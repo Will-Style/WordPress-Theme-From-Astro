@@ -1,0 +1,163 @@
+/** List Setting */
+.schema-admin-table-list {
+	border-collapse: collapse;
+}
+.schema-admin-table-list .schema-admin-table-list-type {
+	width: 15%;
+}
+
+.schema-admin-table-list .schema-admin-table-list-output {
+	width: 30%;
+}
+
+.schema-admin-table-list tr {
+	border-bottom: solid 1px #ddd;
+}
+
+.schema-admin-table-list tr:last-child {
+	border-bottom: none;
+}
+
+.schema-admin-table-list td {
+	vertical-align: middle;
+}
+
+.schema-admin-table-list td:nth-child(1) > span {
+	float: left;
+	height: 2em;
+}
+
+.schema-admin-table-list td:nth-child(1) > span span {
+	display: inline-block;
+	margin: 0 10px 0 0;
+	padding: 0 1em 0 1em;
+	text-align: center;
+	width: 8em;
+}
+
+.schema-admin-table-list td:nth-child(1) > span span.active {
+	background: #00a0d2;
+	color: #fff;
+}
+
+.schema-admin-table-list tr.active {
+	background: #ffffff;
+}
+
+.schema-admin-table-list tr.stop {
+	background: #efefef;
+}
+
+.schema-admin-table-list td:nth-child(1) > span span.stop {
+	background: #ddd;
+}
+
+/** Posts page */
+.schema-admin-h1-span {
+	display: inline-block;
+	font-size: 80%;
+	margin: 0 0 0 10px;
+}
+
+.schema-admin-require::before {
+	color: #a00;
+	content: "*";
+	margin: 0 3px 0 0;
+}
+
+.schema-admin-table {
+	margin: 15px 0 15px 0;
+}
+
+.schema-admin-table caption {
+	border-left: solid 4px #00a0d2;
+	margin: 0 0 5px 0;
+	padding: 3px 0 3px 7px;
+	text-align: left;
+}
+
+.schema-admin-table th {
+	height: 2em;
+	padding: 0 5px 0 0;
+	text-align: right;
+	vertical-align: middle;
+	width: 200px;
+}
+
+.schema-admin-table th.require::before {
+	color: #a00;
+	content: "*";
+	margin: 0 3px 0 0;
+}
+
+.schema-admin-table td {
+	vertical-align: middle;
+}
+
+.schema-admin-table td label {
+	margin: 0 10px 0 0;
+}
+
+.schema-admin-table small {
+	display: block;
+	margin: 2px 0 2px 1px;
+	background: #ddd;
+	padding: 0 5px;
+}
+
+.schema-admin-table input[type="checkbox"] {
+	margin: 0 5px 0 0;
+}
+
+.schema-admin-table input:invalid {
+	border: solid 1px #d8000c;
+	background: #ffbaba;
+}
+
+/** LocalBusiness */
+.markup-time {
+	color: #999;
+	cursor: pointer;
+	width: 18px;
+	height: 18px;
+	line-height: 20px;
+	font-size: 14px;
+	border: solid 1px #bbb;
+	background-color: #fff;
+	border-radius: 100%;
+	margin-top: 5px;
+}
+
+.markup-time:hover {
+	color: #fff;
+	border-color: transparent;
+}
+
+.markup-time .plus:hover {
+	background-color: #00a0d2;
+}
+
+.markup-time .minus {
+	line-height: 18px;
+}
+
+.markup-time .minus:hover {
+	background-color: #f55e4f;
+}
+
+/** Media Uploader */
+.schema-admin-media-button {
+	border: 0;
+	font-size: 12px;
+	padding: 6px 8px 2px 8px;
+}
+
+.schema-admin-media-button:before {
+	font-size: 16px;
+	height: 16px;
+	width: 16px;
+}
+
+.schema-admin-media-button:hover {
+	cursor: pointer;
+}

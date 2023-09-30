@@ -1,0 +1,217 @@
+# Copyright (C) 2016 Markup (JSON-LD) structured in schema.org
+# This file is distributed under the same license as the Markup (JSON-LD) structured in schema.org package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Markup (JSON-LD) structured in schema.org 3.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-structuring-"
+"markup\n"
+"POT-Creation-Date: 2016-06-20 10:36:01+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2016-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kazuya Takami <foundationmeister@outlook.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+
+#: includes/wp-structuring-admin-list.php:43
+msgid "Schema.org Settings List"
+msgstr "Schema.org 設定一覧"
+
+#: includes/wp-structuring-admin-list.php:50
+msgid "Status"
+msgstr "Status"
+
+#: includes/wp-structuring-admin-list.php:51
+msgid "Schema.org Type"
+msgstr "Schema.org タイプ"
+
+#: includes/wp-structuring-admin-list.php:52
+#: includes/wp-structuring-admin-post.php:142
+msgid "Output On"
+msgstr "出力ページ"
+
+#: includes/wp-structuring-admin-list.php:53
+msgid "ShortCode"
+msgstr "ショートコード"
+
+#: includes/wp-structuring-admin-list.php:81 wp-structuring-markup.php:159
+msgid "Edit"
+msgstr "編集"
+
+#: includes/wp-structuring-admin-list.php:87
+msgid "Without registration."
+msgstr "登録されていません。"
+
+#: includes/wp-structuring-admin-post.php:117
+msgid "Schema.org Register"
+msgstr "Schema.org 登録"
+
+#: includes/wp-structuring-admin-post.php:147
+#: includes/wp-structuring-admin-post.php:158
+#: includes/wp-structuring-admin-post.php:187
+#: includes/wp-structuring-admin-post.php:199
+#: includes/wp-structuring-admin-post.php:213
+#: includes/wp-structuring-admin-post.php:227
+#: includes/wp-structuring-admin-post.php:249
+msgid "Posts"
+msgstr "投稿ページ"
+
+#: includes/wp-structuring-admin-post.php:148
+#: includes/wp-structuring-admin-post.php:159
+#: includes/wp-structuring-admin-post.php:188
+#: includes/wp-structuring-admin-post.php:200
+#: includes/wp-structuring-admin-post.php:214
+#: includes/wp-structuring-admin-post.php:228
+#: includes/wp-structuring-admin-post.php:250
+msgid "Pages"
+msgstr "固定ページ"
+
+#: includes/wp-structuring-admin-post.php:169
+#: includes/wp-structuring-admin-post.php:185
+#: includes/wp-structuring-admin-post.php:211
+#: includes/wp-structuring-admin-post.php:225
+#: includes/wp-structuring-admin-post.php:247
+msgid "All Pages (In Header)"
+msgstr "全てのページ（ヘッダー）"
+
+#: includes/wp-structuring-admin-post.php:177
+msgid "Event Post Page"
+msgstr "イベント投稿ページ"
+
+#: includes/wp-structuring-admin-post.php:186
+#: includes/wp-structuring-admin-post.php:212
+#: includes/wp-structuring-admin-post.php:226
+#: includes/wp-structuring-admin-post.php:248
+msgid "Homepage"
+msgstr "ホームページ"
+
+#: includes/wp-structuring-admin-post.php:239
+msgid "Video Post Page"
+msgstr "ビデオ投稿ページ"
+
+#: includes/wp-structuring-admin-post.php:295
+msgid "Output On(Custom Posts)"
+msgstr "出力ページ（カスタム投稿）"
+
+#: includes/wp-structuring-custom-post-event.php:34
+#: includes/wp-structuring-custom-post-event.php:35
+msgid "Event Posts"
+msgstr "イベント投稿"
+
+#: includes/wp-structuring-custom-post-event.php:36
+msgid "All Event Posts"
+msgstr "イベント投稿一覧"
+
+#: includes/wp-structuring-custom-post-event.php:74
+msgid "Schema.org Type Event"
+msgstr "Schema.org Type Event"
+
+#: includes/wp-structuring-custom-post-event.php:96
+msgid "USD"
+msgstr "JPY"
+
+#: includes/wp-structuring-custom-post-event.php:101
+msgid "Event Name"
+msgstr "イベント名"
+
+#: includes/wp-structuring-custom-post-event.php:106
+msgid "Start Date"
+msgstr "開始日"
+
+#: includes/wp-structuring-custom-post-event.php:112
+msgid "Event URL"
+msgstr "イベントURL"
+
+#: includes/wp-structuring-custom-post-event.php:117
+msgid "Place Name"
+msgstr "場所名"
+
+#: includes/wp-structuring-custom-post-event.php:122
+msgid "Place URL"
+msgstr "会場URL"
+
+#: includes/wp-structuring-custom-post-event.php:127
+msgid "Place Address"
+msgstr "会場住所"
+
+#: includes/wp-structuring-custom-post-event.php:132
+msgid "Price"
+msgstr "参加費"
+
+#: includes/wp-structuring-custom-post-event.php:137
+msgid "Currency"
+msgstr "通貨"
+
+#: includes/wp-structuring-custom-post-video.php:34
+#: includes/wp-structuring-custom-post-video.php:35
+msgid "Video Posts"
+msgstr "ビデオ投稿"
+
+#: includes/wp-structuring-custom-post-video.php:36
+msgid "All Video Posts"
+msgstr "ビデオ投稿一覧"
+
+#: includes/wp-structuring-custom-post-video.php:74
+msgid "Schema.org Type Video"
+msgstr "Schema.org Type Video"
+
+#: includes/wp-structuring-custom-post-video.php:98
+msgid "duration"
+msgstr "所要時間"
+
+#: includes/wp-structuring-custom-post-video.php:103
+msgid "contentURL"
+msgstr "コンテンツURL"
+
+#: includes/wp-structuring-custom-post-video.php:108
+msgid "embedURL"
+msgstr "embedURL"
+
+#: includes/wp-structuring-custom-post-video.php:113
+msgid "interactionCount"
+msgstr "ビデオ視聴回数"
+
+#: includes/wp-structuring-custom-post-video.php:118
+msgid "expires"
+msgstr "有効期限"
+
+#: includes/wp-structuring-display.php:309
+#: includes/wp-structuring-display.php:373
+#: includes/wp-structuring-display.php:630
+#: includes/wp-structuring-display.php:767
+msgid "Featured Image not set."
+msgstr "アイキャッチ画像が設定されていません。"
+
+#: includes/wp-structuring-display.php:312
+#: includes/wp-structuring-display.php:376
+#: includes/wp-structuring-display.php:633
+msgid "Logo Image not set."
+msgstr "ロゴ画像が設定されていません。"
+
+#: wp-structuring-markup.php:150 wp-structuring-markup.php:151
+msgid "Schema.org Settings"
+msgstr "Schema.org 設定"
+
+#: wp-structuring-markup.php:158
+msgid "Schema.org Setting Edit"
+msgstr "Schema.org 設定編集"
+
+#. Plugin Name of the plugin/theme
+msgid "Markup (JSON-LD) structured in schema.org"
+msgstr "Markup (JSON-LD) structured in schema.org"
+
+#. Plugin URI of the plugin/theme
+msgid "https://wordpress.org/plugins/wp-structuring-markup/"
+msgstr "https://wordpress.org/plugins/wp-structuring-markup/"
+
+#. Description of the plugin/theme
+msgid "Allows you to include Schema.org JSON-LD syntax markup on your website"
+msgstr "ウェブサイト上でSchema.orgをJSON-LD構文で簡単に導入することができます"
+
+#. Author of the plugin/theme
+msgid "Kazuya Takami"
+msgstr "Kazuya Takami"
+
+#. Author URI of the plugin/theme
+msgid "http://programp.com/"
+msgstr "http://programp.com/"
