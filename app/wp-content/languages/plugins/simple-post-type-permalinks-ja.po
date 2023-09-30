@@ -1,0 +1,44 @@
+# Translation of Plugins - Simple Post Type Permalinks - Stable (latest release) in Japanese
+# This file is distributed under the same license as the Plugins - Simple Post Type Permalinks - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2022-02-08 15:27:00+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: GlotPress/3.0.0-alpha.2\n"
+"Language: ja_JP\n"
+"Project-Id-Version: Plugins - Simple Post Type Permalinks - Stable (latest release)\n"
+
+#. Author URI of the plugin
+msgid "https://torounit.com"
+msgstr "https://torounit.com"
+
+#. Author of the plugin
+msgid "Toro_Unit"
+msgstr "Toro_Unit"
+
+#. Description of the plugin
+msgid "Easy to change Permalink of custom post type."
+msgstr "カスタム投稿タイプのパーマリンクを容易に変更できます。"
+
+#. Plugin URI of the plugin
+msgid "https://github.com/torounit/simple-post-type-permalinks"
+msgstr "https://github.com/torounit/simple-post-type-permalinks"
+
+#. Plugin Name of the plugin
+msgid "Simple Post Type Permalinks"
+msgstr "Simple Post Type Permalinks"
+
+#: simple-post-type-permalinks.php:57
+msgid "[Simple Post Type Permalinks] Simple Post Type Permalinks requires PHP version %s or higher."
+msgstr "[Simple Post Type Permalinks] Simple Post Type Permalinks は PHP バージョン %s 以上で動作します。"
+
+#: includes/Module/Admin.php:43
+msgid "Select permalink setting."
+msgstr "パーマリンク設定を選んでください。"
+
+#: includes/Module/Admin.php:25
+msgid "Custom Post Type Permalink Settings"
+msgstr "Simple Post Type Permalinks 設定"

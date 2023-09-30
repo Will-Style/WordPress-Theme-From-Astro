@@ -1,0 +1,94 @@
+@import url('/assets/css/style.css');
+
+.editor-styles-wrapper{
+    
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    background-color: var(--background-color);
+    color: var(--color);
+    font-family: var(--font-family);
+    font-size: 1rem;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: var(--font-normal, 400);
+    line-height: 1.6;
+    word-wrap: break-word;
+    font-synthesis: none;
+    direction: ltr;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.interface-preferences-modal__section-description{
+    margin: 6px 0 8px;
+}
+.postbox-container button{
+    text-align: center;
+}
+.components-button{
+    text-align: center;
+}
+
+.editor-styles-wrapper * {
+    opacity: 1 !important;
+}
+
+.interface-preferences-modal__section-description{
+    margin: 6px 0 8px;
+}
+.postbox-container button{
+    text-align: center;
+}
+.components-button{
+    text-align: center;
+}
+.lazyblock:not(.is-selected){
+    box-shadow: none;
+    padding: 0;
+    background-color: var(--color-bg);
+}
+.lazyblock-inner-blocks .lazyblock:not(.is-selected){
+    background: transparent;
+}
+
+.lazyblock.is-selected{ 
+
+    background: #fff;
+}
+.lazyblock:not(.is-selected) .lzb-content-title{
+    border: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    display: none;
+}
+.lzb-content-title > span{
+    width: 20px;
+}
+
+.lazyblock p{
+    margin: 0;
+}
+.lazyblock .about__lists{
+    list-style: none;
+    padding: 0;
+    margin-left: 0;
+}
+
+.wp-block-lazyblock-page-title{
+    max-width: 100%;
+}
+.wp-block-lazyblock-container{
+    max-width: 100%;
+}
+.wp-block-lazyblock-content-wrapper{
+    max-width: 100%;
+}
+.wp-block-post-title{
+    font-size: 1.9rem;
+    font-weight: 400;
+}
+html :where(.editor-styles-wrapper) h1, html :where(.editor-styles-wrapper) h2, html :where(.editor-styles-wrapper) h3, html :where(.editor-styles-wrapper) h4, html :where(.editor-styles-wrapper) h5, html :where(.editor-styles-wrapper) h6 ,
+html :where(.editor-styles-wrapper) strong ,html :where(.editor-styles-wrapper) b,html :where(.editor-styles-wrapper) em,html :where(.editor-styles-wrapper) dt{
+    font-weight: 500;
+    font-size: inherit;
+}

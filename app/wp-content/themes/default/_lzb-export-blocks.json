@@ -1,0 +1,215 @@
+[
+    {
+        "id": 64,
+        "title": "定義リスト",
+        "icon": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\"><path d=\"M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z\" \/><\/svg>",
+        "keywords": [],
+        "slug": "lazyblock\/details",
+        "description": "",
+        "category": "text",
+        "category_label": "text",
+        "supports": {
+            "customClassName": true,
+            "anchor": false,
+            "align": [
+                "wide",
+                "full"
+            ],
+            "html": false,
+            "multiple": true,
+            "inserter": true
+        },
+        "ghostkit": {
+            "supports": {
+                "spacings": false,
+                "display": false,
+                "scrollReveal": false,
+                "frame": false,
+                "customCSS": false
+            }
+        },
+        "controls": {
+            "control_015b9347c1": {
+                "type": "text",
+                "name": "label",
+                "default": "",
+                "label": "見出し",
+                "help": "",
+                "child_of": "control_b50a1445e6",
+                "placement": "content",
+                "width": "100",
+                "hide_if_not_selected": "false",
+                "required": "false",
+                "translate": "false",
+                "save_in_meta": "false",
+                "save_in_meta_name": "",
+                "placeholder": "見出し",
+                "characters_limit": ""
+            },
+            "control_14e88b431f": {
+                "type": "rich_text",
+                "name": "value",
+                "default": "",
+                "label": "値",
+                "help": "",
+                "child_of": "control_b50a1445e6",
+                "placement": "content",
+                "width": "100",
+                "hide_if_not_selected": "false",
+                "required": "false",
+                "translate": "false",
+                "save_in_meta": "false",
+                "save_in_meta_name": "",
+                "multiline": "true",
+                "placeholder": "",
+                "characters_limit": ""
+            },
+            "control_a3ba074bf8": {
+                "type": "repeater",
+                "name": "details",
+                "default": "",
+                "label": "定義リスト",
+                "help": "",
+                "child_of": "",
+                "placement": "content",
+                "width": "100",
+                "hide_if_not_selected": "false",
+                "required": "false",
+                "translate": "false",
+                "save_in_meta": "false",
+                "save_in_meta_name": "",
+                "rows_min": "",
+                "rows_max": "",
+                "rows_label": "",
+                "rows_add_button_label": "",
+                "rows_collapsible": "true",
+                "rows_collapsed": "true",
+                "placeholder": "",
+                "characters_limit": ""
+            },
+            "control_ce6b66454c": {
+                "type": "text",
+                "name": "label",
+                "default": "",
+                "label": "見出し",
+                "help": "",
+                "child_of": "control_a3ba074bf8",
+                "placement": "content",
+                "width": "100",
+                "hide_if_not_selected": "false",
+                "required": "false",
+                "translate": "false",
+                "save_in_meta": "false",
+                "save_in_meta_name": "",
+                "placeholder": "見出し",
+                "characters_limit": ""
+            },
+            "control_5b59f04d63": {
+                "type": "rich_text",
+                "name": "value",
+                "default": "",
+                "label": "値",
+                "help": "",
+                "child_of": "control_a3ba074bf8",
+                "placement": "content",
+                "width": "100",
+                "hide_if_not_selected": "false",
+                "required": "false",
+                "translate": "false",
+                "save_in_meta": "false",
+                "save_in_meta_name": "",
+                "multiline": "true",
+                "placeholder": "",
+                "characters_limit": ""
+            }
+        },
+        "code": {
+            "output_method": "php",
+            "editor_html": "",
+            "editor_callback": "",
+            "editor_css": "",
+            "frontend_html": "<?php if(!empty($attributes['details'])):?>\n<dl class=\"blog__details\">\n    <?php foreach ($attributes['details'] as $detail):?>\n    <?php if(!empty($detail['label'])):?>\n    <div class=\"blog__details__row\">\n        <dt class=\"blog__details__dt\"><?php echo esc_html($detail['label']);?><\/dt>\n        <dt class=\"blog__details__dd\"><?php echo $detail['value'];?><\/dd>\n    <\/div>\n    <?php endif;?>\n    <?php endforeach;?>\n<\/dl>\n<?php endif;?>",
+            "frontend_callback": "",
+            "frontend_css": "",
+            "show_preview": "always",
+            "single_output": true
+        },
+        "condition": []
+    },
+    {
+        "id": 51,
+        "title": "スライドショー",
+        "icon": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\"><path d=\"M4 18h3V5H4v13zM18 5v13h3V5h-3zM8 18h9V5H8v13z\" \/><\/svg>",
+        "keywords": [
+            "example",
+            "sample",
+            "template"
+        ],
+        "slug": "lazyblock\/example-block",
+        "description": "Lazy Blocks プラグインの使い始めに便利なサンプルブロック",
+        "category": "design",
+        "category_label": "design",
+        "supports": {
+            "customClassName": true,
+            "anchor": false,
+            "align": [
+                "wide",
+                "full"
+            ],
+            "html": false,
+            "multiple": true,
+            "inserter": true
+        },
+        "ghostkit": {
+            "supports": {
+                "spacings": false,
+                "display": false,
+                "scrollReveal": false,
+                "frame": false,
+                "customCSS": false
+            }
+        },
+        "controls": {
+            "control_0f19754081": {
+                "type": "image",
+                "name": "image",
+                "label": "",
+                "child_of": "control_005ad74de2",
+                "placement": "content",
+                "preview_size": "medium"
+            },
+            "control_3f4b6645e7": {
+                "type": "repeater",
+                "name": "slider",
+                "label": "スライドショー",
+                "placement": "inspector",
+                "rows_min": "",
+                "rows_max": "",
+                "rows_label": "",
+                "rows_add_button_label": "画像を追加",
+                "rows_collapsible": "true",
+                "rows_collapsed": "true"
+            },
+            "control_b9694d4680": {
+                "type": "image",
+                "name": "image",
+                "label": "画像",
+                "child_of": "control_3f4b6645e7",
+                "placement": "content",
+                "preview_size": "medium"
+            }
+        },
+        "code": {
+            "output_method": "php",
+            "editor_html": "",
+            "editor_callback": "",
+            "editor_css": "",
+            "frontend_html": "<?php if(!empty($attributes [ 'slider' ])):?>\n<div class=\"blog__slider\" data-blog-slider>\n    <div class=\"splide\" data-main-slider>\n        <div class=\"splide__track\">\n            <div class=\"splide__list\">\n                <?php foreach ( $attributes [ 'slider' ] as $image ) : ?>\n                <?php if(!empty($image['image'])):?>\n                <div class=\"splide__slide\">\n                    <img src=\"<?php echo esc_url( $image['image']['url'] ); ?>\" alt=\"<?php echo esc_url( $image['image']['alt'] ); ?>\">\n                <\/div>\n                <?php endif;?>\n                <?php endforeach;?>\n            <\/div>\n        <\/div>\n    <\/div>\n    <div data-thumbnail-slider class=\"splide mt-20\">\n        <div class=\"splide__track\">\n            <div class=\"splide__list\">\n                <?php foreach ( $attributes [ 'slider' ] as $image ) : ?>\n                <?php if(!empty($image['image'])):?>\n                <div class=\"splide__slide\">\n                    <img src=\"<?php echo esc_url( $image['image']['url'] ); ?>\" alt=\"<?php echo esc_url( $image['image']['alt'] ); ?>\">\n                <\/div>\n                <?php endif;?>\n                <?php endforeach;?>\n            <\/div>\n        <\/div>\n    <\/div>\n<\/div>\n<?php endif;?>",
+            "frontend_callback": "",
+            "frontend_css": "",
+            "show_preview": "never",
+            "single_output": true
+        },
+        "condition": []
+    }
+]

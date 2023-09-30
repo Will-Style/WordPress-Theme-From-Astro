@@ -1,0 +1,114 @@
+# Translation of Plugins - Rewrite Rules Inspector - Stable (latest release) in Japanese
+# This file is distributed under the same license as the Plugins - Rewrite Rules Inspector - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2022-08-16 14:25:40+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: GlotPress/4.0.0-alpha.1\n"
+"Language: ja_JP\n"
+"Project-Id-Version: Plugins - Rewrite Rules Inspector - Stable (latest release)\n"
+
+#: src/class-rewrite-rules-inspector-list-table.php:140
+msgid "Source"
+msgstr "ソース"
+
+#: src/class-rewrite-rules-inspector-list-table.php:139
+msgid "Rewrite"
+msgstr "リライト"
+
+#: src/class-rewrite-rules-inspector-list-table.php:138
+msgid "Rule"
+msgstr "ルール"
+
+#: src/class-rewrite-rules-inspector-list-table.php:124
+msgid "Reset"
+msgstr "リセット"
+
+#: src/class-rewrite-rules-inspector-list-table.php:122
+msgid "Filter"
+msgstr "絞り込み"
+
+#: src/class-rewrite-rules-inspector-list-table.php:108
+msgid "Rule Source:"
+msgstr "ルールのソース:"
+
+#: src/class-rewrite-rules-inspector-list-table.php:105
+msgid "Match URL:"
+msgstr "一致する URL:"
+
+#: src/class-rewrite-rules-inspector-list-table.php:102
+msgid "Download"
+msgstr "ダウンロード"
+
+#: src/class-rewrite-rules-inspector-list-table.php:102
+msgid "Download current list of rules as a .txt file"
+msgstr "現在のルールリストを.txtファイルとしてダウンロードする"
+
+#: src/class-rewrite-rules-inspector-list-table.php:84
+msgid "Flush Rules"
+msgstr "ルールをクリア"
+
+#: src/class-rewrite-rules-inspector-list-table.php:84
+msgid "Flush your rewrite rules to regenerate them"
+msgstr "リライトルールをクリアして再生成する"
+
+#: src/class-rewrite-rules-inspector-list-table.php:50
+msgid "No rewrite rules were found."
+msgstr "リライトルールが見つかりません。"
+
+#: src/class-rewrite-rules-inspector.php:303
+#: src/class-rewrite-rules-inspector.php:334
+msgid "You do not have permissions to perform this action."
+msgstr "この操作をする権限がありません。"
+
+#. translators: %s: Count of rewrite rules
+#: src/class-rewrite-rules-inspector.php:280
+msgid "A listing of all %1$s rewrite rules for this site."
+msgstr "このサイトのすべての%1$s個のリライトルールのリスト。"
+
+#. translators: %s: Count of rewrite rules
+#: src/class-rewrite-rules-inspector.php:273
+msgid "A listing of all %1$s rewrite rules for this site that match \"<a target=\"_blank\" href=\"%2$s\">%2$s</a>\""
+msgstr "\"<a target=\"_blank\" href=\"%2$s\">%2$s</a>\" にマッチする、このサイトのすべての %1$s個のリライトルールのリスト"
+
+#. translators: %d: Count of missing rewrite rules
+#: src/class-rewrite-rules-inspector.php:264
+msgid "%d rewrite rule may be missing, try flushing."
+msgid_plural "%d rewrite rules may be missing, try flushing."
+msgstr[0] "%d個の書き換えルールがない可能性があります。クリアしてみてください。"
+
+#: src/class-rewrite-rules-inspector.php:260
+msgid "No rewrite rules yet, try flushing."
+msgstr "まだリライトルールはありません。クリアしてみてください。"
+
+#: src/class-rewrite-rules-inspector.php:104
+msgid "Rewrite rules flushed."
+msgstr "リライトルールをクリアしました。"
+
+#: src/class-rewrite-rules-inspector.php:95
+msgid "Rewrite Rules"
+msgstr "リライトルール"
+
+#. Author URI of the plugin
+msgid "https://automattic.com/"
+msgstr "https://automattic.com/"
+
+#. Author of the plugin
+msgid "Automattic, Daniel Bachhuber"
+msgstr "Automattic, Daniel Bachhuber"
+
+#. Description of the plugin
+msgid "Simple WordPress admin tool for inspecting your rewrite rules."
+msgstr "リライトルールを調査するためのシンプルな WordPress 管理ツールです。"
+
+#. Plugin URI of the plugin
+msgid "https://wordpress.org/plugins/rewrite-rules-inspector/"
+msgstr "https://wordpress.org/plugins/rewrite-rules-inspector/"
+
+#. Plugin Name of the plugin
+#: src/class-rewrite-rules-inspector.php:95
+msgid "Rewrite Rules Inspector"
+msgstr "Rewrite ルールチェッカー"

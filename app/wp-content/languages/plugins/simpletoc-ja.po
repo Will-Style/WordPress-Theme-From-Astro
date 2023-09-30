@@ -1,0 +1,111 @@
+# Translation of Plugins - SimpleTOC &#8211; Table of Contents Block - Stable (latest release) in Japanese
+# This file is distributed under the same license as the Plugins - SimpleTOC &#8211; Table of Contents Block - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2022-11-12 11:14:59+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: GlotPress/4.0.0-alpha.4\n"
+"Language: ja_JP\n"
+"Project-Id-Version: Plugins - SimpleTOC &#8211; Table of Contents Block - Stable (latest release)\n"
+
+#: simpletoc-admin-settings.php:135 build/index.js:1 src/edit.js:278
+msgid "Adds minimal JavaScript and css styles."
+msgstr "最小限の JavaScript と css スタイルを追加します。"
+
+#: simpletoc-admin-settings.php:106 build/index.js:1 src/edit.js:268
+msgid "Donate here!"
+msgstr "寄付はこちらから"
+
+#: simpletoc-admin-settings.php:110 build/index.js:1 src/edit.js:261
+msgid "Think about making a donation if you use any of these features."
+msgstr "これらの機能をご利用の方は、寄付ご検討ください。"
+
+#. Description of the plugin
+msgid "SEO-friendly Table of Contents Gutenberg block. No JavaScript and no CSS means faster loading."
+msgstr "SEO に強い目次 Gutenberg ブロック。JavaScript や CSS を一切使用しないため、読み込みが速い。"
+
+#: plugin.php:210
+msgid "Check minimal and maximum level block settings."
+msgstr "レベルブロックの最小値と最大値の設定を確認してください。"
+
+#: build/block.json src/block.json
+msgctxt "block keyword"
+msgid "Index"
+msgstr "Index"
+
+#: build/block.json src/block.json
+msgctxt "block description"
+msgid "Adds a Table of Contents."
+msgstr "目次を追加する。"
+
+#: build/block.json src/block.json
+msgctxt "block keyword"
+msgid "SimpleTOC"
+msgstr "SimpleTOC"
+
+#: build/block.json src/block.json
+msgctxt "block keyword"
+msgid "Table of Contents"
+msgstr "目次"
+
+#: build/block.json src/block.json
+msgctxt "block keyword"
+msgid "TOC"
+msgstr "TOC"
+
+#: build/block.json src/block.json
+msgctxt "block title"
+msgid "SimpleTOC"
+msgstr "SimpleTOC"
+
+#: simpletoc-admin-settings.php:149 build/index.js:1 src/edit.js:311
+msgid "Adds the permalink url to the fragment."
+msgstr "フラグメントにパーマリンク URL を追加します。"
+
+#. Plugin URI of the plugin
+msgid "https://marc.tv/simpletoc-wordpress-inhaltsverzeichnis-plugin-gutenberg/"
+msgstr "https://marc.tv/simpletoc-wordpress-inhaltsverzeichnis-plugin-gutenberg/"
+
+#. Author URI of the plugin
+msgid "https://marc.tv"
+msgstr "https://marc.tv"
+
+#: plugin.php:358
+msgid "Write a review"
+msgstr "レビューを書く"
+
+#: plugin.php:357
+msgid "Donate"
+msgstr "寄付する"
+
+#: plugin.php:356
+msgid "Support"
+msgstr "サポート"
+
+#: plugin.php:206 plugin.php:210
+msgid "No headings found."
+msgstr "見出しが見つかりません。"
+
+#: plugin.php:202
+msgid "No blocks found."
+msgstr "ブロックは見つかりませんでした。"
+
+#: plugin.php:202 plugin.php:206
+msgid "Save or update post first."
+msgstr "投稿の保存や更新を先に行ってください。"
+
+#: plugin.php:68 plugin.php:114 plugin.php:182 plugin.php:190 plugin.php:620
+#: build/index.js:1 src/edit.js:115 src/edit.js:122
+msgid "Table of Contents"
+msgstr "目次"
+
+#. Author of the plugin
+msgid "Marc Tönsing"
+msgstr "Marc Tönsing"
+
+#. Plugin Name of the plugin
+msgid "SimpleTOC - Table of Contents Block"
+msgstr "SimpleTOC - 目次ブロック"
