@@ -4,7 +4,6 @@
     endif;
 ?>
         <?php wp_footer(); ?>
-        </div>
     </div>
 </div>
 <?php include(get_template_directory() . '/components/MouseStalker.php');?>
