@@ -1,4 +1,0 @@
-<IfModule mod_rewrite.c>
-    RewriteEngine on
-    RewriteRule ^siteguard-test\.php$ siteguard-dummy.php [L]
-</IfModule>

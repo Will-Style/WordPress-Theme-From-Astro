@@ -1,9 +1,0 @@
-<Files ~ "\.log$">
-    <IfModule authz_core_module>
-        Require all denied
-    </IfModule>
-    <IfModule !authz_core_module>
-        Order allow,deny
-        Deny from all
-    </IfModule>
-</Files>

@@ -1,3 +1,0 @@
-<?php
-	echo 'dummy page.';
-
