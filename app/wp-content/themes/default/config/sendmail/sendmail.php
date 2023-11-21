@@ -19,12 +19,12 @@ if(isset($_GET['sendmail'])){
 
         
         $SendAutoMail = new SendAutoMail();
-        if( method_exists( $SendAutoMail , $sendmail) ){
+        if( method_exists( $SendAutoMail , str_replace("-","_",$sendmail)) ){
             $SendAutoMail->$sendmail($_POST['email'],$_POST);
         }
         
         $SendAdminMail = new SendAdminMail();
-        if( method_exists( $SendAdminMail , $sendmail) ){
+        if( method_exists( $SendAdminMail ,str_replace("-","_",$sendmail)) ){
             $SendAdminMail->$sendmail($_POST);
         }
 
