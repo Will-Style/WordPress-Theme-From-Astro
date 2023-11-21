@@ -3,12 +3,15 @@ Satisfy any
 allow from all
 </Files>
 
-#AuthUserFile /var/www/.htpasswd
+#<Files ~ "^\.(htaccess|htpasswd)$">
+#    deny from all
+#</Files>
+#AuthUserFile /home/hanaria/hanaria.jp/public_html/app/wp-admin/.htpasswd
 #AuthGroupFile /dev/null
-#AuthName "Enter password"
+#AuthName "Please enter your ID and password"
 #AuthType Basic
+#require valid-user 
 #order deny,allow
-#require valid-user
 
 # BEGIN WordPress
 # "BEGIN WordPress" から "END WordPress" までのディレクティブ (行) は
