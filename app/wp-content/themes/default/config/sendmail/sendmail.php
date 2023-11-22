@@ -13,19 +13,20 @@ if(isset($_GET['sendmail'])){
     function recaptcha_callback(){
 		
         $sendmail = $_GET['sendmail'];
+        $function_name = str_replace("-","_",$sendmail);
         $url = home_url("/") . $sendmail;
         
         setcookie('SEND_'. strtoupper($sendmail) .'_COMPLETE', 1, time() + 2000,"/");
 
         
         $SendAutoMail = new SendAutoMail();
-        if( method_exists( $SendAutoMail , str_replace("-","_",$sendmail)) ){
-            $SendAutoMail->$sendmail($_POST['email'],$_POST);
+        if( method_exists( $SendAutoMail ,$function_name ) ){
+            $SendAutoMail->$function_name($_POST['email'],$_POST);
         }
         
         $SendAdminMail = new SendAdminMail();
-        if( method_exists( $SendAdminMail ,str_replace("-","_",$sendmail)) ){
-            $SendAdminMail->$sendmail($_POST);
+        if( method_exists( $SendAdminMail , $function_name ) ){
+            $SendAdminMail->$function_name($_POST);
         }
 
         
