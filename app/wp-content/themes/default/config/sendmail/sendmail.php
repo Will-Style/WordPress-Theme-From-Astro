@@ -8,13 +8,15 @@ include_once(get_template_directory(). "/config/sendmail/sendAdminMail.php");
 if(isset($_GET['sendmail'])){
     
     $sendmail = $_GET['sendmail'];
-    $url = home_url("/") . $sendmail;
+    $url = $_SERVER['HTTP_REFERER'];
 
     function recaptcha_callback(){
 		
         $sendmail = $_GET['sendmail'];
         $function_name = str_replace("-","_",$sendmail);
-        $url = home_url("/") . $sendmail;
+        $function_name = str_replace("/","",$function_name);
+        
+        $url = $_SERVER['HTTP_REFERER'];
         
         setcookie('SEND_'. strtoupper($sendmail) .'_COMPLETE', 1, time() + 2000,"/");
 
@@ -30,7 +32,7 @@ if(isset($_GET['sendmail'])){
         }
 
         
-        header("Location: ". $url ."/complete/");
+        header("Location: ". $url. "complete/");
         exit();
 	}
 
@@ -42,11 +44,11 @@ if(isset($_GET['sendmail'])){
 			recaptcha_callback();
 
 		}else{
-            header("Location: ". $url ."/error/". $errors );
+            header("Location: ". $url ."error/". $errors );
             exit();
 		}
 	}else{
-        header("Location: ". $url ."/error/". $errors );
+        header("Location: ". $url ."error/". $errors );
         exit();
 	}
 }
