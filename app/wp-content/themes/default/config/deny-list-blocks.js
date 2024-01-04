@@ -2,13 +2,13 @@
 wp.domReady(function () {
     // オフにしたいブロックを指定する
     
-    wp.blocks.unregisterBlockType( 'tadv/classic-paragraph');
-    wp.blocks.unregisterBlockType( 'core/freeform');
-    wp.blocks.unregisterBlockType( 'core/html');
-    wp.blocks.unregisterBlockType( 'core/preformatted');
-    wp.blocks.unregisterBlockType( 'core/pullquote');
-    wp.blocks.unregisterBlockType( 'core/buttons');
-    wp.blocks.unregisterBlockType( 'core/text-columns');
+    // wp.blocks.unregisterBlockType( 'tadv/classic-paragraph');
+    // wp.blocks.unregisterBlockType( 'core/freeform');
+    // wp.blocks.unregisterBlockType( 'core/html');
+    // wp.blocks.unregisterBlockType( 'core/preformatted');
+    // wp.blocks.unregisterBlockType( 'core/pullquote');
+    // wp.blocks.unregisterBlockType( 'core/buttons');
+    // wp.blocks.unregisterBlockType( 'core/text-columns');
     
     wp.blocks.unregisterBlockType( 'core/more');
     wp.blocks.unregisterBlockType( 'core/nextpage');
