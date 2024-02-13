@@ -1,5 +1,4 @@
 
-<?php get_header();?>
 
 <main class="contact">
     <div class="container">
@@ -41,4 +40,3 @@
         </div>
     </div>
 </main>
-<?php get_footer();?>

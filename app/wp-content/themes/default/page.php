@@ -1,3 +1,4 @@
+<?php get_header();?>
 <?php
 $uri = $_SERVER['REQUEST_URI'];
 
@@ -22,7 +23,6 @@ elseif(file_exists( get_template_directory(). '/pages/'. $slug .'.php') ):
 
 else:
     
-    get_header();
     ?>
     <main id="content" class="lower">
     <?php
@@ -42,6 +42,5 @@ else:
         endif;
     ?>
     </main>
-    <?php 
-    get_footer();
-endif;
+<?php endif;?>
+<?php  get_footer();
