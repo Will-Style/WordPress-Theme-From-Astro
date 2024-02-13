@@ -1,4 +1,3 @@
-<?php get_header();?>
 
 <main id="content" class="lower contact">
         <div class="container">
@@ -176,5 +175,3 @@
             </div>
         </div>
     </main>
-
-<?php get_footer();

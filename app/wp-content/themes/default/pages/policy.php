@@ -1,4 +1,4 @@
-<?php get_header();?>
+
 <main id="content" class="lower pp">
     <header class="lower__header">
         <div class="container">
@@ -99,4 +99,3 @@
         </div>
     </div>
 </main>
-<?php get_footer();?>
