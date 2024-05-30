@@ -24,4 +24,4 @@ function complete_pages_redirect() {
         }
     }
 }
-add_action('get_header', "complete_pages_redirect" );
+add_action('send_headers', "complete_pages_redirect" );
