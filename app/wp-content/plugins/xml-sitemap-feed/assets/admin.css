@@ -1,0 +1,19 @@
+div.sidebar {
+	border: 1px solid #ccc;
+	padding: .9em;
+	background: rgba(255,255,255,.9);
+}
+@media screen and (min-width: 1120px) {
+	div.main {
+		width: 74%;
+		float: left;
+	}
+	div.sidebar {
+		width: 23%;
+		padding: .9em 0 2em 2%;
+		border: 0;
+		border-left: 1px solid #ccc;
+		float: right;
+		background: linear-gradient(to right, rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%);
+	}
+}

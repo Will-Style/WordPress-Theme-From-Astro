@@ -3,6 +3,8 @@ Satisfy any
 allow from all
 </Files>
 
+RedirectMatch 404 /\..*$
+
 #<Files ~ "^\.(htaccess|htpasswd)$">
 #    deny from all
 #</Files>
