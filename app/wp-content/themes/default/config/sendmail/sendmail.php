@@ -32,7 +32,7 @@ if(isset($_GET['sendmail'])){
         }
 
         
-        header("Location: ". $url. "/complete/");
+        wp_safe_redirect($url. "/complete/");
         exit();
 	}
 
@@ -44,11 +44,11 @@ if(isset($_GET['sendmail'])){
 			recaptcha_callback();
 
 		}else{
-            header("Location: ". $url ."/error/". $errors );
+            wp_safe_redirect( $url ."/error/". $errors );
             exit();
 		}
 	}else{
-        header("Location: ". $url ."/error/". $errors );
+        wp_safe_redirect( $url ."/error/". $errors );
         exit();
 	}
 }
