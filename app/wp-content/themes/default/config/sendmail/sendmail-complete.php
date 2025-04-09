@@ -15,7 +15,7 @@ function complete_pages_redirect() {
             $cookie_key = "SEND_". strtoupper($slug) ."_COMPLETE";
             if( !array_key_exists($cookie_key,$_COOKIE) ) {
                 
-                header("Location: ". home_url("/") . $slug ."/");
+                wp_safe_redirect( home_url("/") . $slug ."/");
                 exit();
             }
             
