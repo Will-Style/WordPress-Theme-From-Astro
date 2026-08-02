@@ -11,7 +11,7 @@
 	<link rel="alternate" type="application/rss+xml" title="<?php bloginfo('name');?> &raquo; フィード" href="<?php echo home_url('/');?>feed/" />
     <?php wp_head();?>
 	<link rel="stylesheet" href="<?php echo home_url('/');?>assets/css/style.css?v=<?php echo VERSION;?>">
-	<script src="<?php echo home_url('/');?>assets/js/main.js?v=<?php echo VERSION;?>" type="module"></script>
+	<script src="<?php echo home_url('/');?>assets/js/main.js" type="module"></script>
 </head>
 <body>
 <div id="page">
