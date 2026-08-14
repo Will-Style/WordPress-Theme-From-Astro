@@ -24,11 +24,11 @@ class FormValue
         $this->key = $key;
         $this->value_callback = $value_callback;
     }
-    public function get_key() : string
+    public function get_key(): string
     {
         return $this->key;
     }
-    public function get_value_callback() : callable
+    public function get_value_callback(): callable
     {
         return $this->value_callback;
     }

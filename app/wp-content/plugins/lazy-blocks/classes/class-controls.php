@@ -17,7 +17,7 @@ class LazyBlocks_Controls {
 	 * LazyBlocks_Controls constructor.
 	 */
 	public function __construct() {
-		$this->include_controls();
+		add_action( 'lzb/init', array( $this, 'include_controls' ), 5 );
 	}
 
 	/**
@@ -74,7 +74,7 @@ class LazyBlocks_Controls {
 	/**
 	 * Include controls.
 	 */
-	private function include_controls() {
+	public function include_controls() {
 		// Sort.
 		$sort = array(
 			'_base',
@@ -111,7 +111,7 @@ class LazyBlocks_Controls {
 			'repeater',
 		);
 
-		$all_controls = glob( dirname( dirname( __FILE__ ) ) . '/controls/*/index.php' );
+		$all_controls = glob( dirname( __DIR__ ) . '/controls/*/index.php' );
 
 		// include sorted controls.
 		foreach ( $sort as $file_name ) {

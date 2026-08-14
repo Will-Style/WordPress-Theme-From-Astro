@@ -22,8 +22,15 @@ trait MessageTrait
     {
         return $this->protocol;
     }
-    public function withProtocolVersion($version) : \WPMailSMTP\Vendor\Psr\Http\Message\MessageInterface
+    /**
+     * @return static
+     */
+    public function withProtocolVersion($version) : MessageInterface
     {
+        if (!\is_string($version)) {
+            \trigger_deprecation('guzzlehttp/psr7', '2.11', 'Passing %s to MessageInterface::withProtocolVersion() is deprecated; guzzlehttp/psr7 3.0 requires string.', \get_debug_type($version));
+        }
+        $this->assertProtocolVersion($version);
         if ($this->protocol === $version) {
             return $this;
         }
@@ -52,9 +59,19 @@ trait MessageTrait
     {
         return \implode(', ', $this->getHeader($header));
     }
-    public function withHeader($header, $value) : \WPMailSMTP\Vendor\Psr\Http\Message\MessageInterface
+    /**
+     * @return static
+     */
+    public function withHeader($header, $value) : MessageInterface
     {
         $this->assertHeader($header);
+        $values = \is_array($value) ? $value : [$value];
+        foreach ($values as $item) {
+            if (!\is_string($item) && (\is_scalar($item) || $item === null)) {
+                \trigger_deprecation('guzzlehttp/psr7', '2.11', 'Passing %s to MessageInterface::withHeader() is deprecated; guzzlehttp/psr7 3.0 requires string|string[].', \get_debug_type($item));
+                break;
+            }
+        }
         $value = $this->normalizeHeaderValue($value);
         $normalized = \strtolower($header);
         $new = clone $this;
@@ -65,9 +82,19 @@ trait MessageTrait
         $new->headers[$header] = $value;
         return $new;
     }
-    public function withAddedHeader($header, $value) : \WPMailSMTP\Vendor\Psr\Http\Message\MessageInterface
+    /**
+     * @return static
+     */
+    public function withAddedHeader($header, $value) : MessageInterface
     {
         $this->assertHeader($header);
+        $values = \is_array($value) ? $value : [$value];
+        foreach ($values as $item) {
+            if (!\is_string($item) && (\is_scalar($item) || $item === null)) {
+                \trigger_deprecation('guzzlehttp/psr7', '2.11', 'Passing %s to MessageInterface::withAddedHeader() is deprecated; guzzlehttp/psr7 3.0 requires string|string[].', \get_debug_type($item));
+                break;
+            }
+        }
         $value = $this->normalizeHeaderValue($value);
         $normalized = \strtolower($header);
         $new = clone $this;
@@ -80,7 +107,10 @@ trait MessageTrait
         }
         return $new;
     }
-    public function withoutHeader($header) : \WPMailSMTP\Vendor\Psr\Http\Message\MessageInterface
+    /**
+     * @return static
+     */
+    public function withoutHeader($header) : MessageInterface
     {
         $normalized = \strtolower($header);
         if (!isset($this->headerNames[$normalized])) {
@@ -91,14 +121,17 @@ trait MessageTrait
         unset($new->headers[$header], $new->headerNames[$normalized]);
         return $new;
     }
-    public function getBody() : \WPMailSMTP\Vendor\Psr\Http\Message\StreamInterface
+    public function getBody() : StreamInterface
     {
         if (!$this->stream) {
-            $this->stream = \WPMailSMTP\Vendor\GuzzleHttp\Psr7\Utils::streamFor('');
+            $this->stream = Utils::streamFor('');
         }
         return $this->stream;
     }
-    public function withBody(\WPMailSMTP\Vendor\Psr\Http\Message\StreamInterface $body) : \WPMailSMTP\Vendor\Psr\Http\Message\MessageInterface
+    /**
+     * @return static
+     */
+    public function withBody(StreamInterface $body) : MessageInterface
     {
         if ($body === $this->stream) {
             return $this;
@@ -108,7 +141,7 @@ trait MessageTrait
         return $new;
     }
     /**
-     * @param array<string|int, string|string[]> $headers
+     * @param (string|string[])[] $headers
      */
     private function setHeaders(array $headers) : void
     {
@@ -117,6 +150,13 @@ trait MessageTrait
             // Numeric array keys are converted to int by PHP.
             $header = (string) $header;
             $this->assertHeader($header);
+            $values = \is_array($value) ? $value : [$value];
+            foreach ($values as $item) {
+                if (!\is_string($item) && (\is_scalar($item) || $item === null)) {
+                    \trigger_deprecation('guzzlehttp/psr7', '2.11', 'Passing %s to %s::__construct() is deprecated; guzzlehttp/psr7 3.0 requires string|string[].', \get_debug_type($item), static::class);
+                    break;
+                }
+            }
             $value = $this->normalizeHeaderValue($value);
             $normalized = \strtolower($header);
             if (isset($this->headerNames[$normalized])) {
@@ -135,11 +175,11 @@ trait MessageTrait
      */
     private function normalizeHeaderValue($value) : array
     {
+        if (\is_array($value) && $value === []) {
+            \trigger_deprecation('guzzlehttp/psr7', '2.11', 'Passing an empty array as a header value is deprecated; guzzlehttp/psr7 3.0 rejects empty header value arrays.');
+        }
         if (!\is_array($value)) {
             return $this->trimAndValidateHeaderValues([$value]);
-        }
-        if (\count($value) === 0) {
-            throw new \InvalidArgumentException('Header value can not be an empty array.');
         }
         return $this->trimAndValidateHeaderValues($value);
     }
@@ -155,7 +195,7 @@ trait MessageTrait
      *
      * @return string[] Trimmed header values
      *
-     * @see https://tools.ietf.org/html/rfc7230#section-3.2.4
+     * @see https://datatracker.ietf.org/doc/html/rfc7230#section-3.2.4
      */
     private function trimAndValidateHeaderValues(array $values) : array
     {
@@ -163,13 +203,18 @@ trait MessageTrait
             if (!\is_scalar($value) && null !== $value) {
                 throw new \InvalidArgumentException(\sprintf('Header value must be scalar or null but %s provided.', \is_object($value) ? \get_class($value) : \gettype($value)));
             }
+            // Convert non-finite floats explicitly, as implicit coercion of
+            // NAN emits a warning on PHP 8.5.
+            if (\is_float($value) && !\is_finite($value)) {
+                $value = \is_nan($value) ? 'NAN' : ($value > 0 ? 'INF' : '-INF');
+            }
             $trimmed = \trim((string) $value, " \t");
             $this->assertValue($trimmed);
             return $trimmed;
         }, \array_values($values));
     }
     /**
-     * @see https://tools.ietf.org/html/rfc7230#section-3.2
+     * @see https://datatracker.ietf.org/doc/html/rfc7230#section-3.2
      *
      * @param mixed $header
      */
@@ -183,7 +228,22 @@ trait MessageTrait
         }
     }
     /**
-     * @see https://tools.ietf.org/html/rfc7230#section-3.2
+     * @param mixed $version
+     */
+    private function assertProtocolVersion($version) : void
+    {
+        if (\is_string($version)) {
+            $this->assertNoLineSeparators($version, 'Protocol version');
+        }
+    }
+    private function assertNoLineSeparators(string $value, string $field) : void
+    {
+        if (\strpbrk($value, "\r\n") !== \false) {
+            throw new \InvalidArgumentException($field . ' must not contain CR or LF characters.');
+        }
+    }
+    /**
+     * @see https://datatracker.ietf.org/doc/html/rfc7230#section-3.2
      *
      * field-value    = *( field-content / obs-fold )
      * field-content  = field-vchar [ 1*( SP / HTAB ) field-vchar ]

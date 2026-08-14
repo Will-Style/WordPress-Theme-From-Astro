@@ -10,7 +10,7 @@ use WPMailSMTP\Vendor\Psr\Http\Message\UriInterface;
 /**
  * PSR-7 request implementation.
  */
-class Request implements \WPMailSMTP\Vendor\Psr\Http\Message\RequestInterface
+class Request implements RequestInterface
 {
     use MessageTrait;
     /** @var string */
@@ -22,16 +22,18 @@ class Request implements \WPMailSMTP\Vendor\Psr\Http\Message\RequestInterface
     /**
      * @param string                               $method  HTTP method
      * @param string|UriInterface                  $uri     URI
-     * @param array<string, string|string[]>       $headers Request headers
+     * @param (string|string[])[]                  $headers Request headers
      * @param string|resource|StreamInterface|null $body    Request body
      * @param string                               $version Protocol version
      */
     public function __construct(string $method, $uri, array $headers = [], $body = null, string $version = '1.1')
     {
         $this->assertMethod($method);
-        if (!$uri instanceof \WPMailSMTP\Vendor\Psr\Http\Message\UriInterface) {
-            $uri = new \WPMailSMTP\Vendor\GuzzleHttp\Psr7\Uri($uri);
+        $this->assertProtocolVersion($version);
+        if (!$uri instanceof UriInterface) {
+            $uri = new Uri($uri);
         }
+        self::warnOnMethodCasingChange($method);
         $this->method = \strtoupper($method);
         $this->uri = $uri;
         $this->setHeaders($headers);
@@ -40,7 +42,7 @@ class Request implements \WPMailSMTP\Vendor\Psr\Http\Message\RequestInterface
             $this->updateHostFromUri();
         }
         if ($body !== '' && $body !== null) {
-            $this->stream = \WPMailSMTP\Vendor\GuzzleHttp\Psr7\Utils::streamFor($body);
+            $this->stream = Utils::streamFor($body);
         }
     }
     public function getRequestTarget() : string
@@ -57,10 +59,10 @@ class Request implements \WPMailSMTP\Vendor\Psr\Http\Message\RequestInterface
         }
         return $target;
     }
-    public function withRequestTarget($requestTarget) : \WPMailSMTP\Vendor\Psr\Http\Message\RequestInterface
+    public function withRequestTarget($requestTarget) : RequestInterface
     {
         if (\preg_match('#\\s#', $requestTarget)) {
-            throw new \InvalidArgumentException('Invalid request target provided; cannot contain whitespace');
+            throw new InvalidArgumentException('Invalid request target provided; cannot contain whitespace');
         }
         $new = clone $this;
         $new->requestTarget = $requestTarget;
@@ -70,19 +72,23 @@ class Request implements \WPMailSMTP\Vendor\Psr\Http\Message\RequestInterface
     {
         return $this->method;
     }
-    public function withMethod($method) : \WPMailSMTP\Vendor\Psr\Http\Message\RequestInterface
+    public function withMethod($method) : RequestInterface
     {
         $this->assertMethod($method);
+        self::warnOnMethodCasingChange($method);
         $new = clone $this;
         $new->method = \strtoupper($method);
         return $new;
     }
-    public function getUri() : \WPMailSMTP\Vendor\Psr\Http\Message\UriInterface
+    public function getUri() : UriInterface
     {
         return $this->uri;
     }
-    public function withUri(\WPMailSMTP\Vendor\Psr\Http\Message\UriInterface $uri, $preserveHost = \false) : \WPMailSMTP\Vendor\Psr\Http\Message\RequestInterface
+    public function withUri(UriInterface $uri, $preserveHost = \false) : RequestInterface
     {
+        if (!\is_bool($preserveHost)) {
+            \trigger_deprecation('guzzlehttp/psr7', '2.11', 'Passing %s to RequestInterface::withUri() is deprecated; guzzlehttp/psr7 3.0 requires bool for $preserveHost.', \get_debug_type($preserveHost));
+        }
         if ($uri === $this->uri) {
             return $this;
         }
@@ -99,9 +105,11 @@ class Request implements \WPMailSMTP\Vendor\Psr\Http\Message\RequestInterface
         if ($host == '') {
             return;
         }
+        Uri::assertValidHost($host);
         if (($port = $this->uri->getPort()) !== null) {
             $host .= ':' . $port;
         }
+        $this->assertValue($host);
         if (isset($this->headerNames['host'])) {
             $header = $this->headerNames['host'];
         } else {
@@ -109,7 +117,7 @@ class Request implements \WPMailSMTP\Vendor\Psr\Http\Message\RequestInterface
             $this->headerNames['host'] = 'Host';
         }
         // Ensure Host is the first header.
-        // See: http://tools.ietf.org/html/rfc7230#section-5.4
+        // See: https://datatracker.ietf.org/doc/html/rfc7230#section-5.4
         $this->headers = [$header => [$host]] + $this->headers;
     }
     /**
@@ -118,7 +126,14 @@ class Request implements \WPMailSMTP\Vendor\Psr\Http\Message\RequestInterface
     private function assertMethod($method) : void
     {
         if (!\is_string($method) || $method === '') {
-            throw new \InvalidArgumentException('Method must be a non-empty string.');
+            throw new InvalidArgumentException('Method must be a non-empty string.');
+        }
+        $this->assertNoLineSeparators($method, 'Method');
+    }
+    private static function warnOnMethodCasingChange(string $method) : void
+    {
+        if ($method !== \strtoupper($method)) {
+            \trigger_deprecation('guzzlehttp/psr7', '2.11', 'Passing a non-uppercase HTTP method is deprecated; guzzlehttp/psr7 3.0 preserves method casing and will no longer uppercase it. Normalize the method before constructing or modifying requests if uppercase is required.');
         }
     }
 }

@@ -1,26 +1,64 @@
 # Intuitive Custom Post Order
 
-<a href="http://hijiriworld.com/web/plugins/intuitive-custom-post-order/">Intuitive Custom Post Order</a> is WordPress Plugin that order items using a drag and drop sortable JavaScript.
-
 ## Description
 
-Intuitively, order items( Posts, Pages, Custom Post Types, Custom Taxonomies, Sites ) using a drag and drop sortable JavaScript.
+Intuitively reorder Posts, Pages, Custom Post Types, Taxonomies, and Sites with a simple drag-and-drop interface.
 
-Select sortable items from 'Intuitive CPO' menu of Setting menu in WordPress.
+Intuitive Custom Post Order lets you reorder items with simple drag and drop in the WordPress admin.  
+You can sort Posts, Pages, Custom Post Types, Taxonomies, and (on Multisite) Sites.
 
-In addition, You can re-override the parameters of `orderby` and `order`, by using the `WP_Query` or `pre_get_posts` or `query_posts()` or `get_posts()`.<br>
-ATTENTION: Only if you use `get_posts()` to re-overwrite to the default order( `orderby=date, order=DESC` ), You need to use own custom parameter `orderby=default_date`.
+Go to **Settings → Intuitive CPO** and select which content types you want to make sortable.  
+Once enabled, just drag and drop items in the list tables—no extra setup is required.
+
+If you create custom queries in your theme or plugins, set `orderby=menu_order` and `order=ASC` to respect the drag-and-drop order.  
+To keep the default WordPress order (by date), explicitly set `orderby=date` and `order=DESC`.
+
+Source code and development are available on [GitHub](https://github.com/hijiriworld/intuitive-custom-post-order).
 
 ## Installation
 
-1. Upload 'intuitive-custom-post-order' folder to the `/wp-content/plugins/` directory.
+1. Upload the 'intuitive-custom-post-order' folder to the `/wp-content/plugins/` directory.
 2. Activate the plugin through the 'Plugins' menu in WordPress.
-3. Select sortable items from 'Intuitive CPO' menu of Setting menu in WordPress.
+3. Go to **Settings → Intuitive CPO** and choose which post types or taxonomies you want to make sortable.
+4. Simply drag and drop items in the list tables to reorder them.
+
+## Local development
+
+To ensure following WordPress coding standards [@wordpress/scripts](https://developer.wordpress.org/block-editor/reference-guides/packages/packages-scripts/) is used for linting. Currently the CSS and JavaScript parts are not heavy so that there is no bundle process implemented, yet.
+
+### Dependencies
+
+* [Node](https://nodejs.org/en/) >= 18
+* [Composer](https://getcomposer.org/download/) >= 2.0
+
+### Installation
+
+To use the plugin coding standards and linting navigate to the **plugin folder** and run the following commands in terminal:
+
+```Shell
+composer install
+npm i
+```
+
+### Lint
+
+After the installation is complete you can process linting with this command:
+
+```Shell
+npm run lint
+```
+
+### Create a zip file
+
+When you are ready you can create a zip file, which excludes not necessary files with this command:
+
+```Shell
+npm run plugin-zip
+```
 
 ## Documentation
 
-* <a href="http://hijiriworld.com/web/plugins/intuitive-custom-post-order/">Plugin URI</a>
-* <a href="https://wordpress.org/plugins/intuitive-custom-post-order/">WordPress Plugin Directory URI</a>
+* [WordPress Plugin Directory](https://wordpress.org/plugins/intuitive-custom-post-order/)
 
 ## License
 

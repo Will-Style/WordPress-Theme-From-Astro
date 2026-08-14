@@ -10,22 +10,22 @@ wp.domReady(function () {
     // wp.blocks.unregisterBlockType( 'core/buttons');
     // wp.blocks.unregisterBlockType( 'core/text-columns');
     
-    wp.blocks.unregisterBlockType( 'core/more');
-    wp.blocks.unregisterBlockType( 'core/nextpage');
-    wp.blocks.unregisterBlockType( 'core/separator');
-    wp.blocks.unregisterBlockType( 'core/shortcode');
-    wp.blocks.unregisterBlockType( 'core/archives');
-    wp.blocks.unregisterBlockType( 'core/categories');
+    // wp.blocks.unregisterBlockType( 'core/more');
+    // wp.blocks.unregisterBlockType( 'core/nextpage');
+    // wp.blocks.unregisterBlockType( 'core/separator');
+    // wp.blocks.unregisterBlockType( 'core/shortcode');
+    // wp.blocks.unregisterBlockType( 'core/archives');
+    // wp.blocks.unregisterBlockType( 'core/categories');
     wp.blocks.unregisterBlockType( 'core/latest-comments');
     wp.blocks.unregisterBlockType( 'core/latest-posts');
     wp.blocks.unregisterBlockType( 'core/calendar');
     wp.blocks.unregisterBlockType( 'core/rss');
     wp.blocks.unregisterBlockType( 'core/search');
     wp.blocks.unregisterBlockType( 'core/tag-cloud');
-    wp.blocks.unregisterBlockType( 'core/verse' ); 
-    wp.blocks.unregisterBlockType( 'core/cover' ); 
-    wp.blocks.unregisterBlockType( 'core/page-list');
-    wp.blocks.unregisterBlockType( 'core/page-list-item');
+    // wp.blocks.unregisterBlockType( 'core/verse' ); 
+    // wp.blocks.unregisterBlockType( 'core/cover' ); 
+    // wp.blocks.unregisterBlockType( 'core/page-list');
+    // wp.blocks.unregisterBlockType( 'core/page-list-item');
     wp.blocks.unregisterBlockType( 'core/social-link');
     wp.blocks.unregisterBlockType( 'core/social-links');
     wp.blocks.unregisterBlockType( 'core/navigation');
@@ -76,7 +76,7 @@ wp.domReady(function () {
     wp.blocks.unregisterBlockType( 'core/legacy-widget');
     wp.blocks.unregisterBlockType( 'core/widget-g');
     // 特定の埋め込みブロックの場合
-    wp.blocks.unregisterBlockVariation('core/embed', 'wordpress');
+    // wp.blocks.unregisterBlockVariation('core/embed', 'wordpress');
     wp.blocks.unregisterBlockVariation('core/embed', 'soundcloud');
     wp.blocks.unregisterBlockVariation('core/embed', 'flickr');
     wp.blocks.unregisterBlockVariation('core/embed', 'tiktok');

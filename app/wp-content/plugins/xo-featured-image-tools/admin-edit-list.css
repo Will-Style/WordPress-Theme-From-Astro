@@ -1,0 +1,30 @@
+/*
+Edit List table
+*/
+.fixed .column-featured-image {
+	width: 60px;
+}
+
+.featured-image img,
+.featured-image-none {
+	max-width: 48px;
+	max-height: 48px;
+	width: 48px;
+	height: 48px;
+}
+
+.featured-image-none {
+	border: #cccccc dashed 1px;
+}
+
+.wp-list-table tr:not(.inline-edit-row):not(.no-items) td.column-featured-image::before {
+	content: "";
+}
+
+.wp-list-table tr:not(.inline-edit-row):not(.no-items) td.column-featured-image {
+	display: table-cell !important;
+}
+
+.wp-list-table tr:not(.inline-edit-row):not(.no-items) td.hidden {
+	display: none !important;
+}

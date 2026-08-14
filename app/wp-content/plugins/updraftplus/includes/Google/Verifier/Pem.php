@@ -14,6 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+if (!defined('ABSPATH')) die('No direct access allowed');
  
 if (!class_exists('UDP_Google_Client')) {
   require_once dirname(__FILE__) . '/../autoload.php';
@@ -43,7 +45,7 @@ class Google_Verifier_Pem extends Google_Verifier_Abstract
     }
     $this->publicKey = openssl_x509_read($pem);
     if (!$this->publicKey) {
-      throw new Google_Auth_Exception("Unable to parse PEM: $pem");
+      throw new Google_Auth_Exception("Unable to parse PEM: $pem"); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- Error message to be escaped when caught and printed.
     }
   }
 
@@ -69,7 +71,7 @@ class Google_Verifier_Pem extends Google_Verifier_Abstract
     $hash = defined("OPENSSL_ALGO_SHA256") ? OPENSSL_ALGO_SHA256 : "sha256";
     $status = openssl_verify($data, $signature, $this->publicKey, $hash);
     if ($status === -1) {
-      throw new Google_Auth_Exception('Signature verification error: ' . openssl_error_string());
+      throw new Google_Auth_Exception('Signature verification error: ' . openssl_error_string()); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- Error message to be escaped when caught and printed.
     }
     return $status === 1;
   }

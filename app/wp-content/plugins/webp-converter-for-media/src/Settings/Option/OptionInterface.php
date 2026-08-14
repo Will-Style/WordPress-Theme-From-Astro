@@ -31,47 +31,52 @@ interface OptionInterface {
 	 *
 	 * @return string|null
 	 */
-	public function get_label();
+	public static function get_label(): ?string;
 
 	/**
 	 * @return string[]|null
 	 */
-	public function get_notice_lines();
+	public function get_notice_lines(): ?array;
 
 	/**
 	 * Returns additional information of field.
 	 *
 	 * @return string|null
 	 */
-	public function get_info();
+	public function get_info(): ?string;
 
 	/**
 	 * @return string|null
 	 */
-	public function get_placeholder();
+	public function get_placeholder(): ?string;
 
 	/**
 	 * @param mixed[] $settings Plugin settings.
 	 *
 	 * @return string[]|null
 	 */
-	public function get_available_values( array $settings );
+	public function get_available_values( array $settings ): ?array;
 
 	/**
 	 * @param mixed[] $settings Plugin settings.
 	 *
 	 * @return string[]|null
 	 */
-	public function get_disabled_values( array $settings );
+	public function get_values_warnings( array $settings ): ?array;
+
+	/**
+	 * @param mixed[] $settings Plugin settings.
+	 *
+	 * @return string[]|null
+	 */
+	public function get_disabled_values( array $settings ): ?array;
 
 	/**
 	 * Returns default value of field.
 	 *
-	 * @param mixed[]|null $settings Plugin settings.
-	 *
 	 * @return string|string[]
 	 */
-	public function get_default_value( array $settings = null );
+	public function get_default_value();
 
 	/**
 	 * Returns verified value of field.
@@ -82,7 +87,7 @@ interface OptionInterface {
 	 *
 	 * @return mixed|null
 	 */
-	public function validate_value( $current_value, array $available_values = null, array $disabled_values = null );
+	public function validate_value( $current_value, ?array $available_values = null, ?array $disabled_values = null );
 
 	/**
 	 * Returns sanitized value of field.

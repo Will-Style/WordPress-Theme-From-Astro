@@ -16,6 +16,11 @@ class PassthruLoader extends LoaderAbstract {
 	const LOADER_SOURCE = '/includes/passthru.php';
 
 	/**
+	 * @var string[]
+	 */
+	private array $allowed_urls = [];
+
+	/**
 	 * {@inheritdoc}
 	 */
 	public function get_type(): string {
@@ -25,46 +30,53 @@ class PassthruLoader extends LoaderAbstract {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function init_admin_hooks() {
+	public function is_active_loader(): bool {
+		if ( ! parent::is_active_loader() ) {
+			return false;
+		}
+
+		return ( ( apply_filters( 'webpc_dir_name', '', 'uploads' ) === 'wp-content/uploads' )
+			&& ( apply_filters( 'webpc_dir_name', '', 'webp' ) === 'wp-content/uploads-webpc' ) );
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function init_admin_hooks(): void {
 		add_filter( 'webpc_debug_image_url', [ $this, 'update_image_urls' ] );
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function init_front_end_hooks() {
+	public function init_front_end_hooks(): void {
 		add_action( 'init', [ $this, 'start_buffering' ] );
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function activate_loader( bool $is_debug = false ) {
-		$settings    = ( ! $is_debug ) ? $this->plugin_data->get_plugin_settings() : $this->plugin_data->get_debug_settings();
+	public function activate_loader( bool $is_debug = false ): void {
+		$settings    = ( ! $is_debug ) ? $this->plugin_data->get_plugin_settings() : $this->plugin_data->get_plugin_settings_debug();
 		$path_source = $this->plugin_info->get_plugin_directory_path() . self::LOADER_SOURCE;
 		$source_code = ( is_readable( $path_source ) ) ? file_get_contents( $path_source ) ?: '' : '';
 		if ( ! $source_code ) {
 			return;
 		}
 
-		$path_dir_uploads = apply_filters( 'webpc_dir_name', '', 'uploads' );
-		$path_dir_webp    = apply_filters( 'webpc_dir_name', '', 'webp' );
-		$upload_suffix    = implode( '/', array_diff( explode( '/', $path_dir_uploads ), explode( '/', $path_dir_webp ) ) );
-		$mime_types       = $this->format_factory->get_mime_types( $settings[ OutputFormatsOption::OPTION_NAME ] );
+		$path_dir_wp_content = dirname( apply_filters( 'webpc_dir_name', '', 'uploads' ) );
+		$path_dir_webp       = apply_filters( 'webpc_dir_name', '', 'webp' );
+		$allowed_urls        = $this->allowed_urls ?: $this->get_allowed_urls( $path_dir_wp_content, $path_dir_webp );
+		$mime_types          = $this->format_factory->get_mime_types( $settings[ OutputFormatsOption::OPTION_NAME ] );
 
 		$source_code = preg_replace(
-			'/(PATH_UPLOADS(?:\s+)= \')(\')/',
-			'$1/' . $path_dir_uploads . '/$2',
+			'/(ALLOWED_URL_PREFIXES(?:\s+)= \')(\')/',
+			'$1' . base64_encode( json_encode( $allowed_urls ) ?: '' ) . '$2',
 			$source_code
 		);
 		$source_code = preg_replace(
-			'/(PATH_UPLOADS_WEBP(?:\s+)= \')(\')/',
-			'$1/' . $path_dir_webp . '/' . $upload_suffix . '/$2',
-			$source_code ?: ''
-		);
-		$source_code = preg_replace(
 			'/(MIME_TYPES(?:\s+)= \')(\')/',
-			'$1' . json_encode( $mime_types ) . '$2',
+			'$1' . base64_encode( json_encode( $mime_types ) ?: '' ) . '$2',
 			$source_code ?: ''
 		);
 
@@ -75,9 +87,45 @@ class PassthruLoader extends LoaderAbstract {
 	}
 
 	/**
+	 * @param string $path_dir_wp_content .
+	 * @param string $path_dir_webp       .
+	 *
+	 * @return string[]
+	 */
+	private function get_allowed_urls( string $path_dir_wp_content, string $path_dir_webp ): array {
+		$allowed_urls = [];
+
+		if ( is_multisite() ) {
+			$sites = get_sites(
+				[
+					'fields' => 'ids',
+					'number' => 0,
+				]
+			);
+
+			foreach ( $sites as $blog_id ) {
+				switch_to_blog( $blog_id );
+				$upload = wp_upload_dir();
+				if ( ! empty( $upload['baseurl'] ) ) {
+					$allowed_urls[ $upload['baseurl'] ] = realpath( str_replace( $path_dir_wp_content, $path_dir_webp, $upload['basedir'] ) );
+				}
+				restore_current_blog();
+			}
+		} else {
+			$upload = wp_upload_dir();
+			if ( ! empty( $upload['baseurl'] ) ) {
+				$allowed_urls[ $upload['baseurl'] ] = realpath( str_replace( $path_dir_wp_content, $path_dir_webp, $upload['basedir'] ) );
+			}
+		}
+
+		$this->allowed_urls = array_filter( $allowed_urls );
+		return $this->allowed_urls;
+	}
+
+	/**
 	 * {@inheritdoc}
 	 */
-	public function deactivate_loader() {
+	public function deactivate_loader(): void {
 		$dir_output = dirname( apply_filters( 'webpc_dir_path', '', 'uploads' ) ) . self::PATH_LOADER;
 		if ( is_writable( $dir_output ) ) {
 			unlink( $dir_output );
@@ -85,10 +133,9 @@ class PassthruLoader extends LoaderAbstract {
 	}
 
 	/**
-	 * @return void
 	 * @internal
 	 */
-	public function start_buffering() {
+	public function start_buffering(): void {
 		if ( ! ( ( defined( 'DOING_AJAX' ) && DOING_AJAX ) || ( ! is_admin() && ! is_network_admin() ) ) ) {
 			return;
 		}
@@ -110,7 +157,7 @@ class PassthruLoader extends LoaderAbstract {
 	 * @internal
 	 */
 	public function update_image_urls( string $buffer, bool $is_debug = false ): string {
-		$settings   = ( ! $is_debug ) ? $this->plugin_data->get_plugin_settings() : $this->plugin_data->get_debug_settings();
+		$settings   = ( ! $is_debug ) ? $this->plugin_data->get_plugin_settings() : $this->plugin_data->get_plugin_settings_debug();
 		$extensions = implode( '|', $settings[ SupportedExtensionsOption::OPTION_NAME ] );
 		if ( ! $extensions ) {
 			return $buffer;
@@ -137,7 +184,7 @@ class PassthruLoader extends LoaderAbstract {
 	 *
 	 * @return string|null URL of source PHP file.
 	 */
-	public static function get_loader_url() {
+	public static function get_loader_url(): ?string {
 		if ( ! $source_dir = dirname( apply_filters( 'webpc_dir_url', '', 'uploads' ) ) ) {
 			return null;
 		}

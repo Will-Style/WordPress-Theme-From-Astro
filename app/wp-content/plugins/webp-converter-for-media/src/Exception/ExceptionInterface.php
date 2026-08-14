@@ -8,23 +8,18 @@ namespace WebpConverter\Exception;
 interface ExceptionInterface {
 
 	/**
-	 * @param mixed[]|string $value Params of exception.
+	 * @param mixed[]|string $value .
 	 */
 	public function __construct( $value = [] );
 
 	/**
-	 * Returns message of error.
+	 * @param string[] $values .
 	 *
-	 * @param string[] $values Params from class constructor.
-	 *
-	 * @return string Error message.
+	 * @return string
 	 */
 	public function get_error_message( array $values ): string;
 
-	/**
-	 * Returns status of error.
-	 *
-	 * @return string Error status.
-	 */
 	public function get_error_status(): string;
+
+	public function is_crashed_file_required(): bool;
 }

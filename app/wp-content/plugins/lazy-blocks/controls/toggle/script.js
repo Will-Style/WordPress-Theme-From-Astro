@@ -20,12 +20,13 @@ addFilter('lzb.editor.control.toggle.render', 'lzb.editor', (render, props) => (
 			label={props.data.alongside_text}
 			checked={!!props.getValue()}
 			onChange={props.onChange}
+			__nextHasNoMarginBottom
 		/>
 	</BaseControl>
 ));
 
 /**
- * Control settings render in constructor.
+ * Control settings render in block builder.
  */
 addFilter(
 	'lzb.constructor.control.toggle.settings',
@@ -46,6 +47,8 @@ addFilter(
 						onChange={(value) =>
 							updateData({ alongside_text: value })
 						}
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
 					/>
 				</PanelBody>
 				<PanelBody>
@@ -62,6 +65,7 @@ addFilter(
 									checked: value ? 'true' : 'false',
 								})
 							}
+							__nextHasNoMarginBottom
 						/>
 					</BaseControl>
 				</PanelBody>

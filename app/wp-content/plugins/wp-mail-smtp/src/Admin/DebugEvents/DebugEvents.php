@@ -100,8 +100,12 @@ class DebugEvents {
 			wp_send_json_error( esc_html__( 'Access rejected.', 'wp-mail-smtp' ) );
 		}
 
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! current_user_can( wp_mail_smtp()->get_capability_manage_options() ) ) {
 			wp_send_json_error( esc_html__( 'You don\'t have the capability to perform this action.', 'wp-mail-smtp' ) );
+		}
+
+		if ( ! self::is_valid_db() ) {
+			wp_send_json_error( esc_html__( 'For some reason the database table was not installed correctly. Please contact plugin support team to diagnose and fix the issue.', 'wp-mail-smtp' ) );
 		}
 
 		global $wpdb;
@@ -139,8 +143,12 @@ class DebugEvents {
 			wp_send_json_error( esc_html__( 'Access rejected.', 'wp-mail-smtp' ) );
 		}
 
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! current_user_can( wp_mail_smtp()->get_capability_manage_options() ) ) {
 			wp_send_json_error( esc_html__( 'You don\'t have the capability to perform this action.', 'wp-mail-smtp' ) );
+		}
+
+		if ( ! self::is_valid_db() ) {
+			wp_send_json_error( esc_html__( 'For some reason the database table was not installed correctly. Please contact plugin support team to diagnose and fix the issue.', 'wp-mail-smtp' ) );
 		}
 
 		$event_id = isset( $_POST['id'] ) ? intval( $_POST['id'] ) : false;
@@ -170,6 +178,10 @@ class DebugEvents {
 	 * @return bool|int
 	 */
 	public static function add( $message = '', $type = 0 ) {
+
+		if ( ! self::is_valid_db() ) {
+			return false;
+		}
 
 		if ( ! in_array( $type, array_keys( Event::get_types() ), true ) ) {
 			return false;
@@ -204,6 +216,41 @@ class DebugEvents {
 	public static function add_debug( $message = '' ) {
 
 		return self::add( $message, Event::TYPE_DEBUG );
+	}
+
+	/**
+	 * Add a debug event subject to a throttle window — only logs if no other event
+	 * with the same throttle key has been logged within the TTL.
+	 *
+	 * Useful for background errors that can fire on every page load (e.g. expired
+	 * OAuth token refresh failures) to avoid flooding the events table.
+	 *
+	 * @since 4.9.0
+	 *
+	 * @param string $message      The event's message.
+	 * @param string $throttle_key Unique key identifying this event's throttle bucket.
+	 *                             Automatically prefixed with `wp_mail_smtp_` before
+	 *                             being used as a transient key.
+	 * @param int    $ttl          Throttle window in seconds. Default 5 minutes.
+	 * @param int    $type         The event's type. Default Event::TYPE_ERROR (0).
+	 *
+	 * @return bool|int Event ID on success, false if throttled or save failed.
+	 */
+	public static function add_throttled( $message, $throttle_key, $ttl = 5 * MINUTE_IN_SECONDS, $type = 0 ) {
+
+		$transient_key = 'wp_mail_smtp_' . $throttle_key;
+
+		if ( get_transient( $transient_key ) ) {
+			return false;
+		}
+
+		$event_id = self::add( $message, $type );
+
+		if ( $event_id !== false ) {
+			set_transient( $transient_key, time(), $ttl );
+		}
+
+		return $event_id;
 	}
 
 	/**
@@ -275,6 +322,10 @@ class DebugEvents {
 
 		if ( ! $timestamp || $timestamp > time() ) {
 			return new WP_Error( 'wp_mail_smtp_admin_debug_events_get_error_debug_events_count_invalid_time', 'Invalid time span.' );
+		}
+
+		if ( ! self::is_valid_db() ) {
+			return 0;
 		}
 
 		$transient_key             = self::ERROR_DEBUG_EVENTS_TRANSIENT . '_' . sanitize_title_with_dashes( $span_of_time );

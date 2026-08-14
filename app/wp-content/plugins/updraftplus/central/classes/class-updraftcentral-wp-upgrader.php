@@ -1,6 +1,6 @@
 <?php
 
-if (!defined('ABSPATH') || !defined('UPDRAFTCENTRAL_CLIENT_DIR')) die('No access.');
+if (!defined('ABSPATH')) die('No access.');
 
 /**
  * The extended class of Plugin_Upgrader that is mostly used for overriding some of the parent methods to short-circuit their native behaviour or to manipulate some data, parameters and/or method arguments

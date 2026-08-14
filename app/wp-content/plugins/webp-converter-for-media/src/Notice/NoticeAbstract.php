@@ -10,21 +10,23 @@ abstract class NoticeAbstract implements NoticeInterface {
 	/**
 	 * {@inheritdoc}
 	 */
-	public static function get_default_value() {
+	public static function get_default_value(): ?string {
 		return null;
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function get_ajax_action_to_disable() {
+	public function get_ajax_action_to_disable(): ?string {
 		return null;
 	}
 
 	/**
 	 * {@inheritdoc}
+	 *
+	 * @return mixed[]
 	 */
-	public function get_vars_for_view() {
+	public function get_vars_for_view(): array {
 		return [];
 	}
 }

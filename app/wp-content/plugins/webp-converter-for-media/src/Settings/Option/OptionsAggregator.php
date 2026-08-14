@@ -17,7 +17,7 @@ class OptionsAggregator {
 	 *
 	 * @var OptionInterface[]
 	 */
-	private $options = [];
+	private array $options = [];
 
 	public function __construct(
 		TokenRepository $token_repository,
@@ -27,8 +27,8 @@ class OptionsAggregator {
 	) {
 		$conversion_method = new ConversionMethodOption( $token_repository, $method_factory );
 
+		$this->set_option( new OutputFormatsOption( $format_factory, $conversion_method ) );
 		$this->set_option( new ImagesQualityOption() );
-		$this->set_option( new OutputFormatsOption( $token_repository, $format_factory, $conversion_method ) );
 		$this->set_option( new SupportedDirectoriesOption( $directory_factory ) );
 		$this->set_option( new ImageResizeOption( $token_repository ) );
 		$this->set_option( new AutoConversionOption() );
@@ -36,15 +36,22 @@ class OptionsAggregator {
 		$this->set_option( new AccessTokenOption( $token_repository ) );
 
 		$this->set_option( new SupportedExtensionsOption() );
+		$this->set_option( new ExcludedDirectoriesOption() );
 		$this->set_option( $conversion_method );
 		$this->set_option( new LoaderTypeOption() );
 		$this->set_option( new RewriteInheritanceOption() );
-		$this->set_option( new ExcludedDirectoriesOption() );
 		$this->set_option( new ExtraFeaturesOption() );
 		$this->set_option( new MediaStatsOption() );
 
 		$this->set_option( new CloudflareZoneIdOption() );
 		$this->set_option( new CloudflareApiTokenOption() );
+
+		$this->set_option( new ServiceModeOption() );
+		$this->set_option( new HtaccessRewriteRootOption() );
+		$this->set_option( new HtaccessRewritePathOption() );
+		$this->set_option( new HtaccessRewriteParentOption() );
+		$this->set_option( new HtaccessRewriteOutputOption() );
+		$this->set_option( new HtaccessRewriteFlagRedirectOption() );
 	}
 
 	/**
@@ -52,7 +59,7 @@ class OptionsAggregator {
 	 *
 	 * @return OptionInterface[]
 	 */
-	public function get_options( string $form_name = null ): array {
+	public function get_options( ?string $form_name = null ): array {
 		$options = [];
 		foreach ( $this->options as $option ) {
 			if ( ( $form_name === null ) || ( $form_name === $option->get_form_name() ) ) {
@@ -82,10 +89,8 @@ class OptionsAggregator {
 
 	/**
 	 * @param OptionInterface $new_option .
-	 *
-	 * @return void
 	 */
-	private function set_option( OptionInterface $new_option ) {
+	private function set_option( OptionInterface $new_option ): void {
 		foreach ( $this->options as $option_index => $option ) {
 			if ( $option->get_name() === $new_option->get_name() ) {
 				$this->options[ $option_index ] = $new_option;

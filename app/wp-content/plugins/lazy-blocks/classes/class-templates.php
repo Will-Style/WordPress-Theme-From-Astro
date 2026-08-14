@@ -148,6 +148,19 @@ class LazyBlocks_Templates {
 	 * Register CPT.
 	 */
 	public function register_post_type() {
+		// Check if any lazyblocks_templates posts exist.
+		$templates_query = new WP_Query(
+			array(
+				'post_type'      => 'lazyblocks_templates',
+				'posts_per_page' => 1,
+				'post_status'    => 'any',
+			)
+		);
+
+		$templates_exist = $templates_query->have_posts();
+
+		wp_reset_postdata();
+
 		register_post_type(
 			'lazyblocks_templates',
 			array(
@@ -158,7 +171,7 @@ class LazyBlocks_Templates {
 				'public'       => false,
 				'has_archive'  => false,
 				'show_ui'      => true,
-				'show_in_menu' => 'edit.php?post_type=lazyblocks',
+				'show_in_menu' => $templates_exist ? 'edit.php?post_type=lazyblocks' : false,
 				'show_in_rest' => true,
 				'capabilities' => array(
 					'edit_post'          => 'edit_lazyblock',
@@ -254,13 +267,13 @@ class LazyBlocks_Templates {
 	/**
 	 * Disable month dropdown.
 	 *
-	 * @param array  $return disabled dropdown or no.
+	 * @param array  $result disabled dropdown or no.
 	 * @param object $post_type current post type name.
 	 *
 	 * @return array
 	 */
-	public function disable_months_dropdown( $return, $post_type ) {
-		return 'lazyblocks_templates' === $post_type ? true : $return;
+	public function disable_months_dropdown( $result, $post_type ) {
+		return 'lazyblocks_templates' === $post_type ? true : $result;
 	}
 
 	/**
@@ -337,7 +350,7 @@ class LazyBlocks_Templates {
 	}
 
 	/**
-	 * Enqueue constructor styles and scripts.
+	 * Enqueue block templates styles and scripts.
 	 */
 	public function templates_editor_enqueue_scripts() {
 		if ( 'lazyblocks_templates' === get_post_type() ) {

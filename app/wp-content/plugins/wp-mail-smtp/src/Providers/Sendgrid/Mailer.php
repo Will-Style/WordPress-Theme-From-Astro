@@ -232,7 +232,7 @@ class Mailer extends MailerAbstract {
 
 		$headers = isset( $this->body['headers'] ) ? (array) $this->body['headers'] : array();
 
-		$headers[ $name ] = WP::sanitize_value( $value );
+		$headers[ $name ] = $this->sanitize_header_value( $name, $value );
 
 		$this->set_body_param(
 			array(
@@ -365,6 +365,26 @@ class Mailer extends MailerAbstract {
 		}
 
 		return implode( WP::EOL, array_map( 'esc_textarea', array_filter( $error_text ) ) );
+	}
+
+	/**
+	 * Get the error code from the SendGrid API response.
+	 *
+	 * @since 4.8.0
+	 *
+	 * @return string
+	 */
+	public function get_response_error_code() {
+
+		if ( ! empty( $this->response ) ) {
+			$body = wp_remote_retrieve_body( $this->response );
+
+			if ( ! empty( $body->errors ) && is_array( $body->errors ) && ! empty( $body->errors[0]->field ) ) {
+				return $body->errors[0]->field;
+			}
+		}
+
+		return parent::get_response_error_code();
 	}
 
 	/**

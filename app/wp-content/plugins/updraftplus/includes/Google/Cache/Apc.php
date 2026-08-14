@@ -15,6 +15,8 @@
  * limitations under the License.
  */
 
+if (!defined('ABSPATH')) die('No direct access allowed');
+
 if (!class_exists('UDP_Google_Client')) {
   require_once dirname(__FILE__) . '/../autoload.php';
 }
@@ -40,7 +42,7 @@ class Google_Cache_Apc extends Google_Cache_Abstract
       $error = "Apc functions not available";
 
       $client->getLogger()->error($error);
-      throw new Google_Cache_Exception($error);
+      throw new Google_Cache_Exception($error); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- Error message to be escaped when caught and printed.
     }
 
     $this->client = $client;

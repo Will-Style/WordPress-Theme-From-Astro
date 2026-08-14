@@ -377,8 +377,20 @@ class autoptimizeScripts extends autoptimizeBase
                         }
 
                         // not aggregating but deferring?
-                        if ( $this->defer_not_aggregate && false === $this->aggregate && ( str_replace( $this->dontmove, '', $path ) === $path || ( apply_filters( 'autoptimize_filter_js_defer_external', true ) && str_replace( $this->dontmove, '', $orig_tag ) === $orig_tag ) ) && strpos( $new_tag, ' defer' ) === false && strpos( $new_tag, ' async' ) === false ) {
-                            $new_tag = str_replace( '<script ', '<script defer ', $new_tag );
+                        if ( $this->defer_not_aggregate && false === $this->aggregate && ( str_replace( $this->dontmove, '', $path ) === $path || ( apply_filters( 'autoptimize_filter_js_defer_external', true ) && str_replace( $this->dontmove, '', $orig_tag ) === $orig_tag ) ) && strpos( $new_tag, ' defer' ) === false ) {
+                            if ( false !== strpos( $new_tag, ' async' ) && true === apply_filters( 'autoptimize_filter_js_defer_trumps_async', true ) ) {
+                                // remove async flag to ensure JS is properly deferred, otherwise the asynced JS might fire 
+                                // before deferred inlined JS is executed, off course except filter is set to false which
+                                // re-institutes previous behavior.
+                                $new_tag = str_replace( array( " async='async'", ' async="async"', ' async=async', ' async' ), '', $new_tag );
+                            }
+                            
+                            if ( false === strpos( $new_tag, ' async' ) ) {
+                                // either async wasn't there to begin with or it was removed.
+                                // if async is there, the autoptimize_filter_js_defer_trumps_async
+                                // filter was set to false and in that case defer should not be added.
+                                $new_tag = str_replace( '<script ', '<script defer ', $new_tag );
+                            }
                         }
 
                         // Should we minify the non-aggregated script?
@@ -459,8 +471,19 @@ class autoptimizeScripts extends autoptimizeBase
                                 $_id = '';
                             }
 
-                            $new_tag       = '<script defer ' . $_id . 'src="data:text/javascript;base64,' . base64_encode( $match[3] ) . '"></script>';
-                            $this->content = str_replace( $tag, $new_tag, $this->content );
+                            // if "minify inline" is on and if more then 9 spaces or 4 line breaks are found 
+                            // in the inline JS then it is likely not minified, so minify before base64-encoding.
+                            $_script_contents = $match[3];
+                            if ( 'on' === autoptimizeOptionWrapper::get_option( 'autoptimize_html_minify_inline', 'off' ) && substr_count( $_script_contents, ' ' ) > 9 && substr_count( $_script_contents, "\n" ) > 4 && true === apply_filters( 'autoptimize_filter_script_defer_inline_minify', true ) ) {
+                                $_tmp_script_contents = trim( JSMin::minify( $_script_contents ) );
+                                if ( ! empty( $_tmp_script_contents ) ) {
+                                    $_script_contents = $_tmp_script_contents;
+                                }
+                            }
+
+                            // base64 and defer the lot already.
+                            $new_tag       = '<script defer ' . $_id . 'src="data:text/javascript;base64,' . base64_encode( $_script_contents ) . '"></script>';
+                            $this->content = str_replace( $this->hide_comments( $tag ), $new_tag, $this->content );
                             $tag           = '';
                         } else {
                             $tag = '';
@@ -511,7 +534,7 @@ class autoptimizeScripts extends autoptimizeBase
             $tag_without_contents = $tag_parts[1];
         }
 
-        $has_type = ( strpos( $tag_without_contents, 'type' ) !== false );
+        $has_type = ( strpos( $tag_without_contents, ' type' ) !== false );
 
         $type_valid = false;
         if ( $has_type ) {

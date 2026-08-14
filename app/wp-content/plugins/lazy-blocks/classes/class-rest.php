@@ -51,17 +51,6 @@ class LazyBlocks_Rest extends WP_REST_Controller {
 			)
 		);
 
-		// Get Lazy Block Editor Preview.
-		register_rest_route(
-			$namespace,
-			'/block-render-code-preview/',
-			array(
-				'methods'             => WP_REST_Server::EDITABLE,
-				'callback'            => array( $this, 'get_block' ),
-				'permission_callback' => array( $this, 'get_block_permission' ),
-			)
-		);
-
 		// Get Lazy Block Data.
 		register_rest_route(
 			$namespace,
@@ -98,11 +87,11 @@ class LazyBlocks_Rest extends WP_REST_Controller {
 		// Get Lazy Block Editor Preview.
 		register_rest_route(
 			$namespace,
-			'/block-constructor-preview/',
+			'/block-builder-preview/',
 			array(
 				'methods'             => WP_REST_Server::EDITABLE,
-				'callback'            => array( $this, 'block_constructor_preview' ),
-				'permission_callback' => array( $this, 'block_constructor_preview_permission' ),
+				'callback'            => array( $this, 'block_builder_preview' ),
+				'permission_callback' => array( $this, 'block_builder_preview_permission' ),
 			)
 		);
 	}
@@ -186,14 +175,30 @@ class LazyBlocks_Rest extends WP_REST_Controller {
 	}
 
 	/**
-	 * Get block constructor preview permissions.
+	 * Get block builder preview permissions.
 	 *
 	 * @param WP_REST_Request $request Request.
 	 *
 	 * @return WP_REST_Response|true
 	 */
-	public function block_constructor_preview_permission( $request ) {
-		return $this->get_block_data_permission( $request );
+	public function block_builder_preview_permission( $request ) {
+		$base_permission = $this->get_block_data_permission( $request );
+
+		if ( is_wp_error( $base_permission ) || true !== $base_permission ) {
+			return $base_permission;
+		}
+
+		// Check if the block uses PHP output method and requires unfiltered_html capability.
+		$block = $request->get_param( 'block' );
+		if (
+			isset( $block['code_output_method'] ) &&
+			'php' === $block['code_output_method'] &&
+			! current_user_can( 'unfiltered_html' )
+		) {
+			return $this->error( 'lazy_block_cannot_execute_php', esc_html__( 'Not allowed to execute PHP code.', 'lazy-blocks' ), true );
+		}
+
+		return true;
 	}
 
 	/**
@@ -210,17 +215,19 @@ class LazyBlocks_Rest extends WP_REST_Controller {
 		global $post;
 
 		$post_id          = $request->get_param( 'post_id' ) ? intval( $request->get_param( 'post_id' ) ) : 0;
-		$block_context    = $request->get_param( 'context' );
+		$render_location  = $request->get_param( 'render_location' );
 		$block_name       = $request->get_param( 'name' );
 		$block_attributes = $request->get_param( 'attributes' );
+		$context          = $request->get_param( 'context' );
 
 		// add global data to fix meta data output in preview.
 		global $lzb_preview_block_data;
 		$lzb_preview_block_data = array(
 			'post_id'          => $post_id,
-			'block_context'    => $block_context,
+			'render_location'  => $render_location,
 			'block_name'       => $block_name,
 			'block_attributes' => $block_attributes,
+			'context'          => $context,
 		);
 
 		if ( 0 < $post_id ) {
@@ -236,7 +243,7 @@ class LazyBlocks_Rest extends WP_REST_Controller {
 			return $this->error( 'lazy_block_invalid', esc_html__( 'Invalid block.', 'lazy-blocks' ) );
 		}
 
-		$block_result = lazyblocks()->blocks()->render_callback( $block_attributes, null, $block_context, $block );
+		$block_result = lazyblocks()->blocks()->render_callback( $block_attributes, $context, null, $render_location, $block );
 
 		if ( isset( $block_result ) && null !== $block_result ) {
 			return $this->success( $block_result );
@@ -266,6 +273,9 @@ class LazyBlocks_Rest extends WP_REST_Controller {
 			}
 
 			lazyblocks()->blocks()->save_meta_boxes( $post_id, $meta );
+
+			// Clear blocks cache after updating block data.
+			lazyblocks()->blocks()->clear_blocks_cache();
 		}
 
 		return $this->success( $meta );
@@ -323,10 +333,13 @@ class LazyBlocks_Rest extends WP_REST_Controller {
 	 *
 	 * @return WP_REST_Response
 	 */
-	public function block_constructor_preview( $request ) {
+	public function block_builder_preview( $request ) {
 		$block      = $request->get_param( 'block' );
 		$context    = $request->get_param( 'context' );
 		$attributes = $request->get_param( 'attributes' );
+
+		global $lzb_block_builder_preview;
+		$lzb_block_builder_preview = true;
 
 		// Prepare clean block data for marshal method.
 		// Add 'lazyblocks_' prefix to all block attributes.
@@ -348,8 +361,24 @@ class LazyBlocks_Rest extends WP_REST_Controller {
 			'slug' => $block_data['slug'],
 		);
 
+		/**
+		 * The WP_Block_Supports class requires a block_to_render check because of its dependency chain.
+		 * When get_block_wrapper_attributes runs, it calls apply_block_supports.
+		 * This method then needs self::$block_to_render['blockName'], which causes an error if block_to_render is null.
+		 *
+		 * The issue only appears on the block designer page.
+		 * When calling the REST method, the block hasn't been registered in the system yet, which causes errors.
+		 * We fix this by assigning a block to the block_to_render property,
+		 * Which allows the block attributes to display correctly in the block designer preview.
+		 */
+		if ( class_exists( 'WP_Block_Supports' ) ) {
+			$block_data['blockName'] = $block_data['blockName'] ?? $block_data['slug'];
+
+			WP_Block_Supports::$block_to_render = $block_data;
+		}
+
 		try {
-			$block_result = lazyblocks()->blocks()->render_callback( $attributes, null, $context, $block_data );
+			$block_result = lazyblocks()->blocks()->render_callback( $attributes, null, null, $context, $block_data );
 		} catch ( Throwable $e ) {
 			return $this->error( 'lazy_block_render_failed', $e->getMessage() . PHP_EOL . PHP_EOL . $e->getTraceAsString() );
 		}

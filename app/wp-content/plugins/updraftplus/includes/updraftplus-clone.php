@@ -1,6 +1,6 @@
 <?php
 
-if (!defined('UPDRAFTPLUS_DIR')) die('No direct access allowed.');
+if (!defined('ABSPATH')) die('No direct access allowed.');
 
 if (!class_exists('UpdraftPlus_Login')) require_once('updraftplus-login.php');
 
@@ -104,6 +104,7 @@ class UpdraftPlus_Clone extends UpdraftPlus_Login {
 		
 		$action = 'updraftplus_clone_create';
 		if (empty($data['site_url'])) $data['site_url'] = trailingslashit(network_site_url());
+		// translators: %s: site URL with trailing slash
 		if (empty($data['label'])) $data['label'] = sprintf(__('Clone of %s', 'updraftplus'), trailingslashit(network_site_url()));
 		if (empty($data['install_info']['table_prefix'])) $data['install_info']['table_prefix'] = $table_prefix;
 		$subdirectory = parse_url(network_site_url(), PHP_URL_PATH);

@@ -8,33 +8,25 @@ use WebpConverter\Conversion\PathsFinder;
 use WebpConverter\PluginData;
 use WebpConverter\Repository\TokenRepository;
 use WebpConverter\Settings\Option\ExtraFeaturesOption;
+use WebpConverter\Settings\Option\ServiceModeOption;
 
 /**
  * Manages automatic conversion of images.
  */
 class CronInitiator {
 
-	/**
-	 * @var PluginData
-	 */
-	private $plugin_data;
+	private PluginData $plugin_data;
 
-	/**
-	 * @var CronStatusManager
-	 */
-	private $cron_status_manager;
+	private CronStatusManager $cron_status_manager;
 
-	/**
-	 * @var PathsFinder
-	 */
-	private $paths_finder;
+	private PathsFinder $paths_finder;
 
 	public function __construct(
 		PluginData $plugin_data,
 		TokenRepository $token_repository,
 		FormatFactory $format_factory,
-		CronStatusManager $cron_status_manager = null,
-		PathsFinder $paths_finder = null
+		?CronStatusManager $cron_status_manager = null,
+		?PathsFinder $paths_finder = null
 	) {
 		$this->plugin_data         = $plugin_data;
 		$this->cron_status_manager = $cron_status_manager ?: new CronStatusManager();
@@ -65,10 +57,8 @@ class CronInitiator {
 	/**
 	 * @param string[] $new_paths              .
 	 * @param bool     $force_convert_modified .
-	 *
-	 * @return void
 	 */
-	public function add_paths_to_conversion( array $new_paths, bool $force_convert_modified = false ) {
+	public function add_paths_to_conversion( array $new_paths, bool $force_convert_modified = false ): void {
 		$paths           = $this->cron_status_manager->get_paths_to_conversion();
 		$valid_new_paths = $this->paths_finder->skip_converted_paths( $new_paths, null, $force_convert_modified );
 
@@ -77,10 +67,8 @@ class CronInitiator {
 
 	/**
 	 * @param string|null $request_id .
-	 *
-	 * @return void
 	 */
-	public function init_conversion( string $request_id = null ) {
+	public function init_conversion( ?string $request_id = null ): void {
 		$saved_request_id = $this->cron_status_manager->get_conversion_request_id();
 		if ( $this->cron_status_manager->is_conversion_locked()
 			|| ( ( $saved_request_id !== null ) && ( $request_id !== $saved_request_id ) ) ) {
@@ -101,12 +89,10 @@ class CronInitiator {
 
 	/**
 	 * @param bool $upload_request .
-	 *
-	 * @return void
 	 */
-	public function init_async_conversion( bool $upload_request = false ) {
+	public function init_async_conversion( bool $upload_request = false ): void {
 		$plugin_settings = $this->plugin_data->get_plugin_settings();
-		$service_mode    = in_array( ExtraFeaturesOption::OPTION_VALUE_SERVICE_MODE, $plugin_settings[ ExtraFeaturesOption::OPTION_NAME ] );
+		$service_mode    = ( $plugin_settings[ ServiceModeOption::OPTION_NAME ] === 'yes' );
 
 		$headers = [
 			CronConversionEndpoint::ROUTE_NONCE_HEADER => CronConversionEndpoint::get_route_nonce(),
@@ -132,10 +118,7 @@ class CronInitiator {
 		}
 	}
 
-	/**
-	 * @return void
-	 */
-	private function try_restart_conversion() {
+	private function try_restart_conversion(): void {
 		$plugin_settings = $this->plugin_data->get_plugin_settings();
 		$cron_enabled    = in_array( ExtraFeaturesOption::OPTION_VALUE_CRON_ENABLED, $plugin_settings[ ExtraFeaturesOption::OPTION_NAME ] );
 

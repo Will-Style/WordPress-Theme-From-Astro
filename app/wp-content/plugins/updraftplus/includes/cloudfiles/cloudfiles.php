@@ -1,4 +1,8 @@
 <?php
+// phpcs:disable WordPress.WP.AlternativeFunctions.file_system_operations_fclose, WordPress.WP.AlternativeFunctions.file_system_operations_fopen, WordPress.WP.AlternativeFunctions.file_system_operations_fwrite, WordPress.WP.AlternativeFunctions.file_system_operations_fgets, WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents, WordPress.WP.AlternativeFunctions.file_system_operations_mkdir, WordPress.WP.AlternativeFunctions.file_system_operations_fread, WordPress.WP.AlternativeFunctions.file_system_operations_chmod, WordPress.WP.AlternativeFunctions.file_system_operations_fputs, WordPress.WP.AlternativeFunctions.file_system_operations_is_writeable, WordPress.WP.AlternativeFunctions.file_system_operations_chown, WordPress.WP.AlternativeFunctions.file_system_operations_chgrp, WordPress.WP.AlternativeFunctions.file_system_operations_touch -- Native PHP fileystem function is used for direct control and performance because it can bypass additional layers of abstraction so that no overhead from the WordPress filesystem API's internal handling
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals -- This is a third-party library file; naming conventions are not applicable
+if (!defined('ABSPATH')) die('No direct access allowed');
+// phpcs:disable WordPress.Security.EscapeOutput.ExceptionNotEscaped, WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- using the native PHP fclose() function instead of the WP Filesystem API.
 /**
  * This is the PHP Cloud Files API.
  *
@@ -399,7 +403,7 @@ class UpdraftPlus_CF_Connection
      */
     function setDebug($bool)
     {
-        $this->dbug = (boolean) $bool;
+        $this->dbug = (bool) $bool;
         $this->cfs_http->setDebug($this->dbug);
     }
 
@@ -1994,7 +1998,11 @@ class UpdraftPlus_CF_Object
                 if ($ct && $ct != 'application/octet-stream')
                     $this->content_type = $ct;
 
-                @finfo_close($finfo);
+                if (version_compare(PHP_VERSION, '8.1', '<')) {
+                    finfo_close($finfo);
+                } else {
+                    unset($finfo); // On PHP 8.1+, finfo_close() is a no-op (deprecated in 8.5); unset the handle instead.
+                }
             }
         }
 
@@ -2629,4 +2637,5 @@ class UpdraftPlus_CF_Object
  * c-hanging-comment-ender-p: nil
  * End:
  */
+// phpcs:enable
 ?>

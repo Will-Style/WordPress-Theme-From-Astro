@@ -15,6 +15,9 @@
  * Custom Exceptions for the CloudFiles API
  * @package php-cloudfiles-exceptions
  */
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals -- This is a third-party library file; naming conventions are not applicable
+if (!defined('ABSPATH')) die('No direct access allowed');
+
 if (!class_exists('SyntaxException')) {
 class SyntaxException extends Exception { }
 }

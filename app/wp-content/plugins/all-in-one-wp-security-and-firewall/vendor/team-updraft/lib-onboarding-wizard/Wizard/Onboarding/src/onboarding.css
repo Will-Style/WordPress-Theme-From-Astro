@@ -1,0 +1,74 @@
+@import 'assets/css/globals.css';
+@import 'assets/css/reset.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles for the onboarding component */
+
+/* Text color */
+#teamupdraft-onboarding .text-orange-dark {
+    color: var(--teamupdraft-orange-dark) !important;
+}
+
+/* Hover text color */
+#teamupdraft-onboarding .hover\:text-orange-dark:hover {
+    color: var(--teamupdraft-orange-dark) !important;
+}
+
+#teamupdraft-onboarding .custom-scrollbar{
+    --scrollbar-track: initial;
+    --scrollbar-thumb: initial;
+
+    /* Firefox */
+    scrollbar-color: var(--teamupdraft-orange-dark) #fff;
+    scrollbar-width: thin;
+
+    /* Keep a visible gutter so users notice the area is scrollable */
+    scrollbar-gutter: stable;
+}
+
+/* WebKit (Chrome/Safari/Edge) */
+#teamupdraft-onboarding .custom-scrollbar::-webkit-scrollbar {
+    width: 10px;
+}
+
+#teamupdraft-onboarding .custom-scrollbar::-webkit-scrollbar-track {
+    background: #fff;
+}
+
+#teamupdraft-onboarding .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: var(--teamupdraft-orange-dark);
+    border-radius: 9999px;
+    border: 2px solid #fff;
+}
+
+#teamupdraft-onboarding .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: var(--teamupdraft-orange-dark);
+}
+
+#teamupdraft-onboarding,
+#teamupdraft-onboarding *{
+    font-family: "Inter", sans-serif;
+}
+
+#teamupdraft-onboarding button,
+#teamupdraft-onboarding input,
+#teamupdraft-onboarding select,
+#teamupdraft-onboarding textarea {
+    font: inherit;
+}
+#teamupdraft-onboarding .icon-magic-wand {
+    margin-bottom: -2px;
+}
+
+/* Hide spinner arrows for number inputs */
+#teamupdraft-onboarding input[type="number"]::-webkit-outer-spin-button,
+#teamupdraft-onboarding input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+#teamupdraft-onboarding input[type="number"] {
+    -moz-appearance: textfield; /* Firefox */
+}

@@ -1,4 +1,5 @@
-<?php get_header();?>                
+<?php get_header();?>               
+    
     <main id="top" class="lower top">
         <div class="container">
             <header class="lower__header">

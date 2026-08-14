@@ -6,7 +6,7 @@ function complete_pages_redirect() {
     $form_slugs = [
         "contact",
         // フォームの分だけここを増やす
-        "example",
+        "entry",
     ];
 
     foreach ($form_slugs as $key => $slug) {
@@ -15,7 +15,7 @@ function complete_pages_redirect() {
             $cookie_key = "SEND_". strtoupper($slug) ."_COMPLETE";
             if( !array_key_exists($cookie_key,$_COOKIE) ) {
                 
-                wp_safe_redirect( home_url("/") . $slug ."/");
+                header("Location: ". home_url("/") . $slug ."/");
                 exit();
             }
             
@@ -24,4 +24,4 @@ function complete_pages_redirect() {
         }
     }
 }
-add_action('send_headers', "complete_pages_redirect" );
+add_action('get_header', "complete_pages_redirect" );

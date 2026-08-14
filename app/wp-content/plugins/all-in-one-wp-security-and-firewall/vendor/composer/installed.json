@@ -1,0 +1,166 @@
+{
+    "packages": [
+        {
+            "name": "mlocati/ip-lib",
+            "version": "1.22.0",
+            "version_normalized": "1.22.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mlocati/ip-lib.git",
+                "reference": "4e40ffd3bf9989db19403d89c4d8be44b87b8a91"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mlocati/ip-lib/zipball/4e40ffd3bf9989db19403d89c4d8be44b87b8a91",
+                "reference": "4e40ffd3bf9989db19403d89c4d8be44b87b8a91",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "ext-pdo_sqlite": "*",
+                "phpunit/phpunit": "^4.8 || ^5.7 || ^6.5 || ^7.5 || ^8.5 || ^9.5"
+            },
+            "time": "2025-10-15T12:35:09+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "IPLib\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michele Locati",
+                    "email": "mlocati@gmail.com",
+                    "homepage": "https://github.com/mlocati",
+                    "role": "Author"
+                }
+            ],
+            "description": "Handle IPv4, IPv6 addresses and ranges",
+            "homepage": "https://github.com/mlocati/ip-lib",
+            "keywords": [
+                "IP",
+                "address",
+                "addresses",
+                "ipv4",
+                "ipv6",
+                "manage",
+                "managing",
+                "matching",
+                "network",
+                "networking",
+                "range",
+                "subnet"
+            ],
+            "support": {
+                "issues": "https://github.com/mlocati/ip-lib/issues",
+                "source": "https://github.com/mlocati/ip-lib/tree/1.22.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/sponsors/mlocati",
+                    "type": "github"
+                },
+                {
+                    "url": "https://paypal.me/mlocati",
+                    "type": "other"
+                }
+            ],
+            "install-path": "../mlocati/ip-lib"
+        },
+        {
+            "name": "team-updraft/common-libs",
+            "version": "3.1.10",
+            "version_normalized": "3.1.10.0",
+            "source": {
+                "type": "git",
+                "url": "ssh://git@source.updraftplus.com:20022/team-updraft/common-libs.git",
+                "reference": "027214202c3dbc15a807bb3860da36e764c1a58f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://source.updraftplus.com/api/v4/projects/28/packages/composer/archives/team-updraft/common-libs.zip?sha=027214202c3dbc15a807bb3860da36e764c1a58f",
+                "reference": "027214202c3dbc15a807bb3860da36e764c1a58f",
+                "shasum": ""
+            },
+            "require-dev": {
+                "dealerdirect/phpcodesniffer-composer-installer": "0.7.*",
+                "phpcompatibility/php-compatibility": "9.3.*",
+                "sirbrillig/phpcs-variable-analysis": "2.11.*",
+                "squizlabs/php_codesniffer": "3.6.*",
+                "wp-coding-standards/wpcs": "2.3.*"
+            },
+            "type": "library",
+            "installation-source": "dist",
+            "license": [
+                "GPL-3.0-only"
+            ],
+            "authors": [
+                {
+                    "name": "Team Updraft",
+                    "email": "team.updraft@gmail.com"
+                }
+            ],
+            "description": "These are the common libs used across all of our projects",
+            "install-path": "../team-updraft/common-libs"
+        },
+        {
+            "name": "team-updraft/lib-central",
+            "version": "1.25.6",
+            "version_normalized": "1.25.6.0",
+            "source": {
+                "type": "git",
+                "url": "ssh://git@source.updraftplus.com:20022/team-updraft/lib-central.git",
+                "reference": "888161bd56e469a660c1c3607d9b16d82aead64d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://source.updraftplus.com/api/v4/projects/106/packages/composer/archives/team-updraft/lib-central.zip?sha=888161bd56e469a660c1c3607d9b16d82aead64d",
+                "reference": "888161bd56e469a660c1c3607d9b16d82aead64d",
+                "shasum": ""
+            },
+            "type": "library",
+            "installation-source": "dist",
+            "install-path": "../team-updraft/lib-central"
+        },
+        {
+            "name": "team-updraft/lib-onboarding-wizard",
+            "version": "1.0.5",
+            "version_normalized": "1.0.5.0",
+            "source": {
+                "type": "git",
+                "url": "ssh://git@source.updraftplus.com:20022/team-updraft/lib-onboarding-wizard.git",
+                "reference": "b3326bd10931461479e434b34f5226892170f0eb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://source.updraftplus.com/api/v4/projects/140/packages/composer/archives/team-updraft/lib-onboarding-wizard.zip?sha=b3326bd10931461479e434b34f5226892170f0eb",
+                "reference": "b3326bd10931461479e434b34f5226892170f0eb",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^2.0"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "class": "LibOnboardingWizard"
+            },
+            "installation-source": "dist",
+            "autoload": {
+                "classmap": [
+                    "composer-plugin-extras"
+                ]
+            },
+            "description": "onboarding wizard",
+            "install-path": "../team-updraft/lib-onboarding-wizard"
+        }
+    ],
+    "dev": false,
+    "dev-package-names": []
+}

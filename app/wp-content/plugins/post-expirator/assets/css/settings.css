@@ -1,0 +1,448 @@
+ul.pe-list {
+	list-style: disc !important;
+}
+
+ul.pe-list > li {
+	margin-left: 3%;
+}
+
+ul.pe-list ul {
+    margin-left: 20px;
+    list-style: circle;
+}
+
+.pe-scroll {
+	height: 300px;
+	overflow-y: scroll;
+}
+
+.pe-scroll > table td {
+	padding: 5px;
+}
+
+#pe-settings-tabs fieldset {
+	border: 1px solid black;
+	border-radius: 6px;
+	padding: 0px 12px;
+	margin-bottom: 20px;
+}
+
+.pe-checklist label {
+    display: block;
+    width: 300px;
+    margin-bottom: 2px;
+}
+
+.pe-status {
+    display: inline-block;
+    font-size: 25px;
+}
+
+.pe-status-enabled {
+    color: #2c9b1a;
+}
+
+.pe-status-disabled {
+    color: #e58484;
+}
+
+.pe-status + span {
+    line-height: 25px;
+    margin-left: 5px;
+    margin-right: 10px;
+}
+
+.pe-status + span + input[type="submit"] {
+    margin-right: 10px;
+}
+
+.form-table .widefat th {
+	padding-left: 20px;
+	font-weight: 400;
+}
+
+.form-table .widefat .pe-date-column,
+.form-table .widefat .pe-event-column {
+	width: 20%;
+}
+
+span.post-expiration-attributes {
+	color: #adadad;
+}
+
+.pe-event-post {
+	cursor: help;
+}
+
+.pe-post-type-select {
+    margin-top: 10px;
+}
+
+.pe-post-type-select .components-base-control__field {
+    margin-bottom: 0 !important;
+}
+
+.post-expirator-timestamp {
+	width: 20% !important;
+}
+
+.publishpress-future-token-label {
+	margin-bottom: 8px;
+	margin-top: 10px;
+	display: block;
+}
+
+.publishpres-future-token-field [class$="-control"] {
+	padding: 0;
+	border: 1px solid #8c8f94;
+}
+
+.publishpres-future-token-field [class$="-ValueContainer"] {
+	padding: 0 4px;
+}
+
+.publishpres-future-token-field [class$="-multiValue"] {
+	background-color: #d3e3fd;
+}
+
+/* Ads */
+.pp-advertisement-right-sidebar .upgrade-btn a {
+    background: #FCB223;
+    color: #000 !important;
+    font-weight: normal;
+    text-decoration: none;
+    padding: 9px 12px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    box-sizing: border-box;
+    border: 1px solid #fca871;
+    break-inside: avoid;
+    white-space: nowrap;
+}
+
+.pp-advertisement-right-sidebar .upgrade-btn a:hover {
+    background: #fcca46;
+    color: #000 !important;
+}
+
+.pp-advertisement-right-sidebar h3.hndle {
+    font-size: 14px;
+    padding: 8px 12px;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.ppseries-token-right-sidebar h3.hndle {
+    font-size: 14px;
+    padding: 8px 12px;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.pp-advertisement-right-sidebar h3.hndle {
+    font-size: 14px;
+    padding: 8px 12px;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.pp-advertisement-right-sidebar .inside ul {
+    margin-bottom: 20px;
+}
+
+.pp-advertisement-right-sidebar .inside ul li {
+    position: relative;
+    padding-left: 22px;
+    font-weight: 600;
+    font-size: .9em;
+}
+
+.pp-advertisement-right-sidebar .inside ul li:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 0;
+    background-color: #3C50FF;
+    mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z'/></svg>");
+    -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z'/></svg>");
+    mask-size: 16px;
+    -webkit-mask-size: 16px;
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
+    mask-position: left;
+    -webkit-mask-position: left;
+}
+
+.pp-advertisement-right-sidebar a.advert-link {
+    display: block;
+    margin-top: 10px;
+    font-size: 1em;
+}
+
+.pp-advertisement-right-sidebar .advertisement-box-header {
+    background: #655897;
+    color: #ffffff;
+}
+
+.pp-advertisement-right-sidebar .advertisement-box-content {
+    border: 1px solid #655897;
+}
+
+.pp-pro-loc-icon {
+    cursor: pointer;
+    background: #FCB223;
+    color: #000;
+    border-radius: 100%;
+    width: 24px;
+    height: 24px;
+    box-sizing: border-box;
+    margin-left: 5px !important;
+}
+
+#screen-options-wrap label[for^="pp_boxes_banner-hide"],
+#pp_boxes_banner .postbox-header:not(.pp-advert),
+#screen-options-wrap label[for^="ppmacf_banner-hide"],
+#ppmacf_banner .postbox-header:not(.pp-advert) {
+    display: none !important;
+}
+
+#pp_boxes_banner,
+#ppmacf_banner {
+    background: unset !important;
+    border: none !important;
+    margin-bottom: 0 !important;
+}
+
+#pp_boxes_banner .inside:not(.pp-advert),
+#ppmacf_banner .inside:not(.pp-advert) {
+    padding: 0 !important;
+}
+
+@media only screen and (min-width: 1075px) {
+    .pp-advertisement-right-sidebar-message,
+    .upgrade-btn {
+        display: inline-block;
+    }
+
+    .pp-advertisement-right-sidebar-message {
+        margin-right: 25px;
+    }
+}
+
+@media only screen and (max-width: 1074px) {
+    .pp-advertisement-right-sidebar-message,
+    .upgrade-btn {
+        display: block;
+    }
+
+    .upgrade-btn {
+        margin-top: 20px;
+    }
+
+    .upgrade-btn a {
+        max-width: 170px;
+    }
+}
+
+.publishpres-future-token-field {
+    background: white;
+    border-radius: 4px;
+}
+
+.pp-settings-field-row {
+    margin-bottom: 6px;
+}
+
+span.description,
+p.description,
+.form-table td p.description {
+    font-size: 13px;
+    margin: 2px 0 5px;
+    color: #8d929a;
+}
+
+.pp-settings-field-row .description.offset {
+    margin-left: 24px;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .5;
+  }
+}
+
+#publishpress-future-settings-post-types .notice {
+    padding-top: 14px;
+    width: 100%;
+}
+
+.future-action-pending input {
+    background-color: #f0ad4e;
+}
+
+
+/**
+ * Spinner
+ */
+
+.publishpress-future-loading {
+    position: relative;
+}
+
+.publishpress-future-spinner {
+    display: inline-block;
+    position: absolute;
+    width: 80px;
+    height: 80px;
+}
+
+.publishpress-future-spinner div {
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    width: 64px;
+    height: 64px;
+    margin: 8px;
+    border: 8px solid #916ba6;
+    border-radius: 50%;
+    animation: publishpress-future-spinner 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    border-color: #916ba6 transparent transparent transparent;
+}
+
+.publishpress-future-spinner div:nth-child(1) {
+    animation-delay: -0.45s;
+}
+
+.publishpress-future-spinner div:nth-child(2) {
+    animation-delay: -0.3s;
+}
+
+.publishpress-future-spinner div:nth-child(3) {
+    animation-delay: -0.15s;
+}
+
+@keyframes publishpress-future-spinner {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.publishpress-future-loading-input .publishpress-future-spinner {
+    position: absolute;
+    top: 8px;
+    right: 2px;
+    width: 20px;
+    height: 20px;
+}
+
+.publishpress-future-loading-input .publishpress-future-spinner div {
+    width: 14px;
+    height: 14px;
+    margin: 0;
+    border-width: 3px;
+}
+
+/* Notices  */
+.publishpress-future-notice {
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    width: 100%;
+}
+
+.publishpress-future-notice-error {
+    background-color: #f2dede;
+    border-color: #deb2ba;
+    color: #a94442;
+}
+
+#diagnostics-database-schema-check ul {
+    padding-left: 0;
+    margin-left: 44px;
+}
+
+#diagnostics-database-schema-check ul li {
+    list-style-type: disc;
+}
+
+.pp-debug-log textarea {
+    width: 100%;
+    height: 500px;
+    font-size: 12px;
+    font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono', monospace;
+    background-color: #1e1e1e;
+    color: #d6d9d1;
+    border: 1px solid #3c3c3c;
+    overflow-y: scroll;
+    overflow-x: scroll;
+    padding: 12px;
+    text-wrap: nowrap;
+    line-height: 1.5;
+}
+
+.pp-debug-log-actions {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-start;
+}
+
+.pp-debug-log-options {
+    margin-bottom: 15px;
+}
+
+.pp-debug-log-options form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px 25px;
+}
+
+#pp-debug-log-autorefresh {
+    margin-top: 15px;
+}
+
+.pp-debug-log-option {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.pp-debug-log-option label:first-child {
+    font-weight: 600;
+}
+
+.pp-radio-label {
+    font-weight: normal !important;
+}
+
+.pp-radio-label input {
+    margin-right: 3px;
+}
+
+.pp-debug-log-count {
+    margin-bottom: 10px;
+}
+
+.pp-debug-log-count select {
+    margin-left: 5px;
+}
+
+.pp-settings-title {
+    display: inline-block;
+    margin-right: 5px !important;
+}
+
+#pe-settings-tabs {
+    margin-top: 10px;
+}

@@ -27,13 +27,45 @@ addFilter('lzb.editor.control.text.render', 'lzb.editor', (render, props) => {
 				placeholder={props.data.placeholder}
 				value={props.getValue()}
 				onChange={props.onChange}
+				__next40pxDefaultSize
+				__nextHasNoMarginBottom
 			/>
 		</BaseControl>
 	);
 });
 
 /**
- * Control settings render in constructor.
+ * Required check.
+ *
+ * @param {Object} validationData
+ * @param {number} value
+ * @param {Object} data
+ *
+ * @return {Object} validation data.
+ */
+function validate(validationData, value, data) {
+	if (!value.length) {
+		return { valid: false };
+	}
+
+	if (data.characters_limit) {
+		const limit = parseInt(data.characters_limit, 10);
+
+		if (value.length > limit) {
+			return {
+				valid: false,
+				message: `Please shorten this text to ${limit} characters or less (you are currently using ${value.length} characters).`,
+			};
+		}
+	}
+
+	return validationData;
+}
+addFilter('lzb.editor.control.text.validate', 'lzb.editor', validate);
+addFilter('lzb.editor.control.textarea.validate', 'lzb.editor', validate);
+
+/**
+ * Control settings render in block builder.
  */
 addFilter(
 	'lzb.constructor.control.text.settings',
@@ -48,6 +80,8 @@ addFilter(
 						label={__('Placeholder', 'lazy-blocks')}
 						value={data.placeholder}
 						onChange={(value) => updateData({ placeholder: value })}
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
 					/>
 				</PanelBody>
 				<PanelBody>
@@ -68,6 +102,8 @@ addFilter(
 						onChange={(value) =>
 							updateData({ characters_limit: `${value}` })
 						}
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
 					/>
 				</PanelBody>
 			</>

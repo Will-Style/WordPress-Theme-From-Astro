@@ -24,6 +24,14 @@ class RegenerateAttachmentEndpoint extends EndpointAbstract {
 	/**
 	 * {@inheritdoc}
 	 */
+	public function is_valid_request( string $request_nonce, array $request_params ): bool {
+		return ( ( wp_verify_nonce( $request_nonce, 'wp_rest' ) !== false )
+			&& current_user_can( 'edit_post', $request_params['post_id'] ?? 0 ) );
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
 	public function get_route_args(): array {
 		return array_merge(
 			parent::get_route_args(),
@@ -42,8 +50,8 @@ class RegenerateAttachmentEndpoint extends EndpointAbstract {
 						return in_array(
 							$value,
 							array_merge(
-								apply_filters( 'webpc_option_quality_levels', [ '75', '80', '85', '90', '95' ] ),
-								[ '0' ]
+								apply_filters( 'webpc_option_quality_levels', [ 75, 80, 85, 90, 95 ] ),
+								[ 0 ]
 							)
 						);
 					},

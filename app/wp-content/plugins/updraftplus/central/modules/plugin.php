@@ -1,6 +1,6 @@
 <?php
 
-if (!defined('UPDRAFTCENTRAL_CLIENT_DIR')) die('No access.');
+if (!defined('ABSPATH')) die('No direct access allowed');
 
 /**
  * Handles UpdraftCentral Plugin Commands which basically handles
@@ -74,6 +74,32 @@ class UpdraftCentral_Plugin_Commands extends UpdraftCentral_Commands {
 
 		$result = $this->_get_plugin_info($query);
 		return $this->_response($result);
+	}
+
+	/**
+	 * Checks whether the plugins are currently installed and activated.
+	 *
+	 * @param array $query Parameter array containing the names of the plugins to check
+	 * @return array Contains the result of the current process
+	 */
+	public function are_plugins_installed($query) {
+
+		if (!isset($query['plugins']) || !is_array($query['plugins'])) {
+			return $this->_generic_error_response('plugin_name_required');
+		}
+
+		$results = array();
+
+		// Process each requested plugin
+		foreach ($query['plugins'] as $key => $plugin) {
+			if (!isset($plugin['plugin'])) {
+				continue;
+			}
+
+			$info = $this->_get_plugin_info($plugin);
+			$results[$key] = $info;
+		}
+		return $this->_response($results);
 	}
 
 	/**
@@ -207,7 +233,7 @@ class UpdraftCentral_Plugin_Commands extends UpdraftCentral_Commands {
 								$error_message = end($messages);
 							} else {
 								$error_code = 'unable_to_connect_to_filesystem';
-								$error_message = __('Unable to connect to the filesystem.', 'updraftplus').' '.__('Please confirm your credentials.');
+								$error_message = __('Unable to connect to the filesystem.', 'updraftplus').' '.__('Please confirm your credentials.', 'updraftplus');
 							}
 						}
 					}
@@ -564,7 +590,17 @@ class UpdraftCentral_Plugin_Commands extends UpdraftCentral_Commands {
 		if (!is_array($info) || empty($info) || empty($key)) return '';
 
 		$temp = explode('/', $key);
-		$slug = !empty($info['TextDomain']) ? $info['TextDomain'] : basename($temp[0], '.php');
+
+		// With WP standards textdomain must always be equal to the plugin's folder name
+		// but for premium plugins this may not always be the case thus, we extract the folder
+		// name from the key as the default slug.
+		$slug = basename($temp[0], '.php');
+		
+		if (!empty($info['TextDomain']) && 1 === count($temp)) {
+			// For plugin without folder we compare the extracted slug with the 'TextDomain'
+			// and if they're not equal then 'TextDomain' will assume as slug.
+			if ($slug != $info['TextDomain']) $slug = $info['TextDomain'];
+		}
 
 		// If in case the user kept the hello-dolly plugin then we'll make sure that it gets
 		// the proper slug for it, otherwise, we'll end up with the wrong slug 'hello' instead of

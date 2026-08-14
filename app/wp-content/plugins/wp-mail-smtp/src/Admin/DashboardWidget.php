@@ -40,15 +40,7 @@ class DashboardWidget {
 	 *
 	 * @since 2.9.0
 	 */
-	public function __construct() {
-
-		// Prevent the class initialization, if the dashboard widget hidden setting is enabled.
-		if ( Options::init()->get( 'general', 'dashboard_widget_hidden' ) ) {
-			return;
-		}
-
-		add_action( 'admin_init', [ $this, 'init' ] );
-	}
+	public function __construct() {}
 
 	/**
 	 * Init class.
@@ -57,23 +49,34 @@ class DashboardWidget {
 	 */
 	public function init() {
 
-		// This widget should be displayed for certain high-level users only.
-		if ( ! current_user_can( 'manage_options' ) ) {
+		// Prevent the class initialization, if the dashboard widget hidden setting is enabled.
+		if ( Options::init()->get( 'general', 'dashboard_widget_hidden' ) ) {
 			return;
 		}
 
-		/**
-		 * Filters whether the initialization of the dashboard widget should be allowed.
-		 *
-		 * @since 2.9.0
-		 *
-		 * @param bool $var If the dashboard widget should be initialized.
-		 */
-		if ( ! apply_filters( 'wp_mail_smtp_admin_dashboard_widget', '__return_true' ) ) {
-			return;
-		}
+		add_action(
+			'admin_init',
+			function() {
 
-		$this->hooks();
+				// This widget should be displayed for certain high-level users only.
+				if ( ! current_user_can( wp_mail_smtp()->get_capability_manage_options() ) ) {
+					return;
+				}
+
+				/**
+				 * Filters whether the initialization of the dashboard widget should be allowed.
+				 *
+				 * @since 2.9.0
+				 *
+				 * @param bool $var If the dashboard widget should be initialized.
+				 */
+				if ( ! apply_filters( 'wp_mail_smtp_admin_dashboard_widget', '__return_true' ) ) {
+					return;
+				}
+
+				$this->hooks();
+			}
+		);
 	}
 
 	/**
@@ -120,25 +123,25 @@ class DashboardWidget {
 		);
 
 		wp_enqueue_script(
-			'wp-mail-smtp-moment',
-			wp_mail_smtp()->assets_url . '/js/vendor/moment.min.js',
-			[],
-			'2.29.4',
+			'wp-mail-smtp-chart',
+			wp_mail_smtp()->assets_url . '/js/vendor/chart.min.js',
+			[ 'moment' ],
+			'4.4.9',
 			true
 		);
 
 		wp_enqueue_script(
-			'wp-mail-smtp-chart',
-			wp_mail_smtp()->assets_url . '/js/vendor/chart.min.js',
-			[ 'wp-mail-smtp-moment' ],
-			'2.9.4.1',
+			'wp-mail-smtp-chart-adapter',
+			wp_mail_smtp()->assets_url . '/js/vendor/chartjs-adapter-moment.min.js',
+			[ 'moment', 'wp-mail-smtp-chart' ],
+			'1.0.1',
 			true
 		);
 
 		wp_enqueue_script(
 			'wp-mail-smtp-dashboard-widget',
 			wp_mail_smtp()->assets_url . "/js/smtp-dashboard-widget{$min}.js",
-			[ 'jquery', 'wp-mail-smtp-chart' ],
+			[ 'jquery', 'wp-mail-smtp-chart', 'wp-mail-smtp-chart-adapter' ],
 			WPMS_PLUGIN_VER,
 			true
 		);
@@ -172,12 +175,17 @@ class DashboardWidget {
 
 		// Attempt to place the widget at the top.
 		$normal_dashboard = $wp_meta_boxes['dashboard']['normal']['core'];
-		$widget_instance  = [ $widget_key => $normal_dashboard[ $widget_key ] ];
-		unset( $normal_dashboard[ $widget_key ] );
-		$sorted_dashboard = array_merge( $widget_instance, $normal_dashboard );
 
-		//phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-		$wp_meta_boxes['dashboard']['normal']['core'] = $sorted_dashboard;
+		if ( isset( $normal_dashboard[ $widget_key ] ) ) {
+			$widget_instance = [ $widget_key => $normal_dashboard[ $widget_key ] ];
+
+			unset( $normal_dashboard[ $widget_key ] );
+
+			$sorted_dashboard = array_merge( $widget_instance, $normal_dashboard );
+
+			//phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+			$wp_meta_boxes['dashboard']['normal']['core'] = $sorted_dashboard;
+		}
 	}
 
 	/**
@@ -189,7 +197,7 @@ class DashboardWidget {
 
 		check_admin_referer( 'wp_mail_smtp_' . static::SLUG . '_nonce' );
 
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! current_user_can( wp_mail_smtp()->get_capability_manage_options() ) ) {
 			wp_send_json_error();
 		}
 
@@ -210,7 +218,7 @@ class DashboardWidget {
 
 		check_admin_referer( 'wp_mail_smtp_' . static::SLUG . '_nonce' );
 
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! current_user_can( wp_mail_smtp()->get_capability_manage_global_options() ) ) {
 			wp_send_json_error();
 		}
 
@@ -328,7 +336,11 @@ class DashboardWidget {
 
 		$hide_summary_report_email_block = (bool) $this->widget_meta( 'get', 'hide_summary_report_email_block' );
 
-		if ( SummaryReportEmail::is_disabled() && ! $hide_summary_report_email_block ) {
+		if (
+			SummaryReportEmail::is_disabled() &&
+			! $hide_summary_report_email_block &&
+			current_user_can( wp_mail_smtp()->get_capability_manage_global_options() )
+		) {
 			$this->show_summary_report_email_block();
 		}
 
@@ -359,17 +371,18 @@ class DashboardWidget {
 			</div>
 			<div class="wp-mail-smtp-dash-widget-email-alerts-education-content">
 				<?php
-				if ( $error_count === 1 ) {
-					$error_title = __( 'We detected a failed email in the last 30 days.', 'wp-mail-smtp' );
-				} else {
-					$error_title = sprintf(
-						/* translators: %d - number of failed emails. */
-						__( 'We detected %d failed emails in the last 30 days.', 'wp-mail-smtp' ),
-						$error_count
-					);
-				}
+				$error_title = sprintf(
+					/* translators: %d - number of failed emails. */
+					_n(
+						'We detected %d failed email in the last 30 days.',
+						'We detected %d failed emails in the last 30 days.',
+						$error_count,
+						'wp-mail-smtp'
+					),
+					$error_count
+				);
 
-				$content = sprintf(
+				$error_content = sprintf(
 					/* translators: %s - URL to WPMailSMTP.com. */
 					__( '<a href="%s" target="_blank" rel="noopener noreferrer">Upgrade to Pro</a> and get instant alert notifications when they fail.', 'wp-mail-smtp' ),
 					esc_url( wp_mail_smtp()->get_upgrade_link( [ 'medium' => 'dashboard-widget', 'content' => 'alerts-promo-upgrade-to-pro' ] ) ) // phpcs:ignore WordPress.Arrays.ArrayDeclarationSpacing.AssociativeArrayFound
@@ -379,7 +392,7 @@ class DashboardWidget {
 					<strong><?php echo esc_html( $error_title ); ?></strong><br />
 					<?php
 					echo wp_kses(
-						$content,
+						$error_content,
 						[
 							'a' => [
 								'href'   => [],

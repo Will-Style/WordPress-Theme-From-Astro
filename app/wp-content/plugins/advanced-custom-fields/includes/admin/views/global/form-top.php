@@ -1,4 +1,14 @@
 <?php
+/**
+ * @package ACF
+ * @author  WP Engine
+ *
+ * © 2026 Advanced Custom Fields (ACF®). All rights reserved.
+ * "ACF" is a trademark of WP Engine.
+ * Licensed under the GNU General Public License v2 or later.
+ * https://www.gnu.org/licenses/gpl-2.0.html
+ */
+
 global $title, $post_new_file, $post_type_object, $post;
 $acf_title_placeholder = apply_filters( 'enter_title_here', __( 'Add title' ), $post );
 $acf_title             = $post->post_title;
@@ -40,20 +50,23 @@ if ( 'acf-field-group' === $acf_post_type ) {
 	if ( empty( $acf_title ) && $acf_prefilled_title ) {
 		$acf_title = $acf_prefilled_title;
 	}
-} elseif ( in_array( $acf_post_type, array( 'acf-post-type', 'acf-taxonomy' ) ) ) {
-	$acf_duplicate_post_type   = acf_get_post_type_from_request_args( 'acfduplicate' );
-	$acf_duplicate_taxonomy    = acf_get_taxonomy_from_request_args( 'acfduplicate' );
-	$acf_duplicated_from_label = '';
+} elseif ( in_array( $acf_post_type, array( 'acf-post-type', 'acf-taxonomy', 'acf-ui-options-page' ), true ) ) {
+	$acf_duplicate_post_type       = acf_get_post_type_from_request_args( 'acfduplicate' );
+	$acf_duplicate_taxonomy        = acf_get_taxonomy_from_request_args( 'acfduplicate' );
+	$acf_duplicate_ui_options_page = acf_get_ui_options_page_from_request_args( 'acfduplicate' );
+	$acf_duplicated_from_label     = '';
 
 	if ( $acf_duplicate_post_type && ! empty( $acf_duplicate_post_type['labels']['singular_name'] ) ) {
 		$acf_duplicated_from_label = $acf_duplicate_post_type['labels']['singular_name'];
 	} elseif ( $acf_duplicate_taxonomy && ! empty( $acf_duplicate_taxonomy['labels']['singular_name'] ) ) {
 		$acf_duplicated_from_label = $acf_duplicate_taxonomy['labels']['singular_name'];
+	} elseif ( $acf_duplicate_ui_options_page && ! empty( $acf_duplicate_ui_options_page['page_title'] ) ) {
+		$acf_duplicated_from_label = $acf_duplicate_ui_options_page['page_title'];
 	}
 
 	if ( ! empty( $acf_duplicated_from_label ) ) {
 		/* translators: %s - A singular label for a post type or taxonomy. */
-		$acf_duplicated_from = sprintf( __( ' (Duplicated from %s)', 'acf' ), $acf_duplicated_from_label );
+		$acf_duplicated_from = ' ' . sprintf( __( '(Duplicated from %s)', 'acf' ), $acf_duplicated_from_label );
 	}
 }
 ?>

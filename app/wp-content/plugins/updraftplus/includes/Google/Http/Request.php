@@ -15,6 +15,8 @@
  * limitations under the License.
  */
 
+if (!defined('ABSPATH')) die('No direct access allowed');
+
 if (!class_exists('UDP_Google_Client')) {
   require_once dirname(__FILE__) . '/../autoload.php';
 }

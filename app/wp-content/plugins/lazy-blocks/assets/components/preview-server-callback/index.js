@@ -15,6 +15,7 @@ import apiFetch from '@wordpress/api-fetch';
  * Internal dependencies.
  */
 import RenderBlockContent from './render-block-content';
+import PreviewErrorBoundary from '../../components/preview-error-boundary';
 
 /**
  * Block Editor custom PHP preview.
@@ -33,6 +34,8 @@ export default function PreviewServerCallback(props) {
 		urlQueryArgs = {},
 		onBeforeChange = () => {},
 		onChange = () => {},
+		withBlockProps = false,
+		context,
 	} = props;
 
 	const [response, setResponse] = useState(null);
@@ -43,6 +46,7 @@ export default function PreviewServerCallback(props) {
 	const isMountedRef = useRef(true);
 	const currentFetchRequest = useRef(null);
 	const fetchTimeout = useRef();
+	const blockContentWrapper = useRef();
 
 	const prevProps = usePrevious(props);
 
@@ -72,9 +76,10 @@ export default function PreviewServerCallback(props) {
 			path: 'lazy-blocks/v1/block-render',
 			method: 'POST',
 			data: {
-				context: 'editor',
+				render_location: 'editor',
 				name: block,
 				post_id: postId || 0,
+				context,
 				...(attributes !== null ? { attributes } : {}),
 				...urlQueryArgs,
 			},
@@ -150,12 +155,13 @@ export default function PreviewServerCallback(props) {
 
 	// When the component unmounts, set isMountedRef to false. This will
 	// let the async fetch callbacks know when to stop.
-	useEffect(
-		() => () => {
+	useEffect(() => {
+		isMountedRef.current = true;
+
+		return () => {
 			isMountedRef.current = false;
-		},
-		[]
-	);
+		};
+	}, []);
 
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	useEffect(() => {
@@ -193,8 +199,17 @@ export default function PreviewServerCallback(props) {
 		// shows data as soon as possible
 		if (prevProps === undefined) {
 			fetchData();
-		} else if (!isEqual(prevProps.attributes, props.attributes)) {
-			debouncedFetchData();
+		} else {
+			// Check for changes in both attributes AND context
+			const attributesChanged = !isEqual(
+				prevProps.attributes,
+				props.attributes
+			);
+			const contextChanged = !isEqual(prevProps.context, props.context);
+
+			if (attributesChanged || contextChanged) {
+				debouncedFetchData();
+			}
 		}
 	});
 
@@ -228,12 +243,22 @@ export default function PreviewServerCallback(props) {
 		result = (
 			<>
 				{response ? (
-					<RenderBlockContent content={response} props={props} />
+					<RenderBlockContent
+						content={response}
+						props={props}
+						blockContentWrapper={blockContentWrapper}
+						withBlockProps={withBlockProps}
+					/>
 				) : null}
 				{isLoading ? <Spinner /> : null}
 			</>
 		);
 	}
 
-	return <div className="lzb-preview-server">{result}</div>;
+	return (
+		<>
+			<PreviewErrorBoundary>{result}</PreviewErrorBoundary>
+			<link ref={blockContentWrapper} />
+		</>
+	);
 }

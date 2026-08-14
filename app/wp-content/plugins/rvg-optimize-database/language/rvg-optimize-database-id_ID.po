@@ -1,0 +1,1037 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Optimize Database after Deleting Revisions\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-30 20:55-0500\n"
+"PO-Revision-Date: 2024-01-30 20:55-0500\n"
+"Last-Translator: Jordan Silaen <jordan.silaen@chameleonjohn.com>\n"
+"Language-Team: ChameleonJohn.com\n"
+"Language: id\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-KeywordsList: _:1;gettext:1;dgettext:2;ngettext:1,2;dngettext:2,3;"
+"__:1;_e:1;_c:1;_n:1,2;_n_noop:1,2;_nc:1,2;__ngettext:1,2;__ngettext_noop:1,2;"
+"_x:1,2c;_ex:1,2c;_nx:1,2,4c;_nx_noop:1,2,3c;_n_js:1,2;_nx_js:1,2,3c;"
+"esc_attr__:1;esc_html__:1;esc_attr_e:1;esc_html_e:1;esc_attr_x:1,2c;"
+"esc_html_x:1,2c;comments_number_link:2,3;t:1;st:1;trans:1;transChoice:1,2\n"
+"X-Loco-Target-Locale: de_DE\n"
+"X-Generator: Poedit 3.4.2\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: classes/odb-cleaner.php:52
+msgid "Cleaning Database"
+msgstr "membersihkan database"
+
+#: classes/odb-cleaner.php:105
+#, fuzzy
+#| msgid "No REVISIONS found to delete"
+msgid "REVISIONS found to delete: "
+msgstr "Tidak ada REVISI ditemukan untuk menghapus"
+
+#: classes/odb-cleaner.php:114
+#, fuzzy
+#| msgid "No REVISIONS found to delete"
+msgid "REVISIONS deleted: "
+msgstr "Tidak ada REVISI ditemukan untuk menghapus"
+
+#: classes/odb-cleaner.php:123
+#, fuzzy
+#| msgid "DELETED REVISIONS"
+msgid "REVISIONS"
+msgstr "REVISI DIHAPUS"
+
+#: classes/odb-cleaner.php:124
+#, fuzzy
+#| msgid "total number of revisions deleted"
+msgid "total number of revisions"
+msgstr "jumlah revisi dihapus"
+
+#: classes/odb-cleaner.php:128
+msgid "DELETED REVISIONS"
+msgstr "REVISI DIHAPUS"
+
+#: classes/odb-cleaner.php:129
+msgid "total number of revisions deleted"
+msgstr "jumlah revisi dihapus"
+
+#: classes/odb-cleaner.php:141 classes/odb-cleaner.php:229
+#: classes/odb-cleaner.php:314 classes/odb-cleaner.php:401
+#: classes/odb-cleaner.php:497 classes/odb-cleaner.php:587
+#: classes/odb-cleaner.php:676 classes/odb-cleaner.php:764
+msgid "prefix"
+msgstr "awalan"
+
+#: classes/odb-cleaner.php:142
+msgid "post / page"
+msgstr "post / page"
+
+#: classes/odb-cleaner.php:143
+msgid "revision date"
+msgstr "tanggal Revisi"
+
+#: classes/odb-cleaner.php:172
+msgid "No REVISIONS found to delete"
+msgstr "Tidak ada REVISI ditemukan untuk menghapus"
+
+#: classes/odb-cleaner.php:195
+#, fuzzy
+#| msgid "No TRASHED ITEMS found to delete"
+msgid "TRASHED ITEMS found to delete: "
+msgstr "Tidak ada ITEM menghancurkan ditemukan untuk menghapus"
+
+#: classes/odb-cleaner.php:204
+#, fuzzy
+#| msgid "No TRASHED ITEMS found to delete"
+msgid "TRASHED ITEMS deleted: "
+msgstr "Tidak ada ITEM menghancurkan ditemukan untuk menghapus"
+
+#: classes/odb-cleaner.php:213
+#, fuzzy
+#| msgid "DELETED TRASHED ITEMS"
+msgid "TRASHED ITEMS"
+msgstr "DIHAPUS ITEM Dibuang"
+
+#: classes/odb-cleaner.php:214
+#, fuzzy
+#| msgid "total number of trashed items deleted"
+msgid "total number of trashed items"
+msgstr "jumlah item yang dibuang ke tempat sampah dihapus"
+
+#: classes/odb-cleaner.php:217
+msgid "DELETED TRASHED ITEMS"
+msgstr "DIHAPUS ITEM Dibuang"
+
+#: classes/odb-cleaner.php:218
+msgid "total number of trashed items deleted"
+msgstr "jumlah item yang dibuang ke tempat sampah dihapus"
+
+#: classes/odb-cleaner.php:230 classes/odb-cleaner.php:588
+#: classes/odb-cleaner.php:765
+msgid "type"
+msgstr "mengetik"
+
+#: classes/odb-cleaner.php:231
+msgid "IP address / title"
+msgstr "Alamat IP / title"
+
+#: classes/odb-cleaner.php:232 classes/odb-cleaner.php:590
+#: classes/odb-logger.php:112
+msgid "date"
+msgstr "tanggal"
+
+#: classes/odb-cleaner.php:257
+msgid "No TRASHED ITEMS found to delete"
+msgstr "Tidak ada ITEM menghancurkan ditemukan untuk menghapus"
+
+#: classes/odb-cleaner.php:280
+#, fuzzy
+#| msgid "No SPAMMED ITEMS found to delete"
+msgid "SPAMMED ITEMS found to delete: "
+msgstr "Tidak ada ITEM spam ditemukan untuk menghapus"
+
+#: classes/odb-cleaner.php:289
+#, fuzzy
+#| msgid "No SPAMMED ITEMS found to delete"
+msgid "SPAMMED ITEMS deleted: "
+msgstr "Tidak ada ITEM spam ditemukan untuk menghapus"
+
+#: classes/odb-cleaner.php:297
+#, fuzzy
+#| msgid "DELETEED SPAMMED ITEMS"
+msgid "SPAMMED ITEMS"
+msgstr "DELETEED ITEM spam"
+
+#: classes/odb-cleaner.php:298
+#, fuzzy
+#| msgid "total number of spammed items deleted"
+msgid "total number of spammed items"
+msgstr "jumlah item spam dihapus"
+
+#: classes/odb-cleaner.php:302
+#, fuzzy
+#| msgid "DELETEED SPAMMED ITEMS"
+msgid "DELETED SPAMMED ITEMS"
+msgstr "DELETEED ITEM spam"
+
+#: classes/odb-cleaner.php:303
+msgid "total number of spammed items deleted"
+msgstr "jumlah item spam dihapus"
+
+#: classes/odb-cleaner.php:315
+msgid "comment author"
+msgstr "komentar penulis"
+
+#: classes/odb-cleaner.php:316
+msgid "comment author email"
+msgstr "email penulis komentar"
+
+#: classes/odb-cleaner.php:317
+msgid "comment date"
+msgstr "tanggal komentar"
+
+#: classes/odb-cleaner.php:342
+msgid "No SPAMMED ITEMS found to delete"
+msgstr "Tidak ada ITEM spam ditemukan untuk menghapus"
+
+#: classes/odb-cleaner.php:367
+#, fuzzy
+#| msgid "No UNUSED TAGS found to delete"
+msgid "UNUSED TAGS found to delete: "
+msgstr "Tidak ada TAGS UNUSED ditemukan untuk menghapus"
+
+#: classes/odb-cleaner.php:376
+#, fuzzy
+#| msgid "No UNUSED TAGS found to delete"
+msgid "UNUSED TAGS deleted: "
+msgstr "Tidak ada TAGS UNUSED ditemukan untuk menghapus"
+
+#: classes/odb-cleaner.php:385
+msgid "UNUSED TAGS"
+msgstr ""
+
+#: classes/odb-cleaner.php:386
+#, fuzzy
+#| msgid "total number of trashed items deleted"
+msgid "total number of unused tags"
+msgstr "jumlah item yang dibuang ke tempat sampah dihapus"
+
+#: classes/odb-cleaner.php:389
+#, fuzzy
+#| msgid "DELETED TRASHED ITEMS"
+msgid "DELETED UNUSED TAGS"
+msgstr "DIHAPUS ITEM Dibuang"
+
+#: classes/odb-cleaner.php:390
+#, fuzzy
+#| msgid "total number of trashed items deleted"
+msgid "total number of unused tags deleted"
+msgstr "jumlah item yang dibuang ke tempat sampah dihapus"
+
+#: classes/odb-cleaner.php:402
+msgid "tag"
+msgstr ""
+
+#: classes/odb-cleaner.php:427
+msgid "No UNUSED TAGS found to delete"
+msgstr "Tidak ada TAGS UNUSED ditemukan untuk menghapus"
+
+#: classes/odb-cleaner.php:462
+#, fuzzy
+#| msgid "No EXPIRED TRANSIENTS found to delete"
+msgid " TRANSIENTS found to delete: "
+msgstr "Tidak ada transien kadaluarsa ditemukan untuk menghapus"
+
+#: classes/odb-cleaner.php:471
+#, fuzzy
+#| msgid "No EXPIRED TRANSIENTS found to delete"
+msgid " TRANSIENTS deleted: "
+msgstr "Tidak ada transien kadaluarsa ditemukan untuk menghapus"
+
+#: classes/odb-cleaner.php:481
+msgid " TRANSIENTS"
+msgstr ""
+
+#: classes/odb-cleaner.php:482 classes/odb-cleaner.php:486
+#, fuzzy
+#| msgid "total number of revisions deleted"
+msgid "total number of "
+msgstr "jumlah revisi dihapus"
+
+#: classes/odb-cleaner.php:485
+#, fuzzy
+#| msgid "DELETED REVISIONS"
+msgid "DELETED "
+msgstr "REVISI DIHAPUS"
+
+#: classes/odb-cleaner.php:498
+#, fuzzy
+#| msgid "Donation page"
+msgid "option name"
+msgstr "halaman donasi"
+
+#: classes/odb-cleaner.php:553
+#, fuzzy
+#| msgid "No PINGBACKS nor TRACKBACKS found to delete"
+msgid "PINGBACKS AND/OR TRACKBACKS found to delete: "
+msgstr "Tidak ada Pingbacks atau trackbacks ditemukan untuk menghapus"
+
+#: classes/odb-cleaner.php:562
+#, fuzzy
+#| msgid "No PINGBACKS nor TRACKBACKS found to delete"
+msgid "PINGBACKS AND/OR TRACKBACKS deleted: "
+msgstr "Tidak ada Pingbacks atau trackbacks ditemukan untuk menghapus"
+
+#: classes/odb-cleaner.php:571
+#, fuzzy
+#| msgid "NUMBER OF PINGBACKS AND TRACKBACKS DELETED"
+msgid "PINGBACKS AND TRACKBACKS"
+msgstr "JUMLAH Pingbacks dan trackbacks DIHAPUS"
+
+#: classes/odb-cleaner.php:572
+#, fuzzy
+#| msgid "Delete pingbacks and trackbacks"
+msgid "total number of pingbacks and trackbacks"
+msgstr "Hapus pingbacks dan Pelacakan"
+
+#: classes/odb-cleaner.php:575
+#, fuzzy
+#| msgid "NUMBER OF PINGBACKS AND TRACKBACKS DELETED"
+msgid "DELETED PINGBACKS AND TRACKBACKS"
+msgstr "JUMLAH Pingbacks dan trackbacks DIHAPUS"
+
+#: classes/odb-cleaner.php:576
+#, fuzzy
+#| msgid "total number of trashed items deleted"
+msgid "total number of pingbacks and trackbacks deleted"
+msgstr "jumlah item yang dibuang ke tempat sampah dihapus"
+
+#: classes/odb-cleaner.php:589
+#, fuzzy
+#| msgid "comment author"
+msgid "comment_author"
+msgstr "komentar penulis"
+
+#: classes/odb-cleaner.php:616
+msgid "No PINGBACKS nor TRACKBACKS found to delete"
+msgstr "Tidak ada Pingbacks atau trackbacks ditemukan untuk menghapus"
+
+#: classes/odb-cleaner.php:642
+#, fuzzy
+#| msgid "No TRASHED ITEMS found to delete"
+msgid "OEMBED CACHE ITEMS found to delete: "
+msgstr "Tidak ada ITEM menghancurkan ditemukan untuk menghapus"
+
+#: classes/odb-cleaner.php:651
+msgid "OEMBED CACHE ITEMS deleted: "
+msgstr ""
+
+#: classes/odb-cleaner.php:660
+msgid "OEMBED CACHE items"
+msgstr ""
+
+#: classes/odb-cleaner.php:661
+#, fuzzy
+#| msgid "total number of trashed items deleted"
+msgid "total number of oembed cache items"
+msgstr "jumlah item yang dibuang ke tempat sampah dihapus"
+
+#: classes/odb-cleaner.php:664
+#, fuzzy
+#| msgid "DELETED TRASHED ITEMS"
+msgid "DELETED OEMBED CACHE ITEMS"
+msgstr "DIHAPUS ITEM Dibuang"
+
+#: classes/odb-cleaner.php:665
+#, fuzzy
+#| msgid "total number of trashed items deleted"
+msgid "total number of oembed cache items deleted"
+msgstr "jumlah item yang dibuang ke tempat sampah dihapus"
+
+#: classes/odb-cleaner.php:677 classes/odb-cleaner.php:770
+msgid "meta key"
+msgstr ""
+
+#: classes/odb-cleaner.php:678 classes/odb-cleaner.php:771
+msgid "meta value"
+msgstr ""
+
+#: classes/odb-cleaner.php:703
+#, fuzzy
+#| msgid "No TRASHED ITEMS found to delete"
+msgid "No OEMBED CACHE ITEMS found to delete"
+msgstr "Tidak ada ITEM menghancurkan ditemukan untuk menghapus"
+
+#: classes/odb-cleaner.php:729
+#, fuzzy
+#| msgid "No POSTMETA ORPHANS found to delete"
+msgid "ORPHANS found to delete: "
+msgstr "Tidak ada ANAK YATIM POSTMETA ditemukan untuk menghapus"
+
+#: classes/odb-cleaner.php:738
+msgid "ORPHANS deleted: "
+msgstr ""
+
+#: classes/odb-cleaner.php:748
+msgid "ORPHANS"
+msgstr ""
+
+#: classes/odb-cleaner.php:749
+#, fuzzy
+#| msgid "total number of revisions deleted"
+msgid "total number of orphans"
+msgstr "jumlah revisi dihapus"
+
+#: classes/odb-cleaner.php:752
+#, fuzzy
+#| msgid "DELETED REVISIONS"
+msgid "DELETED ORPHANS"
+msgstr "REVISI DIHAPUS"
+
+#: classes/odb-cleaner.php:753
+#, fuzzy
+#| msgid "total number of revisions deleted"
+msgid "total number of orphans deleted"
+msgstr "jumlah revisi dihapus"
+
+#: classes/odb-cleaner.php:766
+msgid "id"
+msgstr ""
+
+#: classes/odb-cleaner.php:767
+msgid "title"
+msgstr ""
+
+#: classes/odb-cleaner.php:768
+msgid "modified"
+msgstr ""
+
+#: classes/odb-cleaner.php:769
+msgid "taxonomy"
+msgstr ""
+
+#: classes/odb-cleaner.php:793
+#, fuzzy
+#| msgid "No POSTMETA ORPHANS found to delete"
+msgid "No ORPHANS found to delete"
+msgstr "Tidak ada ANAK YATIM POSTMETA ditemukan untuk menghapus"
+
+#: classes/odb-cleaner.php:801
+msgid "TOTAL NUMBER OF ITEMS: "
+msgstr ""
+
+#: classes/odb-cleaner.php:820
+msgid "Optimizing Database Tables"
+msgstr "Mengoptimalkan Tabel Database"
+
+#: classes/odb-cleaner.php:827
+msgid "table name"
+msgstr "nama tabel"
+
+#: classes/odb-cleaner.php:828
+msgid "optimization result"
+msgstr "hasil optimasi"
+
+#: classes/odb-cleaner.php:829
+msgid "engine"
+msgstr "mesin"
+
+#: classes/odb-cleaner.php:830
+msgid "table rows"
+msgstr "baris tabel"
+
+#: classes/odb-cleaner.php:831
+msgid "table size"
+msgstr "ukuran tabel"
+
+#: classes/odb-cleaner.php:882
+msgid "Savings"
+msgstr "Tabungan"
+
+#: classes/odb-cleaner.php:889
+msgid "size of the database"
+msgstr "ukuran database"
+
+#: classes/odb-cleaner.php:892
+msgid "BEFORE optimization"
+msgstr "SEBELUM optimasi"
+
+#: classes/odb-cleaner.php:896
+msgid "AFTER optimization"
+msgstr "sETELAH optimasi"
+
+#: classes/odb-cleaner.php:900
+msgid "SAVINGS THIS TIME"
+msgstr "TABUNGAN SAAT INI"
+
+#: classes/odb-cleaner.php:904
+msgid "TOTAL SAVINGS SINCE THE FIRST RUN"
+msgstr "TABUNGAN TOTAL SEJAK PERTAMA RUN"
+
+#: classes/odb-cleaner.php:932
+msgid "DONE!"
+msgstr "DIBUAT!"
+
+#: classes/odb-cleaner.php:940
+msgid "Optimization took"
+msgstr "optimasi mengambil"
+
+#: classes/odb-cleaner.php:940 classes/odb-displayer.php:127
+#: classes/odb-displayer.php:175
+msgid "seconds"
+msgstr "detik"
+
+#: classes/odb-cleaner.php:955 classes/odb-displayer.php:201
+#: classes/odb-logger.php:155
+msgid "Clear the log?"
+msgstr ""
+
+#: classes/odb-cleaner.php:965 classes/odb-displayer.php:219
+#, fuzzy
+#| msgid "View Log File"
+msgid "View Log"
+msgstr "Lihat Log File"
+
+#: classes/odb-cleaner.php:967 classes/odb-displayer.php:221
+#: classes/odb-logger.php:168
+msgid "Clear Log"
+msgstr ""
+
+#: classes/odb-cleaner.php:1211
+msgid "of"
+msgstr ""
+
+#: classes/odb-cleaner.php:1917
+msgid "InnoDB table: skipped..."
+msgstr "InnoDB tabel: dilewati ..."
+
+#: classes/odb-cleaner.php:1924 classes/odb-cleaner.php:1934
+msgid "<span class=\"odb-optimized\">TABLE OPTIMIZED</span>"
+msgstr "<Span class =\"odb-dioptimalkan\">TABLE dioptimalkan</span>"
+
+#: classes/odb-cleaner.php:1926 classes/odb-cleaner.php:1932
+msgid "Table is already up to date"
+msgstr "Tabel sudah up to date"
+
+#: classes/odb-displayer.php:29
+msgid "Optimize Database after Deleting Revisions"
+msgstr "Optimalkan database setelah Menghapus Revisi"
+
+#: classes/odb-displayer.php:33
+msgid ""
+"One-click database optimization with precise revision cleanup and flexible "
+"scheduling."
+msgstr ""
+
+#: classes/odb-displayer.php:34
+msgid "Plugin version"
+msgstr "versi Plugin"
+
+#: classes/odb-displayer.php:34
+msgid "Plugin page"
+msgstr "halaman Plugin"
+
+#: classes/odb-displayer.php:34
+msgid "Download page"
+msgstr "halaman download"
+
+#: classes/odb-displayer.php:34
+msgid "Author"
+msgstr "Penulis"
+
+#: classes/odb-displayer.php:34
+msgid "Company"
+msgstr "Perusahaan"
+
+#: classes/odb-displayer.php:56
+msgid "YES"
+msgstr "IYA NIH"
+
+#: classes/odb-displayer.php:57
+msgid "NO"
+msgstr "TIDAK"
+
+#: classes/odb-displayer.php:65 includes/settings-page.php:328
+#, fuzzy
+#| msgid "NUMBER OF EXPIRED TRANSIENTS DELETED"
+msgid "DELETE EXPIRED TRANSIENTS"
+msgstr "JUMLAH transien kadaluarsa DIHAPUS"
+
+#: classes/odb-displayer.php:67 includes/settings-page.php:331
+#, fuzzy
+#| msgid "DELETED TRASHED ITEMS"
+msgid "DELETE ALL TRANSIENTS"
+msgstr "DIHAPUS ITEM Dibuang"
+
+#: classes/odb-displayer.php:79
+msgid "EVERY FIVE MINUTES"
+msgstr "SETIAP LIMA MENIT"
+
+#: classes/odb-displayer.php:81
+msgid "ONCE HOURLY"
+msgstr "SEKALI PER JAM"
+
+#: classes/odb-displayer.php:83
+msgid "TWICE DAILY"
+msgstr "DUA KALI SEHARI"
+
+#: classes/odb-displayer.php:85
+msgid "ONCE DAILY"
+msgstr "SEKALI SEHARI"
+
+#: classes/odb-displayer.php:87
+msgid "ONCE WEEKLY"
+msgstr "SEMINGGUAN"
+
+#: classes/odb-displayer.php:89
+#, fuzzy
+#| msgid "ONCE HOURLY"
+msgid "ONCE MONTHLY"
+msgstr "SEKALI PER JAM"
+
+#: classes/odb-displayer.php:90 includes/settings-page.php:374
+msgid "NOT SCHEDULED"
+msgstr "TIDAK DIJADWALKAN"
+
+#: classes/odb-displayer.php:95
+msgid "Current settings"
+msgstr "pengaturan saat ini"
+
+#: classes/odb-displayer.php:110
+msgid "NONE"
+msgstr ""
+
+#: classes/odb-displayer.php:112
+#, fuzzy
+#| msgid "deleted<br />revisions"
+msgid "Delete revisions of"
+msgstr "dihapus<br />revisi"
+
+#: classes/odb-displayer.php:115 includes/settings-page.php:155
+#: includes/settings-page.php:270
+#, fuzzy
+#| msgid "deleted<br />revisions"
+msgid "Delete revisions older than"
+msgstr "dihapus<br />revisi"
+
+#: classes/odb-displayer.php:115 classes/odb-displayer.php:171
+msgid "days"
+msgstr ""
+
+#: classes/odb-displayer.php:119
+msgid "Maximum number of - most recent - revisions to keep per post / page"
+msgstr "Jumlah maksimum - terbaru - revisi untuk menjaga per post / page"
+
+#: classes/odb-displayer.php:125 classes/odb-displayer.php:127
+msgid "Last run"
+msgstr "menjalankan terakhir"
+
+#: classes/odb-displayer.php:127 includes/settings-page.php:411
+msgid "hrs"
+msgstr "jam"
+
+#: classes/odb-displayer.php:127
+msgid "in"
+msgstr ""
+
+#: classes/odb-displayer.php:131 includes/settings-page.php:303
+msgid "Delete trashed items"
+msgstr "Menghapus item sampah"
+
+#: classes/odb-displayer.php:132 includes/settings-page.php:309
+msgid "Delete spammed items"
+msgstr "Hapus item spammed"
+
+#: classes/odb-displayer.php:133 includes/settings-page.php:315
+msgid "Delete unused tags"
+msgstr "Hapus tag yang tidak terpakai"
+
+#: classes/odb-displayer.php:134 includes/settings-page.php:321
+#, fuzzy
+#| msgid "Delete expired transients"
+msgid "Delete transients"
+msgstr "Hapus transien kadaluarsa"
+
+#: classes/odb-displayer.php:135 includes/settings-page.php:340
+msgid "Delete pingbacks and trackbacks"
+msgstr "Hapus pingbacks dan Pelacakan"
+
+#: classes/odb-displayer.php:136 includes/settings-page.php:346
+msgid "Clear oEmbed cache"
+msgstr ""
+
+#: classes/odb-displayer.php:137 includes/settings-page.php:364
+msgid "Keep a log"
+msgstr "Menyimpan log"
+
+#: classes/odb-displayer.php:138
+#, fuzzy
+#| msgid "Optimize Database"
+msgid "Optimize InnoDB tables"
+msgstr "Optimalkan database"
+
+#: classes/odb-displayer.php:139
+msgid "Number of excluded tables"
+msgstr "Jumlah meja dikecualikan"
+
+#: classes/odb-displayer.php:141 includes/settings-page.php:370
+msgid "Scheduler"
+msgstr "scheduler"
+
+#: classes/odb-displayer.php:151
+msgid "Next scheduled run"
+msgstr "Berikutnya dijadwalkan run"
+
+#: classes/odb-displayer.php:156
+msgid "Total savings since the first run"
+msgstr "Jumlah tabungan sejak pertama kali menjalankan"
+
+#: classes/odb-displayer.php:172
+msgid "hours"
+msgstr ""
+
+#: classes/odb-displayer.php:173
+msgid "minutes"
+msgstr ""
+
+#: classes/odb-displayer.php:174
+msgid "and"
+msgstr ""
+
+#: classes/odb-displayer.php:193 classes/odb-logger.php:166
+msgid "Change Settings"
+msgstr "Ubah pengaturan"
+
+#: classes/odb-displayer.php:228
+msgid "Analyze (summary)"
+msgstr ""
+
+#: classes/odb-displayer.php:230
+msgid "Analyze (detail)"
+msgstr ""
+
+#: classes/odb-displayer.php:232 classes/odb-logger.php:170
+#: rvg-optimize-database.php:782
+msgid "Optimize (summary)"
+msgstr ""
+
+#: classes/odb-displayer.php:234 classes/odb-logger.php:172
+#: rvg-optimize-database.php:783
+#, fuzzy
+#| msgid "Optimize Database"
+msgid "Optimize (detail)"
+msgstr "Optimalkan database"
+
+#: classes/odb-logger.php:100
+msgid "Logs"
+msgstr ""
+
+#: classes/odb-logger.php:113
+#, fuzzy
+#| msgid "deleted<br />revisions"
+msgid "deleted<br>revisions"
+msgstr "dihapus<br />revisi"
+
+#: classes/odb-logger.php:114
+#, fuzzy
+#| msgid "deleted<br />trash"
+msgid "deleted<br>trash"
+msgstr "dihapus<br />sampah"
+
+#: classes/odb-logger.php:115
+#, fuzzy
+#| msgid "deleted<br />spam"
+msgid "deleted<br>spam"
+msgstr "dihapus<br />spam yang"
+
+#: classes/odb-logger.php:116
+#, fuzzy
+#| msgid "deleted<br />tags"
+msgid "deleted<br>tags"
+msgstr "dihapus tag<br />"
+
+#: classes/odb-logger.php:117
+#, fuzzy
+#| msgid "deleted<br />transients"
+msgid "deleted<br>transients"
+msgstr "dihapus<br />transien"
+
+#: classes/odb-logger.php:118
+#, fuzzy
+#| msgid "deleted<br />pingbacks<br />trackbacks"
+msgid "deleted<br>pingbacks<br>trackbacks"
+msgstr "dihapus<br />ping balik<br />trackbacks"
+
+#: classes/odb-logger.php:119
+#, fuzzy
+#| msgid "deleted<br />revisions"
+msgid "deleted<br>oEmbed<br>records"
+msgstr "dihapus<br />revisi"
+
+#: classes/odb-logger.php:120
+#, fuzzy
+#| msgid "deleted<br />orphans"
+msgid "deleted<br>orphans"
+msgstr "dihapus<br />anak yatim"
+
+#: classes/odb-logger.php:121
+#, fuzzy
+#| msgid "nr of optimized tables"
+msgid "nr of<br>optimized<br>tables"
+msgstr "nr tabel dioptimalkan"
+
+#: classes/odb-logger.php:122
+#, fuzzy
+#| msgid "database size BEFORE"
+msgid "database<br> size<br>BEFORE"
+msgstr "ukuran basis data SEBELUM"
+
+#: classes/odb-logger.php:123
+#, fuzzy
+#| msgid "database size AFTER"
+msgid "database<br>size<br>AFTER"
+msgstr "ukuran basis data SETELAH"
+
+#: classes/odb-logger.php:124
+msgid "SAVINGS"
+msgstr "TABUNGAN"
+
+#: classes/odb-scheduler.php:38
+msgid "Once Weekly"
+msgstr "Semingguan"
+
+#: classes/odb-scheduler.php:42
+#, fuzzy
+#| msgid "Once Weekly"
+msgid "Once Monthly"
+msgstr "Semingguan"
+
+#: classes/odb-scheduler.php:47
+msgid "Every Five Minutes"
+msgstr "Setiap Five Minutes"
+
+#: includes/settings-page.php:118
+msgid "Optimize Database after Deleting Revisions SETTINGS UPDATED"
+msgstr "Optimalkan database setelah Menghapus Revisi PENGATURAN UPDATED"
+
+#: includes/settings-page.php:120
+msgid ""
+"Click <a href=\"tools.php?page=rvg-optimize-database\" class=\"odb-"
+"bold\">HERE</a> to run the optimization"
+msgstr ""
+"Klik <a href=\"tools.php?page=rvg-optimize-database\" class=\"odb-bold\"> "
+"SINI </a> untuk menjalankan optimasi"
+
+#: includes/settings-page.php:155
+msgid "You have to enter: "
+msgstr ""
+
+#: includes/settings-page.php:160
+msgid "<Delete revisions older than> should be a number"
+msgstr ""
+
+#: includes/settings-page.php:168
+msgid "You have to enter the <Maximum number of revisions>"
+msgstr ""
+
+#: includes/settings-page.php:173
+#, fuzzy
+#| msgid "total number of revisions deleted"
+msgid "<Maximum number of revisions> should be a number"
+msgstr "jumlah revisi dihapus"
+
+#: includes/settings-page.php:234 rvg-optimize-database.php:479
+msgid "Settings"
+msgstr "pengaturan"
+
+#: includes/settings-page.php:239
+msgid "Delete revisions for the following (custom) post type(s):"
+msgstr ""
+
+#: includes/settings-page.php:275
+msgid "day(s)"
+msgstr ""
+
+#: includes/settings-page.php:287
+msgid "Maximum number of - most recent - revisions<br>to keep per post / page"
+msgstr "Jumlah maksimum - terbaru - revisi <br> untuk menjaga per post / page"
+
+#: includes/settings-page.php:293
+msgid "('0' means: delete <u>ALL</u> revisions)"
+msgstr "( '0' berarti: menghapus <u> ALL </ u> revisi)"
+
+#: includes/settings-page.php:325
+#, fuzzy
+#| msgid "DELETED TRASHED ITEMS"
+msgid "DO NOT DELETE TRANSIENTS"
+msgstr "DIHAPUS ITEM Dibuang"
+
+#: includes/settings-page.php:352
+#, fuzzy
+#| msgid "deleted<br />orphans"
+msgid "Clear orphans"
+msgstr "dihapus<br />anak yatim"
+
+#: includes/settings-page.php:358
+#, fuzzy
+#| msgid "Optimize Database"
+msgid "Optimize InnoDB tables too"
+msgstr "Optimalkan database"
+
+#: includes/settings-page.php:377
+msgid "run optimization HOURLY"
+msgstr "menjalankan optimasi PER JAM"
+
+#: includes/settings-page.php:380
+msgid "run optimization TWICE A DAY"
+msgstr "menjalankan optimasi DUA KALI SEHARI"
+
+#: includes/settings-page.php:383
+msgid "run optimization DAILY"
+msgstr "run optimasi DAILY"
+
+#: includes/settings-page.php:386
+msgid "run optimization WEEKLY"
+msgstr "menjalankan optimasi MINGGUAN"
+
+#: includes/settings-page.php:389
+#, fuzzy
+#| msgid "run optimization HOURLY"
+msgid "run optimization MONTHLY"
+msgstr "menjalankan optimasi PER JAM"
+
+#: includes/settings-page.php:392
+#, fuzzy
+#| msgid "run optimization WEEKLY"
+msgid "run optimization EVERY FIVE MINUTES"
+msgstr "menjalankan optimasi MINGGUAN"
+
+#: includes/settings-page.php:402
+msgid "Time"
+msgstr "Waktu"
+
+#: includes/settings-page.php:426
+msgid "Show '1-click' link in Admin Bar"
+msgstr "Show '1-klik' link dalam Admin Bar"
+
+#: includes/settings-page.php:432
+msgid "Show an icon in the Admin Menu"
+msgstr "Tampilkan ikon di Menu Admin"
+
+#: includes/settings-page.php:437
+#, fuzzy
+#| msgid "(change will be visible after loading the next page)"
+msgid "change will be visible after loading the next page"
+msgstr "(Perubahan akan terlihat setelah loading halaman berikutnya)"
+
+#: includes/settings-page.php:442 includes/settings-page.php:488
+msgid "Save Settings"
+msgstr "Simpan Pengaturan"
+
+#: includes/settings-page.php:444 includes/settings-page.php:490
+msgid "Go To Optimizer"
+msgstr "Pergi Untuk Optimizer"
+
+#: includes/settings-page.php:451
+#, fuzzy
+#| msgid ""
+#| "EXCLUDE DATABASE TABLES FROM OPTIMIZATION: <span class=\"odb-underline-"
+#| "red\">CHECKED</span> TABLES <span class=\"odb-underline-red\">WON'T</"
+#| "span> BE OPTIMIZED!</span>"
+msgid ""
+"EXCLUDE DATABASE TABLES FROM OPTIMIZATION:<br><span class=\"odb-underline-"
+"red\">CHECKED</span> TABLES <span class=\"odb-underline-red\">WON'T</span> "
+"BE OPTIMIZED!</span>"
+msgstr ""
+"MENGECUALIKAN TABEL DATABASE DARI OPTIMIZATION: <span class = \\ \"odb-"
+"underline-red \"> DIPERIKSA </ span> TABEL <span class = \\ \"odb-underline-"
+"red \"> TIDAK </ span> dioptimalkan! </ span>"
+
+#: includes/settings-page.php:457
+msgid "check all tables"
+msgstr "memeriksa semua tabel"
+
+#: includes/settings-page.php:459
+msgid "uncheck all tables"
+msgstr "hapus centang semua tabel"
+
+#: includes/settings-page.php:461
+msgid "check all NON-WordPress tables"
+msgstr "memeriksa semua tabel NON-WordPress"
+
+#: rvg-optimize-database.php:447 rvg-optimize-database.php:448
+#: rvg-optimize-database.php:464 rvg-optimize-database.php:465
+#: rvg-optimize-database.php:511 rvg-optimize-database.php:512
+#: rvg-optimize-database.php:531 rvg-optimize-database.php:532
+msgid "Optimize Database"
+msgstr "Optimalkan database"
+
+#: rvg-optimize-database.php:498
+msgid "Optimize DB (1 click)"
+msgstr "Optimalkan DB (1 klik)"
+
+#: rvg-optimize-database.php:729
+#, fuzzy
+#| msgid "Optimize Database after Deleting Revisions LOG FILE HAS BEEN DELETED"
+msgid "Optimize Database after Deleting Revisions LOGS HAVE BEEN CLEARED"
+msgstr "Optimalkan database setelah Menghapus Revisi LOG FILE TELAH DIHAPUS"
+
+#: rvg-optimize-database.php:780
+msgid "CLICK ONE OF THE 'OPTIMIZE' BUTTONS TO ACTUALLY DELETE THE FOUND ITEMS"
+msgstr ""
+
+#: rvg-optimize-database.php:781
+msgid "Cancel"
+msgstr ""
+
+#: rvg-optimize-database.php:786
+msgid "Analysis Done!"
+msgstr ""
+
+#~ msgid "revisions deleted"
+#~ msgstr "revisi dihapus"
+
+#~ msgid "NUMBER OF UNUSED TAGS DELETED"
+#~ msgstr "JUMLAH TAGS UNUSED DIHAPUS"
+
+#~ msgid "NUMBER OF POSTMETA ORPHANS DELETED"
+#~ msgstr "JUMLAH POSTMETA ANAK YATIM DIHAPUS"
+
+#~ msgid "Delete Log File"
+#~ msgstr "Hapus Log File"
+
+#~ msgid ""
+#~ "A popular 'one-click' plugin to clean and optimize your WordPress "
+#~ "database."
+#~ msgstr ""
+#~ "A 'satu-klik' plugin yang populer untuk membersihkan dan mengoptimalkan "
+#~ "database WordPress Anda."
+
+#~ msgid "current server time"
+#~ msgstr "waktu server saat ini"
+
+#~ msgid "Start Optimization"
+#~ msgstr "Mulai Optimization"
+
+#~ msgid "A WordPress Plugin by"
+#~ msgstr "Sebuah WordPress Plugin oleh"
+
+#~ msgid "The Netherlands"
+#~ msgstr "Belanda"
+
+#~ msgid "time"
+#~ msgstr "waktu"
+
+#~ msgid ""
+#~ "Click <a href=\"tools.php?page=rvg-optimize-db.php\" class=\"odb-"
+#~ "bold\">HERE</a> to run the optimization"
+#~ msgstr ""
+#~ "<a href=\"tools.php?page=rvg-optimize-db.php\" class=\"odb-bold\">HIER</"
+#~ "a> klicken, um die Optimierung zu starten"
+
+#~ msgid "is an one-click plugin to clean and optimize your WordPress database"
+#~ msgstr ""
+#~ "ist ein 1-Klick Plugin zum Bereinigen und Optimieren der WordPress "
+#~ "Datenbank"
+
+#~ msgid ""
+#~ "Maximum number of - most recent - revisions<br />to keep per post / page"
+#~ msgstr "Maximal gespeicherte Anzahl<br />Revisionen pro Beitrag / Seite"
+
+#~ msgid "Optimize your WordPress Database"
+#~ msgstr "WordPress Datenbank optimieren"
+
+#~ msgid "Plugin version:"
+#~ msgstr "Plugin Version:"
+
+#~ msgid "Author:"
+#~ msgstr "Autor:"
+
+#~ msgid "Plugin URL:"
+#~ msgstr "Plugin URL:"
+
+#~ msgid "Download URL:"
+#~ msgstr "Download URL:"

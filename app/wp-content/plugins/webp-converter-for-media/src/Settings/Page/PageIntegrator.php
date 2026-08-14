@@ -3,8 +3,6 @@
 namespace WebpConverter\Settings\Page;
 
 use WebpConverter\HookableInterface;
-use WebpConverter\Notice\NoticeIntegrator;
-use WebpConverter\Notice\WelcomeNotice;
 use WebpConverter\PluginInfo;
 use WebpConverter\Service\ViewLoader;
 
@@ -14,20 +12,12 @@ use WebpConverter\Service\ViewLoader;
 class PageIntegrator implements HookableInterface {
 
 	const SETTINGS_MENU_PAGE = 'webpc_admin_page';
+	const SETTINGS_PAGE_TYPE = 'action';
 	const UPLOAD_MENU_PAGE   = 'webpc_optimization_page';
 
-	/**
-	 * @var PluginInfo
-	 */
-	private $plugin_info;
+	private ViewLoader $view_loader;
 
-	/**
-	 * @var ViewLoader
-	 */
-	private $view_loader;
-
-	public function __construct( PluginInfo $plugin_info, ViewLoader $view_loader = null ) {
-		$this->plugin_info = $plugin_info;
+	public function __construct( PluginInfo $plugin_info, ?ViewLoader $view_loader = null ) {
 		$this->view_loader = $view_loader ?: new ViewLoader( $plugin_info );
 	}
 
@@ -36,22 +26,19 @@ class PageIntegrator implements HookableInterface {
 	 *
 	 * @var PageInterface[]
 	 */
-	private $pages = [];
+	private array $pages = [];
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function init_hooks() {
+	public function init_hooks(): void {
 		add_action( 'admin_menu', [ $this, 'add_settings_page_for_admin' ] );
 		add_action( 'network_admin_menu', [ $this, 'add_settings_page_for_network' ] );
 	}
 
-	/**
-	 * @return PageInterface|null
-	 */
-	private function get_current_page() {
+	private function get_current_page(): ?PageInterface {
 		$page_name = $_GET['page'] ?? null; // phpcs:ignore WordPress.Security
-		$tab_name  = $_GET['action'] ?? null; // phpcs:ignore WordPress.Security
+		$tab_name  = $_GET[ self::SETTINGS_PAGE_TYPE ] ?? null; // phpcs:ignore WordPress.Security
 
 		foreach ( $this->pages as $page ) {
 			if ( ( $page->get_menu_parent() === $page_name ) && ( $page->get_slug() === $tab_name ) ) {
@@ -61,14 +48,7 @@ class PageIntegrator implements HookableInterface {
 		return null;
 	}
 
-	/**
-	 * Sets integration for page.
-	 *
-	 * @param PageInterface $page .
-	 *
-	 * @return self
-	 */
-	public function set_page_integration( PageInterface $page ) {
+	public function set_page_integration( PageInterface $page ): PageIntegrator {
 		$this->pages[] = $page;
 
 		return $this;
@@ -81,7 +61,7 @@ class PageIntegrator implements HookableInterface {
 	 *
 	 * @return string
 	 */
-	public static function get_settings_page_url( string $action = null ): string {
+	public static function get_settings_page_url( ?string $action = null ): string {
 		if ( ! is_multisite() ) {
 			$page_url = admin_url( 'options-general.php?page=' . self::SETTINGS_MENU_PAGE );
 		} else {
@@ -89,7 +69,7 @@ class PageIntegrator implements HookableInterface {
 		}
 
 		if ( $action !== null ) {
-			$page_url .= '&action=' . $action;
+			$page_url .= '&' . self::SETTINGS_PAGE_TYPE . '=' . $action;
 		}
 		return $page_url;
 	}
@@ -97,10 +77,9 @@ class PageIntegrator implements HookableInterface {
 	/**
 	 * Adds settings page to menu for non-multisite websites.
 	 *
-	 * @return void
 	 * @internal
 	 */
-	public function add_settings_page_for_admin() {
+	public function add_settings_page_for_admin(): void {
 		if ( is_multisite() ) {
 			return;
 		}
@@ -111,10 +90,9 @@ class PageIntegrator implements HookableInterface {
 	/**
 	 * Adds settings page to menu for multisite websites.
 	 *
-	 * @return void
 	 * @internal
 	 */
-	public function add_settings_page_for_network() {
+	public function add_settings_page_for_network(): void {
 		$this->add_settings_page( 'settings.php', self::SETTINGS_MENU_PAGE );
 	}
 
@@ -123,11 +101,9 @@ class PageIntegrator implements HookableInterface {
 	 *
 	 * @param string $parent_page Parent menu page.
 	 * @param string $menu_page   .
-	 *
-	 * @return void
 	 */
-	private function add_settings_page( string $parent_page, string $menu_page ) {
-		$page = add_submenu_page(
+	private function add_settings_page( string $parent_page, string $menu_page ): void {
+		add_submenu_page(
 			$parent_page,
 			'Converter for Media',
 			'Converter for Media',
@@ -135,14 +111,16 @@ class PageIntegrator implements HookableInterface {
 			$menu_page,
 			[ $this, 'load_plugin_page' ]
 		);
-		add_action( 'load-' . $page, [ $this, 'load_scripts_for_page' ] );
 	}
 
 	/**
-	 * @return void
 	 * @internal
 	 */
-	public function load_plugin_page() {
+	public function load_plugin_page(): void {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'Sorry, you do not have permission to do that.', 'webp-converter-for-media' ) );
+		}
+
 		$page = $this->get_current_page();
 		if ( $page === null ) {
 			return;
@@ -164,22 +142,17 @@ class PageIntegrator implements HookableInterface {
 								'is_active' => ( $settings_page === $page ),
 							];
 						},
-						$this->pages
+						array_filter(
+							$this->pages,
+							function ( $page ) {
+								return ( $page->is_available() );
+							}
+						)
 					),
 				]
 			)
 		);
 
 		$page->do_action_after_load();
-	}
-
-	/**
-	 * Loads assets on plugin settings page.
-	 *
-	 * @return void
-	 * @internal
-	 */
-	public function load_scripts_for_page() {
-		( new NoticeIntegrator( $this->plugin_info, new WelcomeNotice() ) )->set_disable_value();
 	}
 }

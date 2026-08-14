@@ -1,0 +1,178 @@
+[
+  {
+    "file": "woocommerce-menu-bar-cart/wp-menu-cart.php",
+    "icon": "menu-cart.png",
+    "search_url": "wp%2520overnight%2520Menu%2520Cart%2520for%2520WooCommerce%2520&tab=search&type=term",
+    "constant_free": "WPMENUCART_VERSION",
+    "premium": {
+      "type": "class",
+      "value": "WPO_Menu_Cart_Pro"
+    },
+    "wordpress_url": "https://wordpress.org/plugins/woocommerce-menu-bar-cart/",
+    "php" : "7.4",
+    "wp" : "3.4",
+    "upgrade_url": "https://wpovernight.com/downloads/menu-cart-pro/",
+    "title": "Menu Cart for WooCommerce",
+    "description": "Add a menu-based cart icon so customers can access their cart instantly.",
+    "conditions": {
+      "plugin": "WC_VERSION"
+    },
+    "conflicting_plugins": [
+      "XOO_WSC_PLUGIN_FILE",
+      "FKCART_PLUGIN_FILE",
+      "WOOFC_VERSION"
+    ],
+    "niche": true
+  },
+  {
+    "file": "woocommerce-pdf-invoices-packing-slips/woocommerce-pdf-invoices-packingslips.php",
+    "icon": "pdf-invoices.png",
+    "search_url": "wp%2520overnight&tab=search&type=term",
+    "constant_free": "WPO_WCPDF_VERSION",
+    "wordpress_url": "https://wordpress.org/plugins/woocommerce-pdf-invoices-packing-slips/",
+    "php" : "7.4",
+    "wp" : "4.4",
+    "upgrade_url": "https://wpovernight.com/downloads/woocommerce-pdf-invoices-packing-slips-professional/",
+    "title": "PDF Invoices & Packing Slips for WooCommerce",
+    "description": "Automatically generate and attach PDF or UBL invoices to customer order emails.",
+    "conflicting_plugins": [
+      "WF_PKLIST_VERSION",
+      "WPI_FILE",
+      "CHALLAN_FREE_VERSION"
+    ],
+    "premium": {
+      "type": "class",
+      "value": "WPO_WCPDF_PRO_VERSION"
+    },
+    "conditions": {
+      "plugin": "WC_VERSION"
+    }
+  },
+  {
+    "file": "all-in-one-wp-security-and-firewall/wp-security.php",
+    "icon": "all-in-one-security.png",
+    "search_url": "all-in-one%2520security%2520firewall%2520aios%2520security%2520updraftplus&tab=search&type=term",
+    "constant_free": "AIO_WP_SECURITY_VERSION",
+    "premium": {
+      "type": "constant",
+      "value": "AIOWPS_PREMIUM_VERSION"
+    },
+    "wordpress_url": "https://wordpress.org/plugins/all-in-one-wp-security-and-firewall/",
+    "php" : "5.6",
+    "wp" : "5.0",
+    "upgrade_url": "https://teamupdraft.com/all-in-one-security/",
+    "title": "All-In-One Security (AIOS)",
+    "description": "Secure and protect your site.",
+    "conflicting_plugins": [
+      "WORDFENCE_VERSION",
+      "ITSEC_VERSION",
+      "JETPACK__VERSION",
+      "BPS_VERSION",
+      "SECUPRESS_VERSION",
+      "SHIELD_VERSION",
+      "SECURITY_NINJA_VERSION",
+      "WPSCAN_VERSION",
+      "rsssl_version"
+    ]
+  },
+  {
+    "file": "burst-statistics/burst.php",
+    "icon": "burst-statistics.png",
+    "search_url": "burst%2520statistics%2520updraftplus&tab=search&type=term",
+    "constant_free": "BURST_FREE",
+    "premium": {
+      "type": "constant",
+      "value": "BURST_PRO"
+    },
+    "wordpress_url": "https://wordpress.org/plugins/burst-statistics/",
+    "php" : "8.0",
+    "wp" : "6.4",
+    "upgrade_url": "https://burst-statistics.com/pricing/",
+    "title": "Burst Statistics",
+    "description": "Measure traffic with self-hosted analytics: pageviews, visitors, goals, emails."
+  },
+  {
+    "file": "updraftplus/updraftplus.php",
+    "icon": "updraftplus.jpg",
+    "search_url": "updraftplus&tab=search&type=term",
+    "constant_free": "UPDRAFTPLUS_DIR",
+    "premium": {
+      "type": "class",
+      "value": "UpdraftPlus_Addon_Google_Enhanced"
+    },
+    "wordpress_url": "https://wordpress.org/plugins/updraftplus/",
+    "php" : "5.6",
+    "wp" : "3.2",
+    "upgrade_url": "https://teamupdraft.com/updraftplus/pricing/",
+    "title": "UpdraftPlus: Backup & Restore",
+    "description": "Back up, restore, clone or migrate your site.",
+    "conflicting_plugins": [
+      "DUPLICATOR_DISABLE_CAP_BASIC",
+      "WPVIVID_PLUGIN_VERSION",
+      "BACKWPUP_VERSION",
+      "BACKUPBUDDY_VERSION",
+      "BOLDGRID_BACKUP_VERSION",
+      "BLOGVAULT_VERSION",
+      "BACKUPWORDPRESS_VERSION"
+    ]
+  },
+  {
+    "file": "wp-optimize/wp-optimize.php",
+    "icon": "wp-optimize.png",
+    "search_url": "wp%2520optimize%2520innodb%2520updraftplus&tab=search&type=term",
+    "constant_free": "WPO_VERSION",
+    "premium": {
+      "type": "slug",
+      "value": "wp-optimize-premium/wp-optimize.php"
+    },
+    "wordpress_url": "https://wordpress.org/plugins/wp-optimize/",
+    "php" : "7.2",
+    "wp" : "4.9",
+    "upgrade_url": "https://teamupdraft.com/wp-optimize/pricing/",
+    "title": "WP-Optimize",
+    "description": "Speed up and optimize your site.",
+    "conflicting_plugins": [
+      "WP_ROCKET_VERSION",
+      "DISABLE_SUPERCACHE",
+      "W3TC",
+      "LSCWP_V",
+      "WPFC_VERSION",
+      "AUTOPTIMIZE_PLUGIN_VERSION",
+      "HUMMINGBIRD_VERSION",
+      "CACHE_ENABLER_VERSION"
+    ]
+  },
+  {
+    "file": "internal-links/wp-internal-linkjuicer.php",
+    "icon": "linkjuicer.svg",
+    "search_url": "internal%2520link%2520juicer%2520updraft&tab=search&type=term",
+    "constant_free": "ILJ_VERSION",
+    "premium": {
+      "type": "slug",
+      "value": "internal-links-premium/wp-internal-linkjuicer.php"
+    },
+    "wordpress_url": "https://wordpress.org/plugins/internal-links/",
+    "php" : "7.1",
+    "wp" : "5.9.0",
+    "upgrade_url": "https://www.internallinkjuicer.com/#get",
+    "title": "Internal Link Juicer",
+    "description": "Auto-link posts for better SEO: set keywords once."
+  },
+  {
+    "file": "wpgetapi/wpgetapi.php",
+    "icon": "wpgetapi.jpg",
+    "search_url": "wpgetapi&tab=search&type=term",
+    "constant_free": "WPGETAPIVERSION",
+    "premium": {
+      "type": "slug",
+      "value": "wpgetapi-extras/wpgetapi-extras.php"
+    },
+    "wordpress_url": "https://wordpress.org/plugins/wpgetapi/",
+    "php" : "7.2",
+    "wp" : "5.6",
+    "upgrade_url": "https://wpgetapi.com/pricing/",
+    "title": "WPGet API",
+    "description": "Add any API without code: fetch and display via shortcodes.",
+    "niche": true
+  }
+]

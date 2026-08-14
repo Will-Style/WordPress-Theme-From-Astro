@@ -1,0 +1,172 @@
+<?php
+
+namespace SearchRegex\Modifier;
+
+use SearchRegex\Schema;
+use SearchRegex\Modifier\Value;
+use SearchRegex\Search;
+use SearchRegex\Source;
+
+/**
+ * Modify a column
+ *
+ * @phpstan-type ModifierOption array{
+ *   column?: string,
+ *   operation?: string,
+ *   searchValue?: string,
+ *   replaceValue?: string,
+ *   posId?: mixed,
+ *   items?: array<int, mixed>
+ * }
+ */
+abstract class Modifier {
+	/**
+	 * Operation to perform
+	 */
+	protected ?string $operation = null;
+
+	/**
+	 * Schema
+	 */
+	protected Schema\Column $schema;
+
+	/**
+	 * Constructor
+	 *
+	 * @param ModifierOption $_option Modification options.
+	 * @param Schema\Column  $schema Schema.
+	 */
+	public function __construct( $_option, Schema\Column $schema ) {
+		$this->schema = $schema;
+		$this->operation = '';
+	}
+
+	/**
+	 * The schema source name
+	 *
+	 * @return string
+	 */
+	public function get_source_name() {
+		return $this->schema->get_source();
+	}
+
+	/**
+	 * Get schema column name.
+	 *
+	 * @return string
+	 */
+	public function get_column_name() {
+		return $this->schema->get_column();
+	}
+
+	/**
+	 * Get schema
+	 *
+	 * @return Schema\Column
+	 */
+	public function get_schema() {
+		return $this->schema;
+	}
+
+	/**
+	 * Does the column match?
+	 *
+	 * @param string $column Column.
+	 * @return boolean
+	 */
+	public function is_for_column( $column ) {
+		return $this->get_column_name() === $column;
+	}
+
+	/**
+	 * Get the data for this column
+	 *
+	 * @param array<string, mixed> $row Array of database columns.
+	 * @return string|false
+	 */
+	public function get_row_data( array $row ) {
+		return $row[ $this->get_column_name() ] ?? false;
+	}
+
+	/**
+	 * Create a column modifier
+	 *
+	 * @param array<string, mixed> $option Options.
+	 * @param Schema\Source $schema Schema.
+	 * @return Modifier|null
+	 */
+	public static function create( $option, Schema\Source $schema ) {
+		$column = $schema->get_column( $option['column'] ?? '' );
+		if ( ! $column ) {
+			return null;
+		}
+
+		if ( $column->get_type() === 'integer' ) {
+			return new Value\Integer_Value( $option, $column );
+		}
+
+		if ( $column->get_type() === 'string' ) {
+			return new Value\String_Value( $option, $column );
+		}
+
+		if ( $column->get_type() === 'date' ) {
+			return new Value\Date_Value( $option, $column );
+		}
+
+		if ( $column->get_type() === 'member' ) {
+			return new Value\Member_Value( $option, $column );
+		}
+
+		// @phpstan-ignore identical.alwaysTrue
+		if ( $column->get_type() === 'keyvalue' ) {
+			return new Value\Key_Value( $option, $column );
+		}
+
+		// @phpstan-ignore deadCode.unreachable
+		return null;
+	}
+
+	/**
+	 * Is this modifier valid?
+	 *
+	 * @return boolean
+	 */
+	public function is_valid() {
+		return $this->operation !== null;
+	}
+
+	/**
+	 * Get changes for this modifier and value
+	 *
+	 * @param string $value Value.
+	 * @return array<string, mixed>|null
+	 */
+	public function get_change( $value ) {
+		return null;
+	}
+
+	/**
+	 * Convert the modifier to JSON
+	 *
+	 * @return array{column: string, source: string}
+	 */
+	public function to_json() {
+		return [
+			'column' => $this->get_column_name(),
+			'source' => $this->get_source_name(),
+		];
+	}
+
+	/**
+	 * Perform the modifier on a column
+	 *
+	 * @param int $row_id Row ID.
+	 * @param string $row_value Row value.
+	 * @param Source\Source $source Source.
+	 * @param Search\Column $column Column.
+	 * @param array<string, mixed> $raw Raw database data.
+	 * @param bool $save_mode Is the save mode enabled.
+	 * @return Search\Column
+	 */
+	abstract public function perform( $row_id, $row_value, Source\Source $source, Search\Column $column, array $raw, $save_mode );
+}

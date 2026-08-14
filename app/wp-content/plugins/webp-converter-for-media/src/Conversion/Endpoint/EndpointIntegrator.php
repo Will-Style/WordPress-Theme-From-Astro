@@ -13,10 +13,8 @@ class EndpointIntegrator implements HookableInterface {
 
 	/**
 	 * Objects of supported REST API endpoints.
-	 *
-	 * @var EndpointInterface
 	 */
-	private $endpoint_object;
+	private EndpointInterface $endpoint_object;
 
 	public function __construct( EndpointInterface $endpoint_object ) {
 		$this->endpoint_object = $endpoint_object;
@@ -25,17 +23,16 @@ class EndpointIntegrator implements HookableInterface {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function init_hooks() {
+	public function init_hooks(): void {
 		add_action( 'rest_api_init', [ $this, 'register_rest_route' ] );
 	}
 
 	/**
 	 * Registers new endpoint in REST API.
 	 *
-	 * @return void
 	 * @internal
 	 */
-	public function register_rest_route() {
+	public function register_rest_route(): void {
 		register_rest_route(
 			self::ROUTE_NAMESPACE,
 			$this->endpoint_object->get_route_name(),
@@ -43,16 +40,17 @@ class EndpointIntegrator implements HookableInterface {
 				'methods'             => $this->endpoint_object->get_http_methods(),
 				'permission_callback' => function ( \WP_REST_Request $request ) {
 					$header_value = $request->get_header( $this->endpoint_object->get_route_nonce_header() );
+					$params       = $request->get_params();
 					if ( $header_value === null ) {
 						return new \WP_Error(
 							'webpc_rest_token_not_found',
-							__( 'Sorry, you do not have permission to do that.' ), // phpcs:ignore WordPress.WP.I18n.MissingArgDomain
+							__( 'Sorry, you do not have permission to do that.', 'webp-converter-for-media' ),
 							[ 'status' => rest_authorization_required_code() ]
 						);
-					} elseif ( ! $this->endpoint_object->is_valid_request( $header_value ) ) {
+					} elseif ( ! $this->endpoint_object->is_valid_request( $header_value, $params ) ) {
 						return new \WP_Error(
 							'webpc_rest_token_invalid',
-							__( 'Sorry, you do not have permission to do that.' ), // phpcs:ignore WordPress.WP.I18n.MissingArgDomain
+							__( 'Sorry, you do not have permission to do that.', 'webp-converter-for-media' ),
 							[ 'status' => rest_authorization_required_code() ]
 						);
 					}

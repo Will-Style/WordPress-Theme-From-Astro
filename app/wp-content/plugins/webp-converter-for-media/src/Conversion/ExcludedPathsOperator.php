@@ -2,6 +2,7 @@
 
 namespace WebpConverter\Conversion;
 
+use WebpConverter\Conversion\Directory\UploadsWebpcDirectory;
 use WebpConverter\HookableInterface;
 use WebpConverter\PluginData;
 use WebpConverter\Settings\Option\ExcludedDirectoriesOption;
@@ -23,7 +24,7 @@ class ExcludedPathsOperator implements HookableInterface {
 	/**
 	 * @var string[]
 	 */
-	private $excluded_dirs = [
+	private array $excluded_dirs = [
 		'.',
 		'..',
 		'.git',
@@ -31,14 +32,18 @@ class ExcludedPathsOperator implements HookableInterface {
 		'node_modules',
 		'wpmc-trash',
 		'__MACOSX',
+		UploadsWebpcDirectory::DIRECTORY_NAME,
 		'ShortpixelBackups',
 		'backup',
+		'wio_backup',
 	];
 
 	/**
-	 * @var PluginData
+	 * @var string[]
 	 */
-	private $plugin_data;
+	private array $excluded_paths = [];
+
+	private PluginData $plugin_data;
 
 	public function __construct( PluginData $plugin_data ) {
 		$this->plugin_data = $plugin_data;
@@ -47,15 +52,26 @@ class ExcludedPathsOperator implements HookableInterface {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function init_hooks() {
-		$plugin_settings     = $this->plugin_data->get_plugin_settings();
-		$saved_dirs          = $plugin_settings[ ExcludedDirectoriesOption::OPTION_NAME ];
-		$this->excluded_dirs = array_merge(
-			$this->excluded_dirs,
-			( $saved_dirs !== '' ) ? explode( ',', $saved_dirs ) : []
-		);
-
+	public function init_hooks(): void {
+		add_action( 'init', [ $this, 'load_excluded_directories_from_plugin_settings' ] );
 		add_filter( 'webpc_supported_source_directory', [ $this, 'skip_excluded_directory' ], 0, 3 );
+	}
+
+	/**
+	 * @internal
+	 */
+	public function load_excluded_directories_from_plugin_settings(): void {
+		$plugin_settings = $this->plugin_data->get_plugin_settings();
+		$saved_dirs      = ( $plugin_settings[ ExcludedDirectoriesOption::OPTION_NAME ] !== '' )
+			? explode( ',', $plugin_settings[ ExcludedDirectoriesOption::OPTION_NAME ] )
+			: [];
+
+		foreach ( $saved_dirs as $saved_dir ) {
+			if ( ! preg_match( '/(\/|\\\)/', $saved_dir ) ) {
+				$this->excluded_dirs[] = $saved_dir;
+			}
+			$this->excluded_paths[] = '/' . str_replace( '\\', '/', $saved_dir ) . '/';
+		}
 	}
 
 	/**
@@ -71,6 +87,13 @@ class ExcludedPathsOperator implements HookableInterface {
 	public function skip_excluded_directory( bool $path_status, string $dirname, string $server_path ): bool {
 		if ( in_array( $dirname, $this->excluded_dirs ) ) {
 			return false;
+		}
+
+		$valid_server_path = str_replace( '\\', '/', $server_path ) . '/';
+		foreach ( $this->excluded_paths as $excluded_path ) {
+			if ( strpos( $valid_server_path, $excluded_path ) !== false ) {
+				return false;
+			}
 		}
 
 		return $path_status;

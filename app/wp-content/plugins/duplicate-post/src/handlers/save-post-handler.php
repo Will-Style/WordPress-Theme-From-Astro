@@ -33,8 +33,9 @@ class Save_Post_Handler {
 	 * @return void
 	 */
 	public function register_hooks() {
-		if ( \intval( \get_option( 'duplicate_post_show_original_meta_box' ) ) === 1
-			|| \intval( \get_option( 'duplicate_post_show_original_column' ) ) === 1 ) {
+		if ( (int) \get_option( 'duplicate_post_show_original_meta_box' ) === 1
+			|| (int) \get_option( 'duplicate_post_show_original_column' ) === 1
+		) {
 			\add_action( 'save_post', [ $this, 'delete_on_save_post' ] );
 		}
 	}
@@ -42,14 +43,18 @@ class Save_Post_Handler {
 	/**
 	 * Deletes the custom field with the ID of the original post.
 	 *
+	 * Handles the classic editor checkbox for removing the original reference.
+	 *
 	 * @param int $post_id The current post ID.
 	 *
 	 * @return void
 	 */
 	public function delete_on_save_post( $post_id ) {
-		if ( ( \defined( 'DOING_AUTOSAVE' ) && \DOING_AUTOSAVE )
-			|| empty( $_POST['duplicate_post_remove_original'] )
-			|| ! \current_user_can( 'edit_post', $post_id ) ) {
+		if ( \defined( 'DOING_AUTOSAVE' ) && \DOING_AUTOSAVE ) {
+			return;
+		}
+
+		if ( ! \current_user_can( 'edit_post', $post_id ) ) {
 			return;
 		}
 
@@ -57,7 +62,14 @@ class Save_Post_Handler {
 		if ( ! $post ) {
 			return;
 		}
-		if ( ! $this->permissions_helper->is_rewrite_and_republish_copy( $post ) ) {
+
+		if ( $this->permissions_helper->is_rewrite_and_republish_copy( $post ) ) {
+			return;
+		}
+
+		// Check for classic editor (POST request).
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce is verified in the metabox.
+		if ( ! empty( $_POST['duplicate_post_remove_original'] ) ) {
 			\delete_post_meta( $post_id, '_dp_original' );
 		}
 	}

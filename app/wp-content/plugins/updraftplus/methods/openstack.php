@@ -1,6 +1,6 @@
 <?php
 
-if (!defined('UPDRAFTPLUS_DIR')) die('No direct access.');
+if (!defined('ABSPATH')) die('No direct access.');
 
 // Necessary to place the code in a separate file, because it uses namespaces, which cause a fatal error in PHP 5.2
 if (version_compare(phpversion(), '5.3.3', '>=')) {

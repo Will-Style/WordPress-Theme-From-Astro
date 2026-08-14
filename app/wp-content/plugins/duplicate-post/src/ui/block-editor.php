@@ -87,7 +87,7 @@ class Block_Editor {
 		}
 		\wp_add_inline_style(
 			'elementor-editor',
-			'.elementor-control-post_status { display: none !important; }'
+			'.elementor-control-post_status { display: none !important; }',
 		);
 	}
 
@@ -128,6 +128,8 @@ class Block_Editor {
 		if ( ! $post instanceof WP_Post ) {
 			return;
 		}
+
+		$this->asset_manager->enqueue_styles();
 
 		$edit_js_object = $this->generate_js_object( $post );
 		$this->asset_manager->enqueue_edit_script( $edit_js_object );
@@ -214,7 +216,7 @@ class Block_Editor {
 				'dpcopy'        => $post->ID,
 				'dpnonce'       => \wp_create_nonce( 'dp-republish' ),
 			],
-			\admin_url( 'post.php?action=edit&post=' . $original_post_id )
+			\admin_url( 'post.php?action=edit&post=' . $original_post_id ),
 		);
 	}
 
@@ -223,18 +225,35 @@ class Block_Editor {
 	 *
 	 * @param WP_Post $post The current post object.
 	 *
-	 * @return array The data to pass to JavaScript.
+	 * @return array<string, mixed> The data to pass to JavaScript.
 	 */
 	protected function generate_js_object( WP_Post $post ) {
 		$is_rewrite_and_republish_copy = $this->permissions_helper->is_rewrite_and_republish_copy( $post );
+		$original_item                 = Utils::get_original( $post );
+		$original_data                 = null;
+
+		if ( $original_item instanceof WP_Post ) {
+			// get_edit_post_link() returns null when the current user cannot edit the original post.
+			$edit_link = (string) \get_edit_post_link( $original_item->ID, 'raw' );
+
+			$original_data = [
+				'editUrl'  => \esc_url_raw( $edit_link ),
+				'viewUrl'  => \esc_url_raw( \get_permalink( $original_item->ID ) ),
+				'title'    => \html_entity_decode( \_draft_or_post_title( $original_item ), \ENT_QUOTES, 'UTF-8' ),
+				'canEdit'  => \current_user_can( 'edit_post', $original_item->ID ),
+			];
+		}
 
 		return [
+			'postId'                  => $post->ID,
 			'newDraftLink'            => $this->get_new_draft_permalink(),
 			'rewriteAndRepublishLink' => $this->get_rewrite_republish_permalink(),
 			'showLinks'               => Utils::get_option( 'duplicate_post_show_link' ),
 			'showLinksIn'             => Utils::get_option( 'duplicate_post_show_link_in' ),
 			'rewriting'               => ( $is_rewrite_and_republish_copy ) ? 1 : 0,
 			'originalEditURL'         => $this->get_original_post_edit_url(),
+			'showOriginalMetaBox'     => (int) \get_option( 'duplicate_post_show_original_meta_box' ) === 1,
+			'originalItem'            => $original_data,
 		];
 	}
 
@@ -268,7 +287,7 @@ class Block_Editor {
 			$suggestions,
 			static function ( $suggestion ) use ( $original_post_id ) {
 				return $suggestion->object_id !== $original_post_id;
-			}
+			},
 		);
 	}
 }

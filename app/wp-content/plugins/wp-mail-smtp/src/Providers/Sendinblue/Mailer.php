@@ -110,7 +110,7 @@ class Mailer extends MailerAbstract {
 		}
 
 		$headers          = isset( $this->body['headers'] ) ? (array) $this->body['headers'] : [];
-		$headers[ $name ] = WP::sanitize_value( $value );
+		$headers[ $name ] = $this->sanitize_header_value( $name, $value );
 
 		$this->set_body_param(
 			[
@@ -321,8 +321,9 @@ class Mailer extends MailerAbstract {
 	 *
 	 * @since 1.6.0
 	 * @since 3.9.0 Returns email body array instead of `SendSmtpEmail` object.
+	 * @since 3.10.0 Returns JSON encoded email body instead of array.
 	 *
-	 * @return array
+	 * @return string
 	 */
 	public function get_body() {
 
@@ -333,26 +334,9 @@ class Mailer extends MailerAbstract {
 		 *
 		 * @param array $body Email body.
 		 */
-		return apply_filters( 'wp_mail_smtp_providers_sendinblue_mailer_get_body', $this->body );
-	}
+		$body = apply_filters( 'wp_mail_smtp_providers_sendinblue_mailer_get_body', $this->body );
 
-	/**
-	 * Send email.
-	 *
-	 * @since 1.6.0
-	 * @since 3.9.0 Use API instead of SDK to send email.
-	 */
-	public function send() {
-
-		$response = wp_safe_remote_post(
-			$this->url,
-			[
-				'headers' => $this->get_headers(),
-				'body'    => wp_json_encode( $this->get_body() ),
-			]
-		);
-
-		$this->process_response( $response );
+		return wp_json_encode( $body );
 	}
 
 	/**
@@ -400,6 +384,26 @@ class Mailer extends MailerAbstract {
 		}
 
 		return implode( WP::EOL, array_map( 'esc_textarea', array_filter( $error_text ) ) );
+	}
+
+	/**
+	 * Get the error code from the Brevo API response.
+	 *
+	 * @since 4.8.0
+	 *
+	 * @return string
+	 */
+	public function get_response_error_code() {
+
+		if ( ! empty( $this->response ) ) {
+			$body = wp_remote_retrieve_body( $this->response );
+
+			if ( ! empty( $body->code ) ) {
+				return $body->code;
+			}
+		}
+
+		return parent::get_response_error_code();
 	}
 
 	/**

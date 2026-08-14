@@ -7,28 +7,16 @@ namespace WebpConverter\Model;
  */
 class Token {
 
-	/**
-	 * @var string|null
-	 */
-	private $token_value;
+	private ?string $token_value;
 
-	/**
-	 * @var bool
-	 */
-	private $valid_status;
+	private bool $valid_status;
 
-	/**
-	 * @var int
-	 */
-	private $images_usage;
+	private int $images_usage;
 
-	/**
-	 * @var int
-	 */
-	private $images_limit;
+	private int $images_limit;
 
 	public function __construct(
-		string $token_value = null,
+		?string $token_value = null,
 		bool $valid_status = false,
 		int $images_usage = 0,
 		int $images_limit = 0
@@ -39,7 +27,7 @@ class Token {
 		$this->images_limit = $images_limit;
 	}
 
-	public function set_token_value( string $token_value = null ): self {
+	public function set_token_value( ?string $token_value = null ): self {
 		$this->token_value = $token_value;
 		return $this;
 	}
@@ -47,7 +35,7 @@ class Token {
 	/**
 	 * @return string|null
 	 */
-	public function get_token_value() {
+	public function get_token_value(): ?string {
 		return $this->token_value;
 	}
 

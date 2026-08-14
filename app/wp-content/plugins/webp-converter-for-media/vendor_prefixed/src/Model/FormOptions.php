@@ -18,7 +18,7 @@ class FormOptions
      *
      * @throws DuplicatedFormOptionKeyException
      */
-    public function set_option(FormOption $new_option) : self
+    public function set_option(FormOption $new_option): self
     {
         foreach ($this->options as $option) {
             if ($option->get_key() === $new_option->get_key()) {
@@ -33,7 +33,7 @@ class FormOptions
      *
      * @throws UnknownFormOptionKeyException
      */
-    public function delete_option(string $option_key) : self
+    public function delete_option(string $option_key): self
     {
         foreach ($this->options as $option_index => $option) {
             if ($option->get_key() === $option_key) {
@@ -49,11 +49,11 @@ class FormOptions
      *
      * @throws UnknownFormOptionKeyException
      */
-    public function update_option(string $option_key, callable $update_callback) : self
+    public function update_option(string $option_key, callable $update_callback): self
     {
         foreach ($this->options as $option) {
             if ($option->get_key() === $option_key) {
-                \call_user_func($update_callback, $option);
+                call_user_func($update_callback, $option);
                 return $this;
             }
         }
@@ -62,10 +62,10 @@ class FormOptions
     /**
      * @return FormOption[]
      */
-    public function get_options() : array
+    public function get_options(): array
     {
         $options = $this->options;
-        \usort($options, function (FormOption $option_a, FormOption $option_b) {
+        usort($options, function (FormOption $option_a, FormOption $option_b) {
             return $option_a->get_priority() <=> $option_b->get_priority();
         });
         return $options;

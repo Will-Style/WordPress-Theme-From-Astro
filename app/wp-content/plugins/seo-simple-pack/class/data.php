@@ -76,22 +76,22 @@ class SSP_Data {
 
 		// 共通の翻訳用テキスト
 		self::$texts = [
-			'quoted_title'         => __( '"%s"', 'loos-ssp' ),
-			'quoted_archive_title' => __( '"%s" archive page', 'loos-ssp' ),
-			'is_snippet'           => __( 'This content is treated as %s.', 'loos-ssp' ), // この内容は %s として扱われます。
-			'title_of'             => __( 'Title tag of %s', 'loos-ssp' ), // %sのタイトルタグ
-			'description_of'       => __( 'Description of %s', 'loos-ssp' ), // %sのディスクリプション
-			'keyword_of'           => __( 'Keywords of %s', 'loos-ssp' ),
-			'title_tag'            => __( 'Title tag format', 'loos-ssp' ), // タイトルタグの形式
-			'description_tag'      => __( 'Description format', 'loos-ssp' ), // ディスクリプションの形式
-			'use'                  => __( 'Use %s', 'loos-ssp' ), // %sを使用する
-			'nouse'                => __( 'Do not use %s', 'loos-ssp' ), // を使用しない
-			'noindex'              => __( 'Do not index %s', 'loos-ssp' ), // sをインデックスさせない
-			'noindex_help'         => __( 'If you select "Yes", the default output will be <code>noindex</code>.', 'loos-ssp' ),
-			'default_output'       => __( 'The default setting of %2$s to be output to %1$s.', 'loos-ssp' ),
-			'input'                => __( 'Please enter %s.', 'loos-ssp' ),
-			'reflect'              => __( 'It will be reflected in %s.', 'loos-ssp' ),
-			'archive_desc'         => __( 'This is the archive page for %s.', 'loos-ssp' ),
+			'quoted_title'         => __( '"%s"', 'seo-simple-pack' ),
+			'quoted_archive_title' => __( '"%s" archive page', 'seo-simple-pack' ),
+			'is_snippet'           => __( 'This content is treated as %s.', 'seo-simple-pack' ), // この内容は %s として扱われます。
+			'title_of'             => __( 'Title tag of %s', 'seo-simple-pack' ), // %sのタイトルタグ
+			'description_of'       => __( 'Description of %s', 'seo-simple-pack' ), // %sのディスクリプション
+			'keyword_of'           => __( 'Keywords of %s', 'seo-simple-pack' ),
+			'title_tag'            => __( 'Title tag format', 'seo-simple-pack' ), // タイトルタグの形式
+			'description_tag'      => __( 'Description format', 'seo-simple-pack' ), // ディスクリプションの形式
+			'use'                  => __( 'Use %s', 'seo-simple-pack' ), // %sを使用する
+			'nouse'                => __( 'Do not use %s', 'seo-simple-pack' ), // を使用しない
+			'noindex'              => __( 'Do not index %s', 'seo-simple-pack' ), // sをインデックスさせない
+			'noindex_help'         => __( 'If you select "Yes", the default output will be <code>noindex</code>.', 'seo-simple-pack' ),
+			'default_output'       => __( 'The default setting of %2$s to be output to %1$s.', 'seo-simple-pack' ),
+			'input'                => __( 'Please enter %s.', 'seo-simple-pack' ),
+			'reflect'              => __( 'It will be reflected in %s.', 'seo-simple-pack' ),
+			'archive_desc'         => __( 'This is the archive page for %s.', 'seo-simple-pack' ),
 		];
 
 		// 設定のデフォルト値をセット
@@ -119,52 +119,52 @@ class SSP_Data {
 	 */
 	public static function set_default() {
 		self::$default_settings = [
-			'home_title'               => '%_site_title_% %_sep_% %_tagline_%',
-			'home_desc'                => '',
-			'home_keyword'             => '',
-			'reuse_keyword'            => '1',
-			'separator'                => 'line',
-			'webmaster_bing'           => '',
-			'webmaster_google'         => '',
-			'webmaster_baidu'          => '',
-			'webmaster_yandex'         => '',
-			'google_analytics_type'    => 'gtag',
-			'google_analytics_id'      => '',
-			'google_g_id'              => '',
-			'google_ua_id'             => '',
-			'post_noindex'             => false,
-			'post_title'               => '%_page_title_% %_sep_% %_site_title_%',
-			'post_desc'                => '%_page_contents_%',
-			'page_noindex'             => false,
-			'page_title'               => '%_page_title_% %_sep_% %_site_title_%',
-			'page_desc'                => '%_page_contents_%',
-			'attachment_disable'       => true,
-			'attachment_noindex'       => true,
-			'attachment_title'         => '%_page_title_% %_sep_% %_site_title_%',
-			'attachment_desc'          => '%_page_contents_%',
-			'cat_noindex'              => false,
-			'cat_title'                => '%_term_name_% %_sep_% %_site_title_%',
-			'cat_desc'                 => '%_term_description_%',
-			'tag_noindex'              => false,
-			'tag_title'                => '%_term_name_% %_sep_% %_site_title_%',
-			'tag_desc'                 => '%_term_description_%',
-			'post_format_disable'      => false,
-			'post_format_noindex'      => true,
-			'post_format_title'        => '%_term_name_% %_sep_% %_site_title_%',
-			'post_format_desc'         => '',
-			'author_disable'           => false,
-			'author_noindex'           => true,
-			'author_title'             => '%_author_name_% %_sep_% %_site_title_%',
-			'author_desc'              => sprintf( self::$texts['archive_desc'], '%_author_name_%' ),
-			'date_noindex'             => true,
-			'date_title'               => '%_date_% %_sep_% %_site_title_%',
-			'date_desc'                => sprintf( self::$texts['archive_desc'], '%_date_%' ),
-			'pt_archive_noindex'       => true,
-			'pt_archive_title'         => '%_post_type_% %_sep_% %_site_title_%',
-			'pt_archive_desc'          => sprintf( self::$texts['archive_desc'], '%_post_type_%' ),
-			'404_title'                => '404: ' . __( 'Page not found', 'loos-ssp' ) . ' %_sep_% %_site_title_%',
-			'search_title'             => __( 'Searched:', 'loos-ssp' ) . ' %_search_phrase_% %_sep_% %_site_title_%',
-			'feed_noindex'             => false,
+			'home_title'            => '%_site_title_% %_sep_% %_tagline_%',
+			'home_desc'             => '',
+			'home_keyword'          => '',
+			'reuse_keyword'         => '1',
+			'separator'             => 'line',
+			'webmaster_bing'        => '',
+			'webmaster_google'      => '',
+			'webmaster_baidu'       => '',
+			'webmaster_yandex'      => '',
+			'google_analytics_type' => 'gtag',
+			'google_analytics_id'   => '',
+			'google_g_id'           => '',
+			'google_ua_id'          => '',
+			'post_noindex'          => false,
+			'post_title'            => '%_page_title_% %_sep_% %_site_title_%',
+			'post_desc'             => '%_page_contents_%',
+			'page_noindex'          => false,
+			'page_title'            => '%_page_title_% %_sep_% %_site_title_%',
+			'page_desc'             => '%_page_contents_%',
+			'attachment_disable'    => true,
+			'attachment_noindex'    => true,
+			'attachment_title'      => '%_page_title_% %_sep_% %_site_title_%',
+			'attachment_desc'       => '%_page_contents_%',
+			'cat_noindex'           => false,
+			'cat_title'             => '%_term_name_% %_sep_% %_site_title_%',
+			'cat_desc'              => '%_term_description_%',
+			'tag_noindex'           => false,
+			'tag_title'             => '%_term_name_% %_sep_% %_site_title_%',
+			'tag_desc'              => '%_term_description_%',
+			'post_format_disable'   => false,
+			'post_format_noindex'   => true,
+			'post_format_title'     => '%_term_name_% %_sep_% %_site_title_%',
+			'post_format_desc'      => '',
+			'author_disable'        => false,
+			'author_noindex'        => true,
+			'author_title'          => '%_author_name_% %_sep_% %_site_title_%',
+			'author_desc'           => sprintf( self::$texts['archive_desc'], '%_author_name_%' ),
+			'date_noindex'          => true,
+			'date_title'            => '%_date_% %_sep_% %_site_title_%',
+			'date_desc'             => sprintf( self::$texts['archive_desc'], '%_date_%' ),
+			'pt_archive_noindex'    => true,
+			'pt_archive_title'      => '%_post_type_% %_sep_% %_site_title_%',
+			'pt_archive_desc'       => sprintf( self::$texts['archive_desc'], '%_post_type_%' ),
+			'404_title'             => '404: ' . __( 'Page not found', 'seo-simple-pack' ) . ' %_sep_% %_site_title_%',
+			'search_title'          => __( 'Searched:', 'seo-simple-pack' ) . ' %_search_phrase_% %_sep_% %_site_title_%',
+			'feed_noindex'          => false,
 		];
 
 		self::$default_ogp_settings = [
@@ -175,7 +175,7 @@ class SSP_Data {
 			'fb_admins'  => '',
 			'tw_active'  => true,
 			'tw_account' => '',
-			'tw_card'    => 'summary_large_image',
+			'tw_card'    => 'summary',
 		];
 
 		/**

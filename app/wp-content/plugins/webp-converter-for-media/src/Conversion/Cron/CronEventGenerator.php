@@ -15,21 +15,15 @@ class CronEventGenerator implements HookableInterface {
 
 	const CRON_PATHS_ACTION = 'webpc_cron_paths';
 
-	/**
-	 * @var PluginData
-	 */
-	private $plugin_data;
+	private PluginData $plugin_data;
 
-	/**
-	 * @var CronInitiator
-	 */
-	private $cron_initiator;
+	private CronInitiator $cron_initiator;
 
 	public function __construct(
 		PluginData $plugin_data,
 		TokenRepository $token_repository,
 		FormatFactory $format_factory,
-		CronInitiator $cron_initiator = null
+		?CronInitiator $cron_initiator = null
 	) {
 		$this->plugin_data    = $plugin_data;
 		$this->cron_initiator = $cron_initiator ?: new CronInitiator( $plugin_data, $token_repository, $format_factory );
@@ -38,7 +32,7 @@ class CronEventGenerator implements HookableInterface {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function init_hooks() {
+	public function init_hooks(): void {
 		add_action( 'init', [ $this, 'add_cron_event' ] );
 		add_action( self::CRON_PATHS_ACTION, [ $this, 'get_paths_to_conversion' ] );
 	}
@@ -46,10 +40,9 @@ class CronEventGenerator implements HookableInterface {
 	/**
 	 * Initializes cron event to convert all images.
 	 *
-	 * @return void
 	 * @internal
 	 */
-	public function add_cron_event() {
+	public function add_cron_event(): void {
 		if ( wp_next_scheduled( self::CRON_PATHS_ACTION )
 			|| ! ( $settings = $this->plugin_data->get_plugin_settings() )
 			|| ! in_array( ExtraFeaturesOption::OPTION_VALUE_CRON_ENABLED, $settings[ ExtraFeaturesOption::OPTION_NAME ] ) ) {
@@ -60,10 +53,9 @@ class CronEventGenerator implements HookableInterface {
 	}
 
 	/**
-	 * @return void
 	 * @internal
 	 */
-	public function get_paths_to_conversion() {
+	public function get_paths_to_conversion(): void {
 		$this->cron_initiator->refresh_paths_to_conversion();
 		$this->cron_initiator->init_conversion();
 	}

@@ -2,6 +2,8 @@
 /**
  * External dependencies.
  */
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { cloneDeep } from 'lodash';
 import { arrayMoveImmutable } from 'array-move';
 import classnames from 'classnames/dedupe';
 
@@ -12,6 +14,7 @@ import { __, _n, sprintf } from '@wordpress/i18n';
 import { addFilter } from '@wordpress/hooks';
 import { useState } from '@wordpress/element';
 import { PanelBody, TextControl, ToggleControl } from '@wordpress/components';
+import { useDispatch } from '@wordpress/data';
 
 /**
  * Internal dependencies.
@@ -21,6 +24,110 @@ import useBlockControlProps from '../../assets/hooks/use-block-control-props';
 
 import RepeaterControl from './repeater-control';
 
+function RepeaterControlWrapper(props) {
+	const val = props.getValue() || [];
+
+	// It is used to save changes in undo/redo history.
+	// TODO: probably we should use this in all controls.
+	const { __unstableMarkLastChangeAsPersistent = false } =
+		useDispatch('core/block-editor') || {};
+
+	const toBool = (value) => {
+		if (typeof value === 'string') {
+			return value.toLowerCase() === 'true';
+		}
+		return Boolean(value);
+	};
+
+	return (
+		<BaseControl {...useBlockControlProps(props)}>
+			<RepeaterControl
+				controlData={props.data}
+				count={val.length}
+				getInnerControls={(index) => {
+					const innerControls = props.getControls(props.uniqueId);
+					const innerResult = {};
+
+					Object.keys(innerControls).forEach((i) => {
+						const innerData = innerControls[i];
+
+						innerResult[i] = {
+							data: innerData,
+							val: props.getValue(innerData, index),
+						};
+					});
+
+					return innerResult;
+				}}
+				renderRow={(index) => (
+					<>
+						{props.renderControls(
+							props.placement,
+							props.group,
+							props.uniqueId,
+							index
+						)}
+					</>
+				)}
+				removeRow={(i) => {
+					if (i > -1) {
+						val.splice(i, 1);
+						props.onChange(val);
+
+						if (__unstableMarkLastChangeAsPersistent) {
+							__unstableMarkLastChangeAsPersistent();
+						}
+					}
+				}}
+				addRow={() => {
+					const innerControls = props.getControls(props.uniqueId);
+					const newRow = {};
+
+					// Add defaults to the new row.
+					Object.keys(innerControls).forEach((i) => {
+						const innerControl = innerControls[i];
+
+						// Add default values of controls.
+						newRow[innerControl.name] =
+							innerControl.default ||
+							toBool(innerControl.checked) ||
+							'';
+					});
+
+					val.push(newRow);
+					props.onChange(val);
+
+					if (__unstableMarkLastChangeAsPersistent) {
+						__unstableMarkLastChangeAsPersistent();
+					}
+				}}
+				duplicateRow={(i) => {
+					val.push(cloneDeep(val[i]));
+
+					const newVal = arrayMoveImmutable(
+						val,
+						val.length - 1,
+						i + 1
+					);
+					props.onChange(newVal);
+
+					if (__unstableMarkLastChangeAsPersistent) {
+						__unstableMarkLastChangeAsPersistent();
+					}
+				}}
+				resortRow={(oldIndex, newIndex) => {
+					const newVal = arrayMoveImmutable(val, oldIndex, newIndex);
+					props.onChange(newVal);
+
+					if (__unstableMarkLastChangeAsPersistent) {
+						__unstableMarkLastChangeAsPersistent();
+					}
+				}}
+			/>
+		</BaseControl>
+	);
+}
+
 /**
  * Control render in editor.
  */
@@ -28,69 +135,7 @@ addFilter(
 	'lzb.editor.control.repeater.render',
 	'lzb.editor',
 	(render, props) => {
-		const val = props.getValue() || [];
-
-		return (
-			<BaseControl {...useBlockControlProps(props)}>
-				<RepeaterControl
-					controlData={props.data}
-					count={val.length}
-					getInnerControls={(index) => {
-						const innerControls = props.getControls(props.uniqueId);
-						const innerResult = {};
-
-						Object.keys(innerControls).forEach((i) => {
-							const innerData = innerControls[i];
-
-							innerResult[i] = {
-								data: innerData,
-								val: props.getValue(innerData, index),
-							};
-						});
-
-						return innerResult;
-					}}
-					renderRow={(index) => (
-						<>
-							{props.renderControls(
-								props.placement,
-								props.uniqueId,
-								index
-							)}
-						</>
-					)}
-					removeRow={(i) => {
-						if (i > -1) {
-							val.splice(i, 1);
-							props.onChange(val);
-						}
-					}}
-					addRow={() => {
-						const innerControls = props.getControls(props.uniqueId);
-						const newRow = {};
-
-						// Add defaults to the new row.
-						Object.keys(innerControls).forEach((i) => {
-							const innerControl = innerControls[i];
-
-							newRow[innerControl.name] =
-								innerControl.default || '';
-						});
-
-						val.push(newRow);
-						props.onChange(val);
-					}}
-					resortRow={(oldIndex, newIndex) => {
-						const newVal = arrayMoveImmutable(
-							val,
-							oldIndex,
-							newIndex
-						);
-						props.onChange(newVal);
-					}}
-				/>
-			</BaseControl>
-		);
+		return <RepeaterControlWrapper {...props} />;
 	}
 );
 
@@ -101,7 +146,13 @@ addFilter('lzb.editor.control.repeater.getValue', 'lzb.editor', (value) => {
 	// change string value to array.
 	if (typeof value === 'string') {
 		try {
-			value = JSON.parse(decodeURI(value));
+			// WPML decodes string in a different way, so we have to use decodeURIComponent
+			// when string does not contains ':'.
+			if (value.includes(':')) {
+				value = JSON.parse(decodeURI(value));
+			} else {
+				value = JSON.parse(decodeURIComponent(value));
+			}
 		} catch (e) {
 			value = [];
 		}
@@ -156,7 +207,8 @@ function ControlsRepeaterItem(props) {
 			_n(
 				'Show %d Child Control',
 				'Show %d Child Controls',
-				childItemsNum
+				childItemsNum,
+				'lazy-blocks'
 			),
 			childItemsNum
 		);
@@ -167,9 +219,9 @@ function ControlsRepeaterItem(props) {
 			{/* eslint-disable-next-line react/button-has-type */}
 			<button
 				className={classnames(
-					'lzb-constructor-controls-item-repeater-toggle',
+					'lzb-block-builder-controls-item-repeater-toggle',
 					collapsedChilds
-						? 'lzb-constructor-controls-item-repeater-toggle-collapsed'
+						? 'lzb-block-builder-controls-item-repeater-toggle-collapsed'
 						: ''
 				)}
 				onClick={(e) => {
@@ -193,7 +245,7 @@ function ControlsRepeaterItem(props) {
 				</svg>
 			</button>
 			{collapsedChilds ? (
-				<div className="lzb-constructor-controls-item-childs">
+				<div className="lzb-block-builder-controls-item-childs">
 					{printControls(id)}
 				</div>
 			) : (
@@ -204,7 +256,7 @@ function ControlsRepeaterItem(props) {
 }
 
 /**
- * Control lists item render in constructor.
+ * Control lists item render in block builder.
  */
 addFilter(
 	'lzb.constructor.controls.repeater.item',
@@ -218,7 +270,7 @@ addFilter(
 );
 
 /**
- * Control settings render in constructor.
+ * Control settings render in block builder.
  */
 addFilter(
 	'lzb.constructor.control.repeater.settings',
@@ -238,6 +290,8 @@ addFilter(
 						)}
 						value={data.rows_label}
 						onChange={(value) => updateData({ rows_label: value })}
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
 					/>
 				</PanelBody>
 				<PanelBody>
@@ -248,6 +302,8 @@ addFilter(
 						onChange={(value) =>
 							updateData({ rows_add_button_label: value })
 						}
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
 					/>
 				</PanelBody>
 				<PanelBody>
@@ -258,6 +314,8 @@ addFilter(
 						min={0}
 						value={data.rows_min}
 						onChange={(value) => updateData({ rows_min: value })}
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
 					/>
 				</PanelBody>
 				<PanelBody>
@@ -268,6 +326,8 @@ addFilter(
 						min={0}
 						value={data.rows_max}
 						onChange={(value) => updateData({ rows_max: value })}
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
 					/>
 				</PanelBody>
 				<PanelBody>
@@ -284,6 +344,7 @@ addFilter(
 									rows_collapsible: value ? 'true' : 'false',
 								})
 							}
+							__nextHasNoMarginBottom
 						/>
 						{data.rows_collapsible === 'true' ? (
 							<ToggleControl
@@ -299,6 +360,7 @@ addFilter(
 											: 'false',
 									})
 								}
+								__nextHasNoMarginBottom
 							/>
 						) : (
 							''

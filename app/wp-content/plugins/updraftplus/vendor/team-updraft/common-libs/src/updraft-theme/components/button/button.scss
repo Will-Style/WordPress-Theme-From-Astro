@@ -1,0 +1,557 @@
+@use "../../helpers/responsive-variables-generator.scss" as *;
+@use "../../helpers/typography.scss" as *;
+
+$button-variables: (
+	"padding-tert": (
+		"mobile": "bu-2",
+		"desktop": "bu-2"
+	),
+	"outline-tert": (
+		"mobile": "bu-2",
+		"desktop": "bu-2"
+	),
+	"large-padding-h": (
+		"mobile": "bu-16",
+		"desktop": "bu-16"
+	),
+	"large-padding-v": (
+		"mobile": "bu-10",
+		"desktop": "bu-10"
+	),
+	"large-min-height": (
+		"mobile": "bu-48",
+		"desktop": "bu-48"
+	),
+	"corner": (
+		"mobile": "bu-32",
+		"desktop": "bu-32"
+	),
+	"icon-basic-corner": (
+		"mobile": "bu-4",
+		"desktop": "bu-4"
+	),
+	"large-gap": (
+		"mobile": "bu-8",
+		"desktop": "bu-8"
+	),
+	"large-border": (
+		"mobile": "bu-1",
+		"desktop": "bu-1"
+	),
+	"large-outline": (
+		"mobile": "bu-4",
+		"desktop": "bu-4"
+	),
+	"medium-padding-h": (
+		"mobile": "bu-16",
+		"desktop": "bu-16"
+	),
+	"medium-padding-v": (
+		"mobile": "bu-10",
+		"desktop": "bu-10"
+	),
+	"medium-min-height": (
+		"mobile": "bu-48",
+		"desktop": "bu-48"
+	),
+	"medium-gap": (
+		"mobile": "bu-8",
+		"desktop": "bu-8"
+	),
+	"medium-border": (
+		"mobile": "bu-1",
+		"desktop": "bu-1"
+	),
+	"medium-outline": (
+		"mobile": "bu-4",
+		"desktop": "bu-4"
+	),
+	"small-padding-h": (
+		"mobile": "bu-16",
+		"desktop": "bu-16"
+	),
+	"small-padding-v": (
+		"mobile": "bu-10",
+		"desktop": "bu-10"
+	),
+	"small-min-height": (
+		"mobile": "bu-48",
+		"desktop": "bu-48"
+	),
+	"small-gap": (
+		"mobile": "bu-6",
+		"desktop": "bu-6"
+	),
+	"small-border": (
+		"mobile": "bu-1",
+		"desktop": "bu-1"
+	),
+	"small-outline": (
+		"mobile": "bu-4",
+		"desktop": "bu-4"
+	),
+	"icon-large-padding": (
+		"mobile": "bu-12",
+		"desktop": "bu-12"
+	),
+	"icon-small-padding": (
+		"mobile": "bu-8",
+		"desktop": "bu-8"
+	),
+	"icon-corner": (
+		"mobile": "bu-48",
+		"desktop": "bu-48"
+	),
+);
+
+@include tu-generate-responsive-variables("tu-button", $button-variables);
+
+$button-themes: (
+	'primary': (
+		'is-gradient': false,
+		'base': var(--color-primary-600),
+		'hover': var(--color-primary-700),
+		'hover-background': var(--color-primary-50),
+		'focus-outline': var(--color-primary-300),
+		'disabled-background': var(--color-primary-200),
+		'icon-button-background': var(--color-primary-50),
+		'icon-button-hover-background': var(--color-primary-100),
+  	),
+	'error': (
+		'is-gradient': false,
+		'base': var(--color-status-error-600),
+		'hover': var(--color-status-error-700),
+		'hover-background': var(--color-status-error-50),
+		'focus-outline': var(--color-status-error-200),
+		'disabled-background': var(--color-status-error-200),
+		'icon-button-background': var(--color-status-error-50),
+		'icon-button-hover-background': var(--color-status-error-100),
+	),
+	'info': (
+		'is-gradient': false,
+		'base': var(--color-status-info-600),
+		'hover': var(--color-status-info-700),
+		'hover-background': var(--color-status-info-50),
+		'focus-outline': var(--color-status-info-200),
+		'disabled-background': var(--color-status-info-200),
+		'icon-button-background': var(--color-status-info-50),
+		'icon-button-hover-background': var(--color-status-info-100),
+	),
+	'success': (
+		'is-gradient': false,
+		'base': var(--color-status-success-600),
+		'hover': var(--color-status-success-700),
+		'hover-background': var(--color-status-success-50),
+		'focus-outline': var(--color-status-success-200),
+		'disabled-background': var(--color-status-success-200),
+		'icon-button-background': var(--color-status-success-50),
+		'icon-button-hover-background': var(--color-status-success-100),
+	),
+	'warning': (
+		'is-gradient': false,
+		'base': var(--color-status-warning-600),
+		'hover': var(--color-status-warning-700),
+		'focus-outline': var(--color-status-warning-200),
+		'icon-button-background': var(--color-status-warning-50),
+		'icon-button-hover-background': var(--color-status-warning-100),
+	),
+	'premium': (
+		'is-gradient': true,
+		'base': var(--color-premium-gradient),
+		'hover': var(--color-premium-gradient-dark),
+		'hover-background': var(--color-premium-gradient-light),
+		'focus-outline': var(--color-primary-300),
+		'disabled-background': var(--color-primary-200),
+	),
+	'white': (
+		'is-gradient': false,
+		'base': var(--color-secondary-0),
+		'hover': var(--color-primary-300),
+		'focus-outline': var(--color-primary-300),
+		'icon-button-text': var(--color-secondary-500),
+		'icon-button-background': var(--color-secondary-0),
+		'icon-button-hover-background': var(--color-secondary-50),
+	),
+	'grey': (
+		'is-gradient': false,
+		'base': var(--color-secondary-600),
+		'hover': var(--color-secondary-800),
+		'focus-outline': var(--color-primary-300),
+	),
+);
+
+tu-button {
+	display: contents;
+
+	button {
+		display: inline-flex;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+		gap: var(--tu-button-large-gap);
+		border: var(--tu-button-large-border) solid transparent;
+		border-radius: var(--tu-button-corner);
+		min-height: var(--tu-button-large-min-height);
+		padding: var(--tu-button-large-padding-v) var(--tu-button-large-padding-h);
+		background: var(--color-primary-600);
+		cursor: pointer;
+		transition: background 0.3s, border-color 0.3s, color 0.3s, box-shadow 0.3s;
+		color: var(--color-secondary-0);
+		@include tu-typography("button-large");
+
+		tu-icon::before {
+			background: var(--color-secondary-0) !important;
+			width: var(--tu-icon-small) !important;
+			height: var(--tu-icon-small) !important;
+		}
+
+		&[size="medium" ] {
+			gap: var(--tu-button-medium-gap);
+			min-height: var(--tu-button-medium-min-height);
+			padding: var(--tu-button-medium-padding-v) var(--tu-button-medium-padding-h);
+			@include tu-typography("button-medium");
+		}
+
+		&[size="small" ] {
+			gap: var(--tu-button-small-gap);
+			min-height: var(--tu-button-small-min-height);
+			padding: var(--tu-button-small-padding-v) var(--tu-button-small-padding-h);
+			@include tu-typography("button-small");
+
+			tu-icon::before {
+				width: var(--tu-icon-extra-small) !important;
+				height: var(--tu-icon-extra-small) !important;
+			}
+		}
+
+		&:hover {
+			background: var(--color-primary-700);
+		}
+
+		&:focus-visible {
+			outline: var(--tu-button-large-outline) solid var(--color-primary-400);
+			background: var(--color-primary-700);
+			border-color: transparent;
+		}
+
+		// Common disabled styles start.
+		&[disabled] {
+			&,
+			&[theme] {
+				&,
+				&:hover {
+					background: var(--color-primary-200) !important;
+					cursor: not-allowed;
+				}
+			}
+		}
+
+		&[disabled][type="tertiary"] {
+			&,
+			&[theme] {
+				&,
+				&:hover {
+					color: var(--color-secondary-400) !important;
+					background: transparent !important;
+					cursor: not-allowed;
+					text-decoration: none !important;
+
+					tu-icon::before {
+						background: var(--color-secondary-400) !important;
+					}
+				}
+			}
+		}
+
+		&[disabled][type="icon"],
+		&[disabled][type="secondary"] {
+			&,
+			&[theme] {
+				&,
+				&:hover {
+					border: var(--tu-button-large-border) solid var(--color-secondary-100) !important;
+					background: var(--color-secondary-0) !important;
+					color: var(--color-secondary-400) !important;
+					cursor: not-allowed;
+
+					tu-icon::before {
+						background: var(--color-secondary-400) !important;
+					}
+				}
+			}
+		}
+		// Common disabled styles end.
+
+		// Default styles of each type button start.
+		&[type="icon"],
+		&[type="secondary"],
+		&[type="tertiary"] {
+			background: var(--color-secondary-0);
+			border-color: var(--color-primary-600);
+			color: var(--color-primary-600);
+
+			tu-icon::before {
+				background: var(--color-primary-600) !important;
+			}
+
+			&:hover, &:focus-visible {
+				background: var(--color-primary-50);
+				color: var(--color-primary-700);
+
+				tu-icon::before {
+					background: var(--color-primary-700) !important;
+				}
+			}
+
+			&:hover {
+				border-color: var(--color-primary-700);
+			}
+
+			&:focus-visible {
+				outline: var(--tu-button-large-outline) solid var(--color-primary-300);
+			}
+		}
+
+		&[type="tertiary"] {
+			&,
+			&[theme] {
+				border: none;
+				padding: 0 var(--tu-button-padding-tert);
+				background: transparent !important;
+				min-height: unset;
+
+				&:hover {
+					text-decoration: underline;
+				}
+			}
+		}
+
+		&[type="icon"],
+		&[type="icon-basic"] {
+			&,
+			&[theme] {
+				background: var(--color-primary-50);
+				border: none;
+				padding: var(--tu-button-icon-large-padding);
+				border-radius: var(--tu-button-icon-corner);
+				min-height: unset;
+
+				.tu-button-content,
+				tu-icon:not(:first-child) {
+					display: none;
+				}
+
+				&:hover {
+					background: var(--color-primary-100);
+				}
+
+				&[disabled],
+				&[disabled]:hover {
+					background: var(--color-secondary-50) !important;
+					border: none !important;
+				}
+			}
+		}
+
+		&[type="icon-basic"] {
+			padding: 0;
+			border-radius: var(--tu-button-icon-basic-corner);
+			background: transparent;
+			color: var(--color-secondary-500);
+
+			&:hover {
+				background: transparent;
+			}
+
+			tu-icon::before {
+				background: var(--color-secondary-500) !important;
+			}
+		}
+		// Default styles of each type button end.
+
+		@each $theme-name, $colors in $button-themes {
+			$base: map-get($colors, 'base');
+			$hover: map-get($colors, 'hover');
+			$hover-background: map-get($colors, 'hover-background');
+			$focus-outline: map-get($colors, 'focus-outline');
+			$is-gradient: map-get($colors, 'is-gradient');
+			$disabled-background: map-get($colors, 'disabled-background');
+			$icon-button-background: map-get($colors, 'icon-button-background');
+			$icon-button-hover-background: map-get($colors, 'icon-button-hover-background');
+			$icon-button-text: map-get($colors, 'icon-button-text');
+
+			&[theme="#{$theme-name}"] {
+				// Disabled style for CTA type button.
+				&[disabled][type="cta"] {
+					&,
+					&:hover {
+						background: $disabled-background;
+						border: none;
+						cursor: not-allowed;
+					}
+				}
+
+				@if $is-gradient {
+
+					&[type="cta"] {
+						background: $base;
+						color: var(--color-secondary-0);
+						border: none;
+						-webkit-font-smoothing: antialiased;
+
+						&:hover, &:focus-visible {
+							background: $hover;
+						}
+					}
+
+					&[type="secondary"],
+					&[type="tertiary"] {
+						position: relative;
+						z-index: 1;
+						border: var(--tu-button-large-border) solid transparent;
+						border-radius: var(--tu-button-corner);
+
+						// Text.
+						background-image: $base;
+						background-clip: text;
+						-webkit-background-clip: text;
+						color: transparent;
+
+						tu-icon::before {
+							background: $base !important;
+						}
+
+						// Border.
+						&::before {
+							content: "";
+							position: absolute;
+							inset: calc(-1 * var(--tu-button-large-border));
+							z-index: -1;
+							border-radius: inherit;
+							padding: var(--tu-button-large-border);
+
+							background: $base;
+
+							mask:
+								linear-gradient(var(--color-secondary-0) 0 0) content-box,
+								linear-gradient(var(--color-secondary-0) 0 0);
+							-webkit-mask:
+								linear-gradient(var(--color-secondary-0) 0 0) content-box,
+								linear-gradient(var(--color-secondary-0) 0 0);
+							-webkit-mask-composite: xor;
+							mask-composite: exclude;
+						}
+
+						// Background.
+						&::after {
+							content: "";
+							position: absolute;
+							inset: 0;
+							z-index: -2;
+							border-radius: inherit;
+							background: transparent;
+							transition: background 0.3s ease;
+						}
+
+						&[disabled] {
+							&,
+							&:hover {
+								&::before {
+									background: var(--color-secondary-100);
+								}
+							}
+						}
+
+						&:hover, &:focus-visible {
+							background-image: $hover, $hover-background;
+							-webkit-background-clip: text, padding-box;
+							background-clip: text, padding-box;
+							color: transparent;
+
+							tu-icon::before {
+								background: $hover !important;
+							}
+
+							&::before {
+								background: $hover;
+							}
+
+							&::after {
+								display: none;
+							}
+						}
+					}
+				} @else {
+					&[type="cta"] {
+						background: $base;
+						color: var(--color-secondary-0);
+						border-color: $base;
+
+						tu-icon::before {
+							background: var(--color-secondary-0) !important;
+						}
+
+						&:hover, &:focus-visible {
+							background: $hover;
+							border-color: $hover;
+						}
+
+						&:focus-visible {
+							outline: var(--tu-button-large-outline) solid $focus-outline;
+						}
+					}
+
+					&[type="icon"],
+					&[type="secondary"],
+					&[type="tertiary"] {
+						background: var(--color-secondary-0);
+						border-color: $base;
+						color: $base;
+
+						tu-icon::before {
+							background: $base !important;
+						}
+
+						&:hover, &:focus-visible {
+							background: $hover-background;
+							color: $hover;
+
+							tu-icon::before {
+								background: $hover !important;
+							}
+						}
+
+						&:hover {
+							border-color: $hover;
+						}
+
+						&:focus-visible {
+							outline: var(--tu-button-large-outline) solid $focus-outline;
+						}
+					}
+
+					&[type="icon"] {
+						border: none;
+						background: $icon-button-background;
+
+						tu-icon::before {
+							background: $icon-button-text !important;
+						}
+
+						&:focus-visible tu-icon::before {
+							background: $icon-button-text !important;
+						}
+
+						&:hover {
+							background: $icon-button-hover-background;
+
+							tu-icon::before {
+								background: $icon-button-text !important;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

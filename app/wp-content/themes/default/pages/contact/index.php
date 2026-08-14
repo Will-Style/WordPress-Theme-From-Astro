@@ -25,6 +25,8 @@
                                             <p>
                                                 必要事項をご入力の上、確認ボタンを押してください。
                                             </p>
+                                            
+                                            
                                             <div class="form__row mt-20">
                                                 <label for="form__type" class="form__label form__require">お問い合わせの種類</label>
                                                 <div class="form__content form__vertical">

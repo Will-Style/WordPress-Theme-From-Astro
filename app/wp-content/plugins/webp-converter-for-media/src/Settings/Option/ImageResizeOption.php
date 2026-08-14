@@ -11,10 +11,7 @@ class ImageResizeOption extends OptionAbstract {
 
 	const OPTION_NAME = 'image_resize';
 
-	/**
-	 * @var TokenRepository
-	 */
-	private $token_repository;
+	private TokenRepository $token_repository;
 
 	public function __construct( TokenRepository $token_repository ) {
 		$this->token_repository = $token_repository;
@@ -31,7 +28,7 @@ class ImageResizeOption extends OptionAbstract {
 	 * {@inheritdoc}
 	 */
 	public function get_form_name(): string {
-		return OptionAbstract::FORM_TYPE_BASIC;
+		return OptionAbstract::FORM_TYPE_GENERAL;
 	}
 
 	/**
@@ -44,7 +41,7 @@ class ImageResizeOption extends OptionAbstract {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function get_label(): string {
+	public static function get_label(): string {
 		return __( 'Maximum image dimensions', 'webp-converter-for-media' );
 	}
 
@@ -72,7 +69,7 @@ class ImageResizeOption extends OptionAbstract {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function get_notice_lines() {
+	public function get_notice_lines(): ?array {
 		$size   = $this->get_max_image_size();
 		$notice = [
 			sprintf(
@@ -88,7 +85,7 @@ class ImageResizeOption extends OptionAbstract {
 			/* translators: %1$s: open anchor tag, %2$s: close anchor tag */
 				__( '%1$sUpgrade to PRO%2$s', 'webp-converter-for-media' ),
 				'<a href="https://url.mattplugins.com/converter-field-image-resize-info" target="_blank">',
-				' <span class="dashicons dashicons-external"></span></a>'
+				'</a>'
 			);
 		}
 		return $notice;
@@ -120,14 +117,14 @@ class ImageResizeOption extends OptionAbstract {
 	 *
 	 * @return mixed[]
 	 */
-	public function get_default_value( array $settings = null ): array {
+	public function get_default_value(): array {
 		return [ '', '', '' ];
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function validate_value( $current_value, array $available_values = null, array $disabled_values = null ) {
+	public function validate_value( $current_value, ?array $available_values = null, ?array $disabled_values = null ) {
 		if ( ! is_array( $current_value ) ) {
 			return [ '', '', '' ];
 		}

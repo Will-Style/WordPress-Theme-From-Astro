@@ -42,7 +42,32 @@ class LazyBlocks_Control_ClassicEditor extends LazyBlocks_Control {
 	 * @return array script dependencies.
 	 */
 	public function get_script_depends() {
+		global $current_screen;
+
+		// Fixed Classic control error on legacy Widgets screen.
+		if ( isset( $current_screen->id ) && 'widgets' === $current_screen->id ) {
+			wp_tinymce_inline_scripts();
+		}
+
 		return array( 'lazyblocks-control-classic-editor' );
+	}
+
+	/**
+	 * Embed support for classic editor control.
+	 *
+	 * @param mixed  $value - control value.
+	 * @param array  $control_data - control data.
+	 * @param array  $block_data - block data.
+	 * @param string $context - block render context.
+	 *
+	 * @return string|array
+	 */
+	// phpcs:ignore
+	public function filter_control_value( $value, $control_data, $block_data, $context ) {
+		global $wp_embed;
+		$value = $wp_embed->autoembed( $value );
+
+		return $value;
 	}
 }
 

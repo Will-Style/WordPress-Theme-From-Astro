@@ -7,7 +7,7 @@ import { MediaPlaceholder } from '@wordpress/block-editor';
 import { useSelect } from '@wordpress/data';
 
 const { allowed_mime_types: wpAllowedMimeTypes } =
-	window.lazyblocksConstructorData || window.lazyblocksGutenberg;
+	window.lazyblocksBlockBuilderData || window.lazyblocksGutenberg;
 
 function FileControl(props) {
 	const {
@@ -102,8 +102,8 @@ function FileControl(props) {
 					</div>
 					<div className="lzb-gutenberg-file-button">
 						<Button
-							isSecondary
-							isSmall
+							variant="secondary"
+							size="small"
 							onClick={() => {
 								onChange('');
 							}}

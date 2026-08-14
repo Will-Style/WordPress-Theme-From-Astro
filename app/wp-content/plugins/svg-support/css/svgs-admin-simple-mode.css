@@ -1,0 +1,6 @@
+/**
+ * Hide advanced features (no-JS fallback while Advanced Mode is off)
+ */
+.svgs-advanced {
+	display: none;
+}

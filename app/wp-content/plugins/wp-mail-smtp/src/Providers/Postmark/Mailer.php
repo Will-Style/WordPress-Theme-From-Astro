@@ -92,10 +92,7 @@ class Mailer extends MailerAbstract {
 		}
 
 		$headers = isset( $this->body['Headers'] ) ? (array) $this->body['Headers'] : [];
-
-		if ( $name !== 'Message-ID' ) {
-			$value = WP::sanitize_value( $value );
-		}
+		$value   = $this->sanitize_header_value( $name, $value );
 
 		// Prevent duplicates.
 		$key = array_search( $name, array_column( $headers, 'Name' ), true );
@@ -372,6 +369,28 @@ class Mailer extends MailerAbstract {
 			$this->phpmailer->addCustomHeader( 'X-Msg-ID', $this->response['body']->MessageID );
 			$this->verify_sent_status = true;
 		}
+	}
+
+	/**
+	 * Get the error code from the Postmark API response.
+	 *
+	 * @since 4.8.0
+	 *
+	 * @return string
+	 */
+	public function get_response_error_code() {
+
+		if ( ! empty( $this->response ) ) {
+			$body = wp_remote_retrieve_body( $this->response );
+
+			// phpcs:ignore WordPress.NamingConventions.ValidVariableName
+			if ( ! empty( $body->ErrorCode ) ) {
+				// phpcs:ignore WordPress.NamingConventions.ValidVariableName
+				return $body->ErrorCode;
+			}
+		}
+
+		return parent::get_response_error_code();
 	}
 
 	/**

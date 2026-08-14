@@ -3,12 +3,12 @@
  * Plugin Name: SEO SIMPLE PACK
  * Plugin URI: https://wemo.tech/1670
  * Description: A very simple SEO plugin. You can easily set and customize meta tags and OGP tags for each page.
- * Version: 3.2.0
- * Author: LOOS,Inc.
- * Author URI: https://loos-web-studio.com/
+ * Version: 3.7.0
+ * Author: LOOS Inc.
+ * Author URI: https://loos.co.jp/
  * License: GPL2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain: loos-ssp
+ * Text Domain: seo-simple-pack
  * Domain Path: /languages
  */
 defined( 'ABSPATH' ) || exit;
@@ -30,14 +30,6 @@ if ( ! defined( 'SSP_VERSION' ) ) {
 }
 
 
-/**
- * 翻訳ファイルを登録 ( 自前の翻訳ファイルを読み込む )
- */
-if ( 'ja' === determine_locale() ) {
-	load_textdomain( 'loos-ssp', SSP_PATH . 'languages/loos-ssp-ja.mo' );
-} else {
-	load_plugin_textdomain( 'loos-ssp' );
-}
 
 
 /**
@@ -64,10 +56,23 @@ require_once SSP_PATH . 'class/activate.php';
  */
 class SEO_SIMPLE_PACK {
 	public function __construct() {
-		SSP_Data::init();
+		add_action( 'init', function() {
+			// 翻訳ファイルを登録 ( 日本語の場合は自前の翻訳ファイルを読み込む )
+			if ( 'ja' === determine_locale() ) {
+				load_textdomain( 'seo-simple-pack', SSP_PATH . 'languages/loos-ssp-ja.mo' );
+			} else {
+				load_plugin_textdomain( 'seo-simple-pack' );
+			}
+
+			// Dataセット
+			SSP_Data::init();
+			SSP_Menu::init();
+			SSP_MetaBox::init();
+		}, 0 );
+
+		SSP_Menu::create();
+		SSP_MetaBox::create();
 		SSP_Hooks::init();
-		SSP_Menu::init();
-		SSP_MetaBox::init();
 		SSP_Output::init();
 	}
 }
@@ -78,7 +83,7 @@ class SEO_SIMPLE_PACK {
  */
 // register_activation_hook( __FILE__, ['SSP_Activate', 'plugin_activate' ] );
 // register_deactivation_hook( __FILE__, ['SSP_Activate', 'plugin_deactivate' ] );
-register_uninstall_hook( __FILE__, ['SSP_Activate', 'plugin_uninstall' ] );
+register_uninstall_hook( __FILE__, [ 'SSP_Activate', 'plugin_uninstall' ] );
 
 
 /**

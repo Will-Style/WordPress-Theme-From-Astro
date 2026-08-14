@@ -4,17 +4,17 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit2d7762ae17e5a131c25e33cafd932f56
+class ComposerStaticInit977a71a7bb63d9fc0c8d6b8913a12a29
 {
     public static $prefixLengthsPsr4 = array (
-        'W' => 
+        'W' =>
         array (
             'WebpConverter\\' => 14,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'WebpConverter\\' => 
+        'WebpConverter\\' =>
         array (
             0 => __DIR__ . '/../..' . '/src',
         ),
@@ -83,6 +83,7 @@ class ComposerStaticInit2d7762ae17e5a131c25e33cafd932f56
         'WebpConverter\\Conversion\\OutputPathGenerator' => __DIR__ . '/../..' . '/src/Conversion/OutputPathGenerator.php',
         'WebpConverter\\Conversion\\PathsFinder' => __DIR__ . '/../..' . '/src/Conversion/PathsFinder.php',
         'WebpConverter\\Error\\Detector\\CloudflareStatusDetector' => __DIR__ . '/../..' . '/src/Error/Detector/CloudflareStatusDetector.php',
+        'WebpConverter\\Error\\Detector\\CurlLibraryDetector' => __DIR__ . '/../..' . '/src/Error/Detector/CurlLibraryDetector.php',
         'WebpConverter\\Error\\Detector\\DetectorInterface' => __DIR__ . '/../..' . '/src/Error/Detector/DetectorInterface.php',
         'WebpConverter\\Error\\Detector\\LibsNotInstalledDetector' => __DIR__ . '/../..' . '/src/Error/Detector/LibsNotInstalledDetector.php',
         'WebpConverter\\Error\\Detector\\LibsWithoutWebpSupportDetector' => __DIR__ . '/../..' . '/src/Error/Detector/LibsWithoutWebpSupportDetector.php',
@@ -91,12 +92,13 @@ class ComposerStaticInit2d7762ae17e5a131c25e33cafd932f56
         'WebpConverter\\Error\\Detector\\RewritesErrorsDetector' => __DIR__ . '/../..' . '/src/Error/Detector/RewritesErrorsDetector.php',
         'WebpConverter\\Error\\Detector\\SettingsIncorrectDetector' => __DIR__ . '/../..' . '/src/Error/Detector/SettingsIncorrectDetector.php',
         'WebpConverter\\Error\\Detector\\TokenStatusDetector' => __DIR__ . '/../..' . '/src/Error/Detector/TokenStatusDetector.php',
-        'WebpConverter\\Error\\Detector\\WebpFormatActivatedDetector' => __DIR__ . '/../..' . '/src/Error/Detector/WebpFormatActivatedDetector.php',
+        'WebpConverter\\Error\\Detector\\UnsupportedServerDetector' => __DIR__ . '/../..' . '/src/Error/Detector/UnsupportedServerDetector.php',
         'WebpConverter\\Error\\ErrorDetectorAggregator' => __DIR__ . '/../..' . '/src/Error/ErrorDetectorAggregator.php',
         'WebpConverter\\Error\\Notice\\AccessTokenInvalidNotice' => __DIR__ . '/../..' . '/src/Error/Notice/AccessTokenInvalidNotice.php',
         'WebpConverter\\Error\\Notice\\ApiLimitExceededNotice' => __DIR__ . '/../..' . '/src/Error/Notice/ApiLimitExceededNotice.php',
         'WebpConverter\\Error\\Notice\\BypassingApacheNotice' => __DIR__ . '/../..' . '/src/Error/Notice/BypassingApacheNotice.php',
         'WebpConverter\\Error\\Notice\\CloudflareSettingsIncorrectNotice' => __DIR__ . '/../..' . '/src/Error/Notice/CloudflareSettingsIncorrectNotice.php',
+        'WebpConverter\\Error\\Notice\\CurlFunctionDisabledNotice' => __DIR__ . '/../..' . '/src/Error/Notice/CurlFunctionDisabledNotice.php',
         'WebpConverter\\Error\\Notice\\LibsNotInstalledNotice' => __DIR__ . '/../..' . '/src/Error/Notice/LibsNotInstalledNotice.php',
         'WebpConverter\\Error\\Notice\\LibsWithoutWebpSupportNotice' => __DIR__ . '/../..' . '/src/Error/Notice/LibsWithoutWebpSupportNotice.php',
         'WebpConverter\\Error\\Notice\\NoticeInterface' => __DIR__ . '/../..' . '/src/Error/Notice/NoticeInterface.php',
@@ -111,7 +113,7 @@ class ComposerStaticInit2d7762ae17e5a131c25e33cafd932f56
         'WebpConverter\\Error\\Notice\\RewritesNotWorkingNotice' => __DIR__ . '/../..' . '/src/Error/Notice/RewritesNotWorkingNotice.php',
         'WebpConverter\\Error\\Notice\\RewritesUploadsBlockedNotice' => __DIR__ . '/../..' . '/src/Error/Notice/RewritesUploadsBlockedNotice.php',
         'WebpConverter\\Error\\Notice\\SettingsIncorrectNotice' => __DIR__ . '/../..' . '/src/Error/Notice/SettingsIncorrectNotice.php',
-        'WebpConverter\\Error\\Notice\\WebpRequiredNotice' => __DIR__ . '/../..' . '/src/Error/Notice/WebpRequiredNotice.php',
+        'WebpConverter\\Error\\Notice\\UnsupportedPlaygroundServerNotice' => __DIR__ . '/../..' . '/src/Error/Notice/UnsupportedPlaygroundServerNotice.php',
         'WebpConverter\\Exception\\ConversionErrorException' => __DIR__ . '/../..' . '/src/Exception/ConversionErrorException.php',
         'WebpConverter\\Exception\\ExceptionAbstract' => __DIR__ . '/../..' . '/src/Exception/ExceptionAbstract.php',
         'WebpConverter\\Exception\\ExceptionInterface' => __DIR__ . '/../..' . '/src/Exception/ExceptionInterface.php',
@@ -136,6 +138,7 @@ class ComposerStaticInit2d7762ae17e5a131c25e33cafd932f56
         'WebpConverter\\Loader\\LoaderIntegrator' => __DIR__ . '/../..' . '/src/Loader/LoaderIntegrator.php',
         'WebpConverter\\Loader\\LoaderInterface' => __DIR__ . '/../..' . '/src/Loader/LoaderInterface.php',
         'WebpConverter\\Loader\\PassthruLoader' => __DIR__ . '/../..' . '/src/Loader/PassthruLoader.php',
+        'WebpConverter\\Model\\DebugCurl' => __DIR__ . '/../..' . '/src/Model/DebugCurl.php',
         'WebpConverter\\Model\\Token' => __DIR__ . '/../..' . '/src/Model/Token.php',
         'WebpConverter\\Notice\\BlackFridayNotice' => __DIR__ . '/../..' . '/src/Notice/BlackFridayNotice.php',
         'WebpConverter\\Notice\\CloudflareNotice' => __DIR__ . '/../..' . '/src/Notice/CloudflareNotice.php',
@@ -171,6 +174,7 @@ class ComposerStaticInit2d7762ae17e5a131c25e33cafd932f56
         'WebpConverter\\Service\\PathsGenerator' => __DIR__ . '/../..' . '/src/Service/PathsGenerator.php',
         'WebpConverter\\Service\\RestApiUnlocker' => __DIR__ . '/../..' . '/src/Service/RestApiUnlocker.php',
         'WebpConverter\\Service\\ServerConfigurator' => __DIR__ . '/../..' . '/src/Service/ServerConfigurator.php',
+        'WebpConverter\\Service\\SiteHealthDetector' => __DIR__ . '/../..' . '/src/Service/SiteHealthDetector.php',
         'WebpConverter\\Service\\StatsManager' => __DIR__ . '/../..' . '/src/Service/StatsManager.php',
         'WebpConverter\\Service\\TokenValidator' => __DIR__ . '/../..' . '/src/Service/TokenValidator.php',
         'WebpConverter\\Service\\ViewLoader' => __DIR__ . '/../..' . '/src/Service/ViewLoader.php',
@@ -183,6 +187,11 @@ class ComposerStaticInit2d7762ae17e5a131c25e33cafd932f56
         'WebpConverter\\Settings\\Option\\ConversionMethodOption' => __DIR__ . '/../..' . '/src/Settings/Option/ConversionMethodOption.php',
         'WebpConverter\\Settings\\Option\\ExcludedDirectoriesOption' => __DIR__ . '/../..' . '/src/Settings/Option/ExcludedDirectoriesOption.php',
         'WebpConverter\\Settings\\Option\\ExtraFeaturesOption' => __DIR__ . '/../..' . '/src/Settings/Option/ExtraFeaturesOption.php',
+        'WebpConverter\\Settings\\Option\\HtaccessRewriteFlagRedirectOption' => __DIR__ . '/../..' . '/src/Settings/Option/HtaccessRewriteFlagRedirectOption.php',
+        'WebpConverter\\Settings\\Option\\HtaccessRewriteOutputOption' => __DIR__ . '/../..' . '/src/Settings/Option/HtaccessRewriteOutputOption.php',
+        'WebpConverter\\Settings\\Option\\HtaccessRewriteParentOption' => __DIR__ . '/../..' . '/src/Settings/Option/HtaccessRewriteParentOption.php',
+        'WebpConverter\\Settings\\Option\\HtaccessRewritePathOption' => __DIR__ . '/../..' . '/src/Settings/Option/HtaccessRewritePathOption.php',
+        'WebpConverter\\Settings\\Option\\HtaccessRewriteRootOption' => __DIR__ . '/../..' . '/src/Settings/Option/HtaccessRewriteRootOption.php',
         'WebpConverter\\Settings\\Option\\ImageResizeOption' => __DIR__ . '/../..' . '/src/Settings/Option/ImageResizeOption.php',
         'WebpConverter\\Settings\\Option\\ImagesQualityOption' => __DIR__ . '/../..' . '/src/Settings/Option/ImagesQualityOption.php',
         'WebpConverter\\Settings\\Option\\LoaderTypeOption' => __DIR__ . '/../..' . '/src/Settings/Option/LoaderTypeOption.php',
@@ -193,6 +202,7 @@ class ComposerStaticInit2d7762ae17e5a131c25e33cafd932f56
         'WebpConverter\\Settings\\Option\\OptionsAggregator' => __DIR__ . '/../..' . '/src/Settings/Option/OptionsAggregator.php',
         'WebpConverter\\Settings\\Option\\OutputFormatsOption' => __DIR__ . '/../..' . '/src/Settings/Option/OutputFormatsOption.php',
         'WebpConverter\\Settings\\Option\\RewriteInheritanceOption' => __DIR__ . '/../..' . '/src/Settings/Option/RewriteInheritanceOption.php',
+        'WebpConverter\\Settings\\Option\\ServiceModeOption' => __DIR__ . '/../..' . '/src/Settings/Option/ServiceModeOption.php',
         'WebpConverter\\Settings\\Option\\SupportedDirectoriesOption' => __DIR__ . '/../..' . '/src/Settings/Option/SupportedDirectoriesOption.php',
         'WebpConverter\\Settings\\Option\\SupportedExtensionsOption' => __DIR__ . '/../..' . '/src/Settings/Option/SupportedExtensionsOption.php',
         'WebpConverter\\Settings\\OptionsManager' => __DIR__ . '/../..' . '/src/Settings/OptionsManager.php',
@@ -200,6 +210,7 @@ class ComposerStaticInit2d7762ae17e5a131c25e33cafd932f56
         'WebpConverter\\Settings\\Page\\BulkOptimizationPage' => __DIR__ . '/../..' . '/src/Settings/Page/BulkOptimizationPage.php',
         'WebpConverter\\Settings\\Page\\CdnSettingsPage' => __DIR__ . '/../..' . '/src/Settings/Page/CdnSettingsPage.php',
         'WebpConverter\\Settings\\Page\\DebugPage' => __DIR__ . '/../..' . '/src/Settings/Page/DebugPage.php',
+        'WebpConverter\\Settings\\Page\\ExpertSettingsPage' => __DIR__ . '/../..' . '/src/Settings/Page/ExpertSettingsPage.php',
         'WebpConverter\\Settings\\Page\\GeneralSettingsPage' => __DIR__ . '/../..' . '/src/Settings/Page/GeneralSettingsPage.php',
         'WebpConverter\\Settings\\Page\\PageAbstract' => __DIR__ . '/../..' . '/src/Settings/Page/PageAbstract.php',
         'WebpConverter\\Settings\\Page\\PageIntegrator' => __DIR__ . '/../..' . '/src/Settings/Page/PageIntegrator.php',
@@ -212,9 +223,9 @@ class ComposerStaticInit2d7762ae17e5a131c25e33cafd932f56
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit2d7762ae17e5a131c25e33cafd932f56::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit2d7762ae17e5a131c25e33cafd932f56::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit2d7762ae17e5a131c25e33cafd932f56::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit977a71a7bb63d9fc0c8d6b8913a12a29::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit977a71a7bb63d9fc0c8d6b8913a12a29::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit977a71a7bb63d9fc0c8d6b8913a12a29::$classMap;
 
         }, null, ClassLoader::class);
     }

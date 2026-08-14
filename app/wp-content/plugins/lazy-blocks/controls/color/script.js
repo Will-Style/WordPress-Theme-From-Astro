@@ -34,7 +34,27 @@ addFilter('lzb.editor.control.color.render', 'lzb.editor', (render, props) => (
 ));
 
 /**
- * Control settings render in constructor.
+ * Required check.
+ *
+ * @param {Object} validationData
+ * @param {number} value
+ *
+ * @return {Object} validation data.
+ */
+function validate(validationData, value) {
+	if (!value) {
+		return {
+			valid: false,
+			message: 'Please choose a color.',
+		};
+	}
+
+	return validationData;
+}
+addFilter('lzb.editor.control.color.validate', 'lzb.editor', validate);
+
+/**
+ * Control settings render in block builder.
  */
 addFilter(
 	'lzb.constructor.control.color.settings',
@@ -55,6 +75,8 @@ addFilter(
 						onChange={(value) =>
 							updateData({ alongside_text: value })
 						}
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
 					/>
 				</PanelBody>
 				<PanelBody>
@@ -73,6 +95,7 @@ addFilter(
 							onChange={(value) =>
 								updateData({ alpha: value ? 'true' : 'false' })
 							}
+							__nextHasNoMarginBottom
 						/>
 					</BaseControl>
 					<BaseControl
@@ -92,6 +115,7 @@ addFilter(
 									palette: value ? 'true' : 'false',
 								})
 							}
+							__nextHasNoMarginBottom
 						/>
 					</BaseControl>
 				</PanelBody>

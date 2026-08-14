@@ -1,6 +1,6 @@
 <?php
 
-if (!defined('UPDRAFTPLUS_DIR')) die('No direct access.');
+if (!defined('ABSPATH')) die('No direct access allowed');
 
 if (version_compare(phpversion(), '5.3.3', '>=')) {
 

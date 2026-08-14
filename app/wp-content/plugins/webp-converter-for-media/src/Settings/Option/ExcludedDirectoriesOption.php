@@ -33,7 +33,7 @@ class ExcludedDirectoriesOption extends OptionAbstract {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function get_label(): string {
+	public static function get_label(): string {
 		return __( 'Excluded directories', 'webp-converter-for-media' );
 	}
 
@@ -47,7 +47,7 @@ class ExcludedDirectoriesOption extends OptionAbstract {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function get_placeholder() {
+	public function get_placeholder(): string {
 		return 'directory-1,directory-2';
 	}
 
@@ -63,17 +63,35 @@ class ExcludedDirectoriesOption extends OptionAbstract {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function get_default_value( array $settings = null ): string {
+	public function get_default_value(): string {
 		return '';
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function validate_value( $current_value, array $available_values = null, array $disabled_values = null ): string {
-		$valid_values = explode( ',', str_replace( [ '/', '\\' ], '', $current_value ) );
-		$valid_values = array_map( 'trim', $valid_values );
-		return implode( ',', $valid_values );
+	public function validate_value( $current_value, ?array $available_values = null, ?array $disabled_values = null ): string {
+		$valid_values = explode( ',', $current_value );
+		$valid_values = array_map(
+			function ( $value ) {
+				return preg_replace(
+					'/(\/|\\\)+/',
+					'$1',
+					trim( $value, '/\\' )
+				);
+			},
+			$valid_values
+		);
+
+		return implode(
+			',',
+			array_filter(
+				$valid_values,
+				function ( $directory_name ) {
+					return ( $directory_name !== '' );
+				}
+			)
+		);
 	}
 
 	/**

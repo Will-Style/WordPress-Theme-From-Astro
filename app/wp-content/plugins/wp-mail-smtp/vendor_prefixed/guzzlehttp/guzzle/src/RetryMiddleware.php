@@ -36,22 +36,27 @@ class RetryMiddleware
      *                                                                         and returns the number of
      *                                                                         milliseconds to delay.
      */
-    public function __construct(callable $decider, callable $nextHandler, callable $delay = null)
+    public function __construct(callable $decider, callable $nextHandler, ?callable $delay = null)
     {
         $this->decider = $decider;
         $this->nextHandler = $nextHandler;
-        $this->delay = $delay ?: __CLASS__ . '::exponentialDelay';
+        $this->delay = $delay ?: static function (int $retries) : int {
+            return (int) 2 ** ($retries - 1) * 1000;
+        };
     }
     /**
      * Default exponential backoff delay function.
      *
      * @return int milliseconds.
+     *
+     * @deprecated since 7.11, will be removed in 8.0.
      */
     public static function exponentialDelay(int $retries) : int
     {
-        return (int) \pow(2, $retries - 1) * 1000;
+        \trigger_deprecation('guzzlehttp/guzzle', '7.11', '%s::%s() is deprecated and will be removed in 8.0.', __CLASS__, __FUNCTION__);
+        return (int) 2 ** ($retries - 1) * 1000;
     }
-    public function __invoke(\WPMailSMTP\Vendor\Psr\Http\Message\RequestInterface $request, array $options) : \WPMailSMTP\Vendor\GuzzleHttp\Promise\PromiseInterface
+    public function __invoke(RequestInterface $request, array $options) : PromiseInterface
     {
         if (!isset($options['retries'])) {
             $options['retries'] = 0;
@@ -62,7 +67,7 @@ class RetryMiddleware
     /**
      * Execute fulfilled closure
      */
-    private function onFulfilled(\WPMailSMTP\Vendor\Psr\Http\Message\RequestInterface $request, array $options) : callable
+    private function onFulfilled(RequestInterface $request, array $options) : callable
     {
         return function ($value) use($request, $options) {
             if (!($this->decider)($options['retries'], $request, $value, null)) {
@@ -74,18 +79,18 @@ class RetryMiddleware
     /**
      * Execute rejected closure
      */
-    private function onRejected(\WPMailSMTP\Vendor\Psr\Http\Message\RequestInterface $req, array $options) : callable
+    private function onRejected(RequestInterface $req, array $options) : callable
     {
         return function ($reason) use($req, $options) {
             if (!($this->decider)($options['retries'], $req, null, $reason)) {
-                return \WPMailSMTP\Vendor\GuzzleHttp\Promise\Create::rejectionFor($reason);
+                return P\Create::rejectionFor($reason);
             }
             return $this->doRetry($req, $options);
         };
     }
-    private function doRetry(\WPMailSMTP\Vendor\Psr\Http\Message\RequestInterface $request, array $options, \WPMailSMTP\Vendor\Psr\Http\Message\ResponseInterface $response = null) : \WPMailSMTP\Vendor\GuzzleHttp\Promise\PromiseInterface
+    private function doRetry(RequestInterface $request, array $options, ?ResponseInterface $response = null) : PromiseInterface
     {
-        $options['delay'] = ($this->delay)(++$options['retries'], $response);
+        $options['delay'] = ($this->delay)(++$options['retries'], $response, $request);
         return $this($request, $options);
     }
 }

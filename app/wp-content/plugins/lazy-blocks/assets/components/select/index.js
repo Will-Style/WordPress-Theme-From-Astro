@@ -3,6 +3,8 @@
  */
 import './editor.scss';
 
+import StyleProvider from './style-provider';
+
 /**
  * External dependencies
  */
@@ -11,7 +13,13 @@ import AsyncSelect from 'react-select/async';
 import ReactSelect, { components } from 'react-select';
 import selectStyles from 'gutenberg-react-select-styles';
 
-import { closestCenter, DndContext } from '@dnd-kit/core';
+import {
+	DndContext,
+	PointerSensor,
+	closestCenter,
+	useSensor,
+	useSensors,
+} from '@dnd-kit/core';
 import { restrictToParentElement } from '@dnd-kit/modifiers';
 import { SortableContext, useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
@@ -19,7 +27,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { arrayMoveImmutable } from 'array-move';
 
 export default function Select(props) {
-	const { value, onChange } = props;
+	const { value, onChange, styles = {} } = props;
 
 	let ThisSelect = ReactSelect;
 
@@ -29,7 +37,13 @@ export default function Select(props) {
 		ThisSelect = CreatableSelect;
 	}
 
-	const selectProps = { ...props };
+	const selectProps = { ...props, styles: { ...selectStyles, ...styles } };
+
+	// Set activation distance to prevent conflict with remove button.
+	const activationConstraint = { distance: 4 };
+	const sensors = useSensors(
+		useSensor(PointerSensor, { activationConstraint })
+	);
 
 	// Tags.
 	if (selectProps.isTags) {
@@ -89,6 +103,8 @@ export default function Select(props) {
 		return (
 			<DndContext
 				modifiers={[restrictToParentElement]}
+				collisionDetection={closestCenter}
+				sensors={sensors}
 				onDragEnd={(event) => {
 					const { active, over } = event;
 
@@ -103,30 +119,31 @@ export default function Select(props) {
 						onChange(arrayMoveImmutable(value, oldIndex, newIndex));
 					}
 				}}
-				collisionDetection={closestCenter}
 			>
 				<SortableContext
 					items={
 						value && value.length ? value.map((o) => o.value) : []
 					}
 				>
-					<ThisSelect
-						menuPlacement="auto"
-						className="lazyblocks-component-select"
-						styles={selectStyles}
-						{...selectProps}
-					/>
+					<StyleProvider>
+						<ThisSelect
+							menuPlacement="auto"
+							className="lazyblocks-component-select"
+							{...selectProps}
+						/>
+					</StyleProvider>
 				</SortableContext>
 			</DndContext>
 		);
 	}
 
 	return (
-		<ThisSelect
-			menuPlacement="auto"
-			className="lazyblocks-component-select"
-			styles={selectStyles}
-			{...selectProps}
-		/>
+		<StyleProvider>
+			<ThisSelect
+				menuPlacement="auto"
+				className="lazyblocks-component-select"
+				{...selectProps}
+			/>
+		</StyleProvider>
 	);
 }

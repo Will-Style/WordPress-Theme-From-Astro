@@ -1,0 +1,16 @@
+{
+    "name": "team-updraft/lib-onboarding-wizard",
+    "description": "onboarding wizard",
+    "type": "composer-plugin",
+    "autoload": {
+        "classmap": [
+            "composer-plugin-extras"
+        ]
+    },
+    "require": {
+        "composer-plugin-api": "^2.0"
+    },
+    "extra": {
+        "class": "LibOnboardingWizard"
+    }
+}

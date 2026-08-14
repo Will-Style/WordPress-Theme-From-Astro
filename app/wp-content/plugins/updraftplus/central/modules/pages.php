@@ -1,6 +1,6 @@
 <?php
 
-if (!defined('UPDRAFTCENTRAL_CLIENT_DIR')) die('No access.');
+if (!defined('ABSPATH')) die('No direct access allowed');
 
 // Load the posts command class since we're going to be extending it for our page module service/command
 // class in order to minimize redundant shareable methods.

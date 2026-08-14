@@ -1,0 +1,66 @@
+@use "./helpers/responsive-variables-generator.scss" as *;
+
+$theme-global-variables: (
+	"margin-v": (
+		"mobile": "bu-16",
+		"desktop": "bu-24"
+	),
+	"margin-h": (
+		"mobile": "bu-16",
+		"desktop": "bu-24"
+	),
+	"gap-v": (
+		"mobile": "bu-16",
+		"desktop": "bu-24"
+	),
+	"gap-h": (
+		"mobile": "bu-16",
+		"desktop": "bu-24"
+	),
+	"corner": (
+		"mobile": "bu-16",
+		"desktop": "bu-16"
+	),
+	"max-width": (
+		"mobile": "2000px",
+		"desktop": "1712px"
+	),
+	"min-width": (
+		"mobile": "600px",
+		"desktop": "600px"
+	),
+    "text-icon-gap": (
+		"mobile": "bu-6",
+		"desktop": "bu-6"
+	),
+	"2xl": (
+		"mobile": "bu-16",
+		"desktop": "bu-16"
+	),
+	"xl": (
+		"mobile": "bu-12",
+		"desktop": "bu-12"
+	),
+	"md": (
+		"mobile": "bu-10",
+		"desktop": "bu-10"
+	),
+	"sm": (
+		"mobile": "bu-8",
+		"desktop": "bu-8"
+	),
+	"xs": (
+		"mobile": "bu-6",
+		"desktop": "bu-6"
+	),
+	"xxs": (
+		"mobile": "bu-4",
+		"desktop": "bu-4"
+	),
+	"indent": (
+		"mobile": "bu-40",
+		"desktop": "bu-40"
+	)
+);
+
+@include tu-generate-responsive-variables("tu-global", $theme-global-variables);

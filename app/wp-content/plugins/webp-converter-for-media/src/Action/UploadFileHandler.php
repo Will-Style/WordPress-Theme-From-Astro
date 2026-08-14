@@ -15,28 +15,22 @@ use WebpConverter\Settings\Option\SupportedExtensionsOption;
  */
 class UploadFileHandler implements HookableInterface {
 
-	/**
-	 * @var PluginData
-	 */
-	private $plugin_data;
+	private PluginData $plugin_data;
 
-	/**
-	 * @var CronInitiator
-	 */
-	private $cron_initiator;
+	private CronInitiator $cron_initiator;
 
 	/**
 	 * Paths of converted images.
 	 *
 	 * @var string[]
 	 */
-	private $uploaded_paths = [];
+	private array $uploaded_paths = [];
 
 	public function __construct(
 		PluginData $plugin_data,
 		TokenRepository $token_repository,
 		FormatFactory $format_factory,
-		CronInitiator $cron_initiator = null
+		?CronInitiator $cron_initiator = null
 	) {
 		$this->plugin_data    = $plugin_data;
 		$this->cron_initiator = $cron_initiator ?: new CronInitiator( $plugin_data, $token_repository, $format_factory );
@@ -45,8 +39,21 @@ class UploadFileHandler implements HookableInterface {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function init_hooks() {
-		add_filter( 'wp_update_attachment_metadata', [ $this, 'init_attachment_convert' ], 10, 2 );
+	public function init_hooks(): void {
+		add_action( 'init', [ $this, 'init_hooks_after_setup' ] );
+	}
+
+	/**
+	 * @internal
+	 */
+	public function init_hooks_after_setup(): void {
+		$plugin_settings = $this->plugin_data->get_plugin_settings();
+		if ( ! $plugin_settings[ AutoConversionOption::OPTION_NAME ] ) {
+			return;
+		}
+
+		add_filter( 'wp_update_attachment_metadata', [ $this, 'init_attachment_conversion' ], 10, 2 );
+		add_filter( 'image_make_intermediate_size', [ $this, 'init_image_conversion' ] );
 	}
 
 	/**
@@ -58,29 +65,56 @@ class UploadFileHandler implements HookableInterface {
 	 * @return mixed[]|null Attachment meta data.
 	 * @internal
 	 */
-	public function init_attachment_convert( array $data = null, int $attachment_id = null ) {
+	public function init_attachment_conversion( ?array $data = null, ?int $attachment_id = null ): ?array {
 		if ( ( $data === null ) || ( $attachment_id === null )
 			|| ! isset( $data['file'] ) || ! isset( $data['sizes'] ) ) {
 			return $data;
 		}
 
 		$plugin_settings = $this->plugin_data->get_plugin_settings();
-		if ( ! $plugin_settings[ AutoConversionOption::OPTION_NAME ] ) {
-			return $data;
-		}
-
-		$file_extension = strtolower( pathinfo( $data['file'], PATHINFO_EXTENSION ) );
+		$file_extension  = strtolower( pathinfo( $data['file'], PATHINFO_EXTENSION ) );
 		if ( ! in_array( $file_extension, $plugin_settings[ SupportedExtensionsOption::OPTION_NAME ] ) ) {
 			return $data;
 		}
 
-		$paths                = $this->get_sizes_paths( $data );
-		$paths                = apply_filters( 'webpc_attachment_paths', $paths, $attachment_id );
-		$this->uploaded_paths = array_merge( $this->uploaded_paths, $paths );
+		$paths = $this->get_sizes_paths( $data );
+		$paths = apply_filters( 'webpc_attachment_paths', $paths, $attachment_id );
 
+		$this->uploaded_paths = array_merge( $this->uploaded_paths, $paths );
 		add_action( 'shutdown', [ $this, 'save_paths_to_conversion' ] );
 
 		return $data;
+	}
+
+	/**
+	 * Initializes converting attachment images after file is saved by Image Editor.
+	 *
+	 * @param string $filename Path of image.
+	 *
+	 * @return string
+	 * @internal
+	 */
+	public function init_image_conversion( string $filename ): string {
+		$upload = wp_upload_dir();
+		if ( strpos( $filename, $upload['basedir'] ) !== 0 ) {
+			return $filename;
+		}
+
+		$plugin_settings = $this->plugin_data->get_plugin_settings();
+		$file_extension  = strtolower( pathinfo( $filename, PATHINFO_EXTENSION ) );
+		if ( ! in_array( $file_extension, $plugin_settings[ SupportedExtensionsOption::OPTION_NAME ] ) ) {
+			return $filename;
+		} elseif ( ! apply_filters( 'webpc_supported_source_directory', true, basename( dirname( $filename ) ), $filename ) ) {
+			return $filename;
+		} elseif ( ! apply_filters( 'webpc_supported_source_file', true, basename( $filename ), $filename ) ) {
+			return $filename;
+		}
+
+		$this->uploaded_paths[] = str_replace( '\\', '/', $filename );
+
+		add_action( 'shutdown', [ $this, 'save_paths_to_conversion' ] );
+
+		return $filename;
 	}
 
 	/**
@@ -94,6 +128,10 @@ class UploadFileHandler implements HookableInterface {
 		$directory = $this->get_attachment_directory( $data['file'] );
 		$list      = [];
 
+		if ( ! apply_filters( 'webpc_supported_source_directory', true, basename( $directory ), $directory ) ) {
+			return $list;
+		}
+
 		if ( isset( $data['original_image'] ) ) {
 			$list[] = $directory . $data['original_image'];
 		}
@@ -105,6 +143,13 @@ class UploadFileHandler implements HookableInterface {
 				$list[] = $path;
 			}
 		}
+
+		foreach ( $list as $index => $path ) {
+			if ( ! apply_filters( 'webpc_supported_source_file', true, basename( $path ), $path ) ) {
+				unset( $list[ $index ] );
+			}
+		}
+
 		return array_values( array_unique( $list ) );
 	}
 
@@ -124,11 +169,9 @@ class UploadFileHandler implements HookableInterface {
 	}
 
 	/**
-	 * @return void
-	 *
 	 * @internal
 	 */
-	public function save_paths_to_conversion() {
+	public function save_paths_to_conversion(): void {
 		$paths = array_unique( $this->uploaded_paths );
 		if ( ! $paths ) {
 			return;

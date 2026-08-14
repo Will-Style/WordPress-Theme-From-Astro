@@ -9,20 +9,11 @@ use WebpConverter\Conversion\Format\FormatFactory;
  */
 class OutputPathGenerator {
 
-	/**
-	 * @var FormatFactory
-	 */
-	private $format_factory;
+	private FormatFactory $format_factory;
 
-	/**
-	 * @var string|null
-	 */
-	private $path_wp_content_dir = null;
+	private ?string $path_wp_content_dir = null;
 
-	/**
-	 * @var string|null
-	 */
-	private $path_output_dir = null;
+	private ?string $path_output_dir = null;
 
 	public function __construct( FormatFactory $format_factory ) {
 		$this->format_factory = $format_factory;
@@ -37,7 +28,7 @@ class OutputPathGenerator {
 	 *
 	 * @return string|null Server path for output image.
 	 */
-	public function get_path( string $path, bool $create_dir = false, string $file_extension = '' ) {
+	public function get_path( string $path, bool $create_dir = false, string $file_extension = '' ): ?string {
 		$paths = $this->get_paths( $path, $create_dir, [ $file_extension ] );
 		return $paths[0] ?? null;
 	}
@@ -46,13 +37,13 @@ class OutputPathGenerator {
 	 * Generates output paths from paths of source image for all output formats.
 	 * Creates directory structure of output path, if it does not exist.
 	 *
-	 * @param string   $path            Server path of source image.
-	 * @param bool     $create_dir      Create output directory structure?
-	 * @param string[] $file_extensions Output format extensions.
+	 * @param string        $path            Server path of source image.
+	 * @param bool          $create_dir      Create output directory structure?
+	 * @param string[]|null $file_extensions Output format extensions.
 	 *
 	 * @return string[] Server paths for output images.
 	 */
-	public function get_paths( string $path, bool $create_dir = false, array $file_extensions = null ): array {
+	public function get_paths( string $path, bool $create_dir = false, ?array $file_extensions = null ): array {
 		$new_path = $this->get_directory_path( $path );
 		if ( ! $new_path || ( $create_dir && ! $this->make_directories( $this->check_directories( $new_path ) ) ) ) {
 			return [];
@@ -80,7 +71,7 @@ class OutputPathGenerator {
 	 *
 	 * @return string|null Server paths for output directory.
 	 */
-	public function get_directory_path( string $path ) {
+	public function get_directory_path( string $path ): ?string {
 		$webp_root   = $this->get_output_dir();
 		$wp_content  = $this->get_wp_content_dir();
 		$output_path = str_replace(

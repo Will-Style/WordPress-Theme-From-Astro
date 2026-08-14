@@ -1,6 +1,6 @@
 <?php
 
-if (!defined('UPDRAFTPLUS_DIR')) die('No direct access allowed.');
+if (!defined('ABSPATH')) die('No direct access allowed.');
 
 if (class_exists('UpdraftPlus_Addons_RemoteStorage_webdav')) {
 

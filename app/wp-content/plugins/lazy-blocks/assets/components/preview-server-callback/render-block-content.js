@@ -15,17 +15,13 @@ import json5 from 'json5';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { isEqual } from 'lodash';
 import { __, sprintf } from '@wordpress/i18n';
-import { useState, useEffect, useContext } from '@wordpress/element';
+import { useState, useEffect } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 import {
 	InnerBlocks,
 	useInnerBlocksProps,
-	BlockList,
+	useBlockProps,
 } from '@wordpress/block-editor';
-
-const { elementContext: __stableElementContext, __unstableElementContext } =
-	BlockList;
-const elementContext = __stableElementContext || __unstableElementContext;
 
 const CONVERT_ATTRIBUTES = {
 	classname: 'className',
@@ -41,13 +37,10 @@ const CONVERT_TO_JSON = [
 ];
 
 function RenderScript(props) {
-	const { src = '', innerHTML = '' } = props;
-
-	const element = useContext(elementContext);
+	const { src = '', innerHTML = '', blockContentWrapper } = props;
 
 	useEffect(() => {
-		const doc = element?.ownerDocument || document;
-
+		const doc = blockContentWrapper.current?.ownerDocument || document;
 		const script = doc.createElement('script');
 
 		if (src) {
@@ -64,7 +57,7 @@ function RenderScript(props) {
 			// to prevent unwanted JS errors.
 			doc?.body?.removeChild(script);
 		};
-	}, [element, src, innerHTML]);
+	}, [blockContentWrapper, src, innerHTML]);
 }
 
 /**
@@ -104,19 +97,49 @@ function prepareAttributes(attrs) {
 		}
 	});
 
-	// Convert attributes to boolean.
 	Object.keys(newAttrs).forEach((name) => {
+		// Convert attributes to boolean.
 		if (newAttrs[name] === 'false') {
 			newAttrs[name] = false;
 		} else if (newAttrs[name] === 'true') {
 			newAttrs[name] = true;
+
+			// Convert class attribute to className.
+		} else if (name === 'class') {
+			newAttrs.className = newAttrs.className || newAttrs.class;
+			delete newAttrs.class;
+
+			// Convert string style attribute to React style object.
+		} else if (name === 'style' && typeof newAttrs[name] === 'string') {
+			const styleObj = {};
+			newAttrs[name].split(';').forEach((declaration) => {
+				const [property, value] = declaration
+					.split(':')
+					.map((s) => s.trim());
+
+				if (property && value) {
+					// Convert kebab-case to camelCase
+					const camelProperty = property.replace(
+						/-([a-z])/g,
+						(match, letter) => letter.toUpperCase()
+					);
+					styleObj[camelProperty] = value;
+				}
+			});
+			newAttrs[name] = styleObj;
 		}
 	});
 
 	return newAttrs;
 }
 
-export default function RenderBlockContent({ content, props }) {
+export default function RenderBlockContent({
+	content,
+	props,
+	blockContentWrapper,
+	withBlockProps,
+}) {
+	const [blockAttrs, setBlockAttrs] = useState({});
 	const [innerBlocksOptions, setInnerBlocksOptions] = useState({});
 
 	const { hasChildBlocks } = useSelect(
@@ -132,6 +155,7 @@ export default function RenderBlockContent({ content, props }) {
 		[props.clientId]
 	);
 
+	const blockProps = useBlockProps(withBlockProps ? blockAttrs : undefined);
 	const innerBlocksProps = useInnerBlocksProps(
 		{
 			className: innerBlocksOptions.className || 'lazyblock-inner-blocks',
@@ -195,6 +219,39 @@ export default function RenderBlockContent({ content, props }) {
 					return <div {...innerBlocksProps} />;
 				}
 
+				// Handle useBlockProps
+				if (domNode.attribs && 'useblockprops' in domNode.attribs) {
+					// Get the existing attributes
+					const attrs = { ...domNode.attribs };
+					delete attrs.useblockprops;
+
+					const newBlockAttrs = {
+						...blockAttrs,
+						...prepareAttributes(attrs),
+					};
+
+					if (!isEqual(newBlockAttrs, blockAttrs)) {
+						setBlockAttrs(newBlockAttrs);
+					}
+
+					const Tag = domNode.name;
+
+					if (withBlockProps) {
+						return (
+							<Tag {...blockProps}>
+								{domToReact(domNode.children, options)}
+							</Tag>
+						);
+					}
+
+					// If we don't use block props, we need to remove the attributes
+					return (
+						<Tag {...blockAttrs}>
+							{domToReact(domNode.children, options)}
+						</Tag>
+					);
+				}
+
 				// Script element is not working by default, so we should add it manually.
 				// @link https://github.com/remarkablemark/html-react-parser/issues/98
 				if (domNode.type === 'script') {
@@ -205,6 +262,10 @@ export default function RenderBlockContent({ content, props }) {
 					}
 					if (domNode?.children[0]?.data) {
 						scriptData.innerHTML = domNode.children[0].data;
+					}
+
+					if (typeof blockContentWrapper !== 'undefined') {
+						scriptData.blockContentWrapper = blockContentWrapper;
 					}
 
 					return <RenderScript {...scriptData} />;

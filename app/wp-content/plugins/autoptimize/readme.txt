@@ -1,11 +1,13 @@
 === Autoptimize ===
 Contributors: futtta, optimizingmatters, zytzagoo, turl
-Tags: optimize, minify, performance, images, core web vitals, lazy-load, pagespeed, google fonts
+Tags: optimize, performance, images, core web vitals, pagespeed
 Donate link: http://blog.futtta.be/2013/10/21/do-not-donate-to-me/
-Requires at least: 5.3 
-Tested up to: 6.3
-Requires PHP: 5.6
-Stable tag: 3.1.8.1
+License: GPLv3
+License URI: [https://www.gnu.org/licenses/gpl-3.0.html](https://www.gnu.org/licenses/gpl-3.0.html)
+Requires at least: 5.3
+Tested up to: 6.9
+Requires PHP: 7.1
+Stable tag: 3.1.15.1
 
 Autoptimize speeds up your website by optimizing JS, CSS, images (incl. lazy-load), HTML and Google Fonts, asyncing JS, removing emoji cruft and more.
 
@@ -18,9 +20,9 @@ If you think performance indeed is important, you should at least consider one o
 > [Autoptimize Pro is a premium Power-Up](https://misc.optimizingmatters.com/partners/?from=partnertab&partner=aopro), adding image optimization, CDN, page caching, automatic critical CSS rules and extra “booster” options, all in one handy subscription to [make your site even faster!](https://misc.optimizingmatters.com/partners/?from=partnertab&partner=aopro)!
 
 > <strong>Premium Support</strong><br>
-> We provide great [Premium Support and Web Performance Optimization services](https://misc.optimizingmatters.com/partners/?from=partnertab&partner=autoptimizepro), check out our offering on [https://accelera.site/](https://misc.optimizingmatters.com/partners/?from=partnertab&partner=autoptimizepro)!
+> We provide great [Premium Support and Web Performance Optimization services](https://misc.optimizingmatters.com/partners/?from=partnertab&partner=autoptimizepro) with Accelera, check out our offering on [https://accelerawp.com/](https://misc.optimizingmatters.com/partners/?from=partnertab&partner=autoptimizepro)!
 
-(Speed-surfing image  under creative commons [by LL Twistiti](https://www.flickr.com/photos/twistiti/818552808/))
+(Speed-surfing image under creative commons [by LL Twistiti](https://www.flickr.com/photos/twistiti/818552808/))
 
 == Installation ==
 
@@ -318,6 +320,52 @@ You can get help on the [wordpress.org support forum](http://wordpress.org/suppo
 Just [fork Autoptimize on Github](https://github.com/futtta/autoptimize) and code away!
 
 == Changelog ==
+
+= 3.1.15.1 =
+* fix for "Uncaught Error: Using $this when not in object context" when preloads are set
+
+= 3.1.15 =
+* also add fetchpriority=high to preload set on Extra tab
+* improve exit survey display in RTL languages
+* security enhancements for 2 authenticated stored XSS issues responsibly reported by stealhcopter and bashu
+* multiple minor changes/ improvements/ bugfixes, see the [GitHub commit log](https://github.com/futtta/autoptimize/commits/beta).
+
+= 3.1.14 =
+* improve HTML output for <link rel="preload" images (based on report by Muhammad)
+* let the 404-handler issue a 302 iso 301 HTTP response (as mentioned by thefitrv)
+* small improvement in critical CSS cron job handling in case of an empty "time limit" (thanks for the help Jason)
+* fix bug in "domain binding" in critical CSS advanced options (reported by Hazel)
+* catch and report (exceptional) JS optimization issues causing preg_replace_callback to crash out (in case of a huge amount of JS code), thanks siliconforks
+* confirmed OK with WordPress 6.9
+
+= 3.1.13 =
+* multiple minor changes/ improvements/ bugfixes, see the [GitHub commit log](https://github.com/futtta/autoptimize/commits/beta).
+
+= 3.1.12 =
+* image optimization: improvements to the favicon regex
+* javascript optimization: integrate most recent version of jsmin.php
+* critical CSS: improve blocklist (url/ paths that should not be added to the job queue)
+* some other minor changes/ improvements/ filters, see the [GitHub commit log](https://github.com/futtta/autoptimize/commits/beta).
+
+= 3.1.11 =
+* code quality improvements see the [GitHub commit log](https://github.com/futtta/autoptimize/commits/beta).
+* some other minor changes/ improvements/ filters, see the [GitHub commit log](https://github.com/futtta/autoptimize/commits/beta).
+
+= 3.1.10 =
+* improvement: with "don't aggregate but defer" and "also defer inline JS" on, also defer JS that had the async flag to avoid the (previously) asynced JS from executing before the inline JS has ran.
+* improvement: show option to disable the default on "compatibility logic".
+* fix for regression in  3.1.9 which caused JetPack Image optimization not working even if image optimization was off in AO.
+* API: some extra hooks in critical CSS to enable others (and AOPro) to act on changes in critical CSS rules
+* some other minor changes/ improvements/ filters, see the [GitHub commit log](https://github.com/futtta/autoptimize/commits/beta).
+
+= 3.1.9 =
+* improvement: activate JS, CSS & HTML optimization upon plugin activation (hat tip to Adam Silverstein (developer relations engineer at Google))
+* improvement: also defer asynced JS (to ensure execution order remains intact; asynced JS should not execute before deferred inline JS which it might depend upon)
+* improvement: exclude images from being lazyloaded if they have fetchpriority attribute set to high (as done by WordPress core since 6.3)
+* bugfix: disable spellcheck on CSS textarea's (above the fold CSS/ critical CSS) which in some cases caused browser issues
+* add tab to explain Autoptimize Pro.
+* confirmed working with WordPress 6.4 (beta 3)
+* some other minor changes/ improvements/ filters, see the [GitHub commit log](https://github.com/futtta/autoptimize/commits/beta).
 
 = 3.1.8.1 =
 * urgent fix for PHP error, sorry about that!

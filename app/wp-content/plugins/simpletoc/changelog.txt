@@ -1,5 +1,129 @@
 == Changelog ==
 
+= 7.1.1 =
+* Fixed: Prevented WordPress HTML API notices when nested block content is not a string.
+* Fixed: Escaped TOC links and titles before rendering them.
+* Fixed: Preserved legacy SimpleTOC block validity in the WordPress editor.
+
+= 7.1.0 =
+* Fixed: Avoid DOMDocument HTML parsing for highlighted heading markup by using the WordPress HTML API.
+* Changed: Minimum required WordPress version is now 6.2.
+* Added: PHPUnit coverage for core rendering helpers and an editor e2e smoke test.
+
+= 7.0.10 =
+* Fixed: Prevent the SimpleTOC editor preview from collapsing during WordPress autosaves.
+* Changed: Automatic editor refresh now runs after manual post saves and keeps the previous TOC visible while updating.
+
+= 7.0.9 =
+* Fixed: Restored WordPress 7.0 editor previews for existing SimpleTOC blocks that contain legacy editor-only attributes.
+* Fixed: The "Hide SimpleTOC" editor toggle no longer stores a redundant helper attribute.
+
+= 7.0.8 =
+* Fixed: Prevent editor preview errors when another plugin adds editor-only attributes to blocks, for example Noted! block notes. Thanks Hans-Gerd Gerhards (@hage).
+
+= 7.0.7 =
+* Fix invalid frontend TOC list markup when excluded heading levels appear between included headings.
+
+= 7.0.6 =
+* Prepared release for WordPress 7.0 compatibility.
+
+= 7.0.5 =
+* Fixed: GenerateBlocks dynamic tags in heading links keep working when SimpleTOC adds heading IDs.
+* Fixed: GenerateBlocks dynamic heading text is resolved consistently in the TOC and matching heading anchors.
+* Maintenance: Added automated GitHub README generation from the WordPress.org `readme.txt`.
+
+= 7.0.4 =
+* Fixed: GenerateBlocks dynamic tags in heading links keep working when SimpleTOC adds heading IDs.
+* Fixed: GenerateBlocks dynamic heading text is resolved consistently in the TOC and matching heading anchors.
+
+= 7.0.3 =
+* Fixed: Removed an invalid `aria-labelledby` reference from hidden TOC `<details>` markup and now rely on native `<summary>` labeling.
+
+= 7.0.2 =
+* Fixed: Removed an invalid `aria-labelledby` reference from hidden TOC `<details>` markup and now rely on native `<summary>` labeling.
+
+= 7.0.1 =
+* Added: Direct link from the Advanced Features sidebar to the global SimpleTOC settings.
+* Fixed: Global settings link now appears reliably in the editor sidebar.
+* Changed: Wrapper toggle now reflects the automatic wrapper state while box style is active.
+
+= 7.0.0 =
+* Added: Box style option in the block sidebar with a color picker and default gray background.
+* Added: Global setting to force the default gray box style for all SimpleTOC blocks.
+* Added: Frontend box-style CSS registered through block metadata.
+
+= 6.9.8 =
+* Updated: Dependencies and house-keeping.
+* Fix: corrected dependency declarations.
+
+= 6.9.7 =
+* Fixed: GeneratePress Dynamic Tags work again - hopefully. If not, please report here https://github.com/mtoensing/simpletoc/issues/79#issuecomment-3745650464 Thanks @jhanten
+
+= 6.9.6 =
+* Added: Coding standards cleanup with improved rules, cleaner code, safer output, and consistent naming. Thanks @ronalfy
+* Added: Minimum PHP version requirement set to 7.3
+
+= 6.9.4 =
+* Added: Introduced proper PHP namespaces to avoid class and function name conflicts and improve overall code robustness. Thanks @ronalfy.
+* Added: Improved sidebar sub-menu for the "Hide SimpleTOC" option
+
+= 6.9.3 =
+* Fix: Fix Multiple IDs in Table of Contents Thanks @ronalfy
+* Added: Support for GenerateBlocks 2.1.0 Thanks @ronalfy
+
+= 6.9.1 =
+* Added: Support for the new V3 block api.
+* Added: Tested compatibility with WordPress 6.9
+
+= 6.7.3 =
+* Added: Tested compatibility with WordPress 6.8
+
+= 6.7.2 =
+* Added: Support for GenerateBlocks 2.0. Thanks @blronaldhuereca
+* Added: Included an accessibility statement in the plugin description. Thanks Gen Herres.
+
+= 6.6.1 = 
+* Added: Initialize the JavaScript for the TOC accordion on page load or after the document has fully loaded. Thanks blronaldhuereca https://github.com/mtoensing/simpletoc/pull/63 
+
+= 6.6.0 =
+* Added: Tested compatibility with WordPress 6.7
+
+= 6.5.6 =
+* Fixed: All script versions have been updated to prevent caching issues.
+* Fixed: Legacy Accordion was always expanded. Thanks Francesco Palmieri.
+* Added: Updated dependencies for improved performance and stability.​
+* Added: Tested compatibility with WordPress 6.6
+
+= 6.4.3 =
+* Added: A pointer cursor on hover for the hidden TOC
+
+= 6.4.3 =
+* Added: Utilizes the browser's built-in details tag for a collapsible interface. Thanks @infinitnet
+* Compatibility with WordPress 6.5
+* Fixed: Minor localization problems.   
+
+= 6.3.2 =
+* Fixed: Option for automatic refresh did not work in some instances.
+
+= 6.3.0 =
+* Added: Option for automatic refresh. This can be disabled in the blocks advanced settings.
+* Added: Option to globally disable automatic refresh in the WordPress SimpleTOC settings.
+
+= 6.2.0 =
+* Added: Implemented smooth animation for improved user interaction in the accordion menu.
+* Added: Upgraded styling of the accordion menu for a more visually appealing and modern user experience.
+
+= 6.1.0 =
+* Fixed: Broken markup when tags closed for headers below minimum. Thanks @harmoney !
+
+= 6.0.10 =
+* Added aria-hidden attribute to icon in accordion. Thanks Alex Stine!
+
+= 6.0.9 =
+* Added ARIA accessibility labels for the accordion. Thanks Amber Hinds!
+* Fixed: Caching of accordion JavaScript. Thanks jghitchcock!
+* Added correct ARIA controls attribute.
+
 = 6.0.4 =
 * Fix: specific min/max values for could result in merged headlines.
 

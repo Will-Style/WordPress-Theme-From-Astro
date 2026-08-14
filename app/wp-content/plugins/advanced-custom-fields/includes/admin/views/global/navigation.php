@@ -1,4 +1,14 @@
 <?php
+/**
+ * @package ACF
+ * @author  WP Engine
+ *
+ * © 2026 Advanced Custom Fields (ACF®). All rights reserved.
+ * "ACF" is a trademark of WP Engine.
+ * Licensed under the GNU General Public License v2 or later.
+ * https://www.gnu.org/licenses/gpl-2.0.html
+ */
+
 //phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- included template file.
 /**
  * The template for displaying admin navigation.
@@ -71,6 +81,10 @@ if ( isset( $submenu[ $parent_slug ] ) ) {
 			$acf_more_items[] = $menu_item;
 		} else {
 			// Third party tabs placed into the "More" menu.
+			if ( 'acf_options_preview' === $menu_item['class'] ) {
+				continue;
+			}
+
 			$more_items[] = $menu_item;
 		}
 	}
@@ -78,9 +92,9 @@ if ( isset( $submenu[ $parent_slug ] ) ) {
 
 if ( ! acf_get_setting( 'pro' ) ) {
 	$acf_more_items[] = array(
-		'url'    => acf_add_url_utm_tags( 'https://www.advancedcustomfields.com/pro/', 'more-menu', 'options-pages' ),
+		'url'    => 'edit.php?post_type=acf-field-group&page=acf_options_preview',
 		'text'   => __( 'Options Pages', 'acf' ) . '<span class="acf-requires-pro">' . __( 'PRO', 'acf' ) . '</span>',
-		'target' => '_blank',
+		'target' => '_self',
 	);
 }
 
@@ -89,10 +103,11 @@ if ( ! defined( 'PWP_NAME' ) ) {
 	$acf_wpengine_logo     = sprintf( '<span><img class="acf-wp-engine-pro" src="%s" alt="WP Engine" /></span>', $acf_wpengine_logo );
 	$utm_content           = acf_is_pro() ? 'acf_pro_plugin_topbar_dropdown_cta' : 'acf_free_plugin_topbar_dropdown_cta';
 	$wpengine_more_items[] = array(
-		'url'      => acf_add_url_utm_tags( 'https://wpengine.com/plans/?coupon=freedomtocreate', 'bx_prod_referral', $utm_content, false, 'acf_plugin', 'referral' ),
-		'text'     => $acf_wpengine_logo . '<span class="acf-wp-engine-upsell-pill">' . __( '4 Months Free', 'acf' ) . '</span>',
-		'target'   => '_blank',
-		'li_class' => 'acf-wp-engine',
+		'url'        => acf_add_url_utm_tags( 'https://wpengine.com/plans/?coupon=freedomtocreate', 'bx_prod_referral', $utm_content, false, 'acf_plugin', 'referral' ),
+		'text'       => $acf_wpengine_logo . '<span class="acf-wp-engine-upsell-pill">' . __( '4 Months Free', 'acf' ) . '</span>',
+		'target'     => '_blank',
+		'li_class'   => 'acf-wp-engine',
+		'aria-label' => __( 'Get 4 months free on any WP Engine plan', 'acf' ),
 	);
 }
 
@@ -138,16 +153,18 @@ function acf_print_menu_section( $menu_items, $section = '' ) {
 	$section_html = '';
 
 	foreach ( $menu_items as $menu_item ) {
-		$class    = ! empty( $menu_item['class'] ) ? $menu_item['class'] : $menu_item['text'];
-		$target   = ! empty( $menu_item['target'] ) ? ' target="' . esc_attr( $menu_item['target'] ) . '"' : '';
-		$li_class = ! empty( $menu_item['li_class'] ) ? $menu_item['li_class'] : '';
+		$class      = ! empty( $menu_item['class'] ) ? $menu_item['class'] : $menu_item['text'];
+		$target     = ! empty( $menu_item['target'] ) ? ' target="' . esc_attr( $menu_item['target'] ) . '"' : '';
+		$aria_label = ! empty( $menu_item['aria-label'] ) ? ' aria-label="' . esc_attr( $menu_item['aria-label'] ) . '"' : '';
+		$li_class   = ! empty( $menu_item['li_class'] ) ? esc_attr( $menu_item['li_class'] ) : '';
 
 		$html = sprintf(
-			'<a class="acf-tab%s %s" href="%s"%s><i class="acf-icon"></i>%s</a>',
+			'<a class="acf-tab%s %s" href="%s"%s%s><i class="acf-icon"></i>%s</a>',
 			! empty( $menu_item['is_active'] ) ? ' is-active' : '',
-			'acf-header-tab-' . acf_slugify( $class ),
+			'acf-header-tab-' . esc_attr( acf_slugify( $class ) ),
 			esc_url( $menu_item['url'] ),
 			$target,
+			$aria_label,
 			acf_esc_html( $menu_item['text'] )
 		);
 
@@ -162,20 +179,23 @@ function acf_print_menu_section( $menu_items, $section = '' ) {
 		$section_html .= $html;
 	}
 
-	echo $section_html;
+	echo $section_html; //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- safely built and escaped HTML above.
 }
 ?>
 <div class="acf-admin-toolbar">
 	<div class="acf-admin-toolbar-inner">
 		<div class="acf-nav-wrap">
-			<a href="<?php echo admin_url( 'edit.php?post_type=acf-field-group' ); ?>" class="acf-logo">
-				<img src="<?php echo acf_get_url( 'assets/images/acf-logo.svg' ); ?>" alt="<?php esc_attr_e( 'Advanced Custom Fields logo', 'acf' ); ?>">
-				<?php if ( acf_is_pro() ) { ?>
-					<div class="acf-pro-label">PRO</div>
-				<?php } ?>
-			</a>
+			<?php if ( acf_is_pro() && acf_pro_is_license_active() ) { ?>
+				<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=acf-field-group' ) ); ?>" class="acf-logo pro" aria-label="<?php esc_attr_e( 'Edit ACF Field Groups', 'acf' ); ?>">
+					<img src="<?php echo esc_url( acf_get_url( 'assets/images/acf-pro-logo.svg' ) ); ?>" alt="<?php esc_attr_e( 'Advanced Custom Fields logo', 'acf' ); ?>">
+				</a>
+			<?php } else { ?>
+				<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=acf-field-group' ) ); ?>" class="acf-logo" aria-label="<?php esc_attr_e( 'Edit ACF Field Groups', 'acf' ); ?>">
+					<img src="<?php echo esc_url( acf_get_url( 'assets/images/acf-logo.svg' ) ); ?>" alt="<?php esc_attr_e( 'Advanced Custom Fields logo', 'acf' ); ?>">
+				</a>
+			<?php } ?>
 
-			<h2><?php echo acf_get_setting( 'name' ); ?></h2>
+			<h2><?php echo esc_html( acf_get_setting( 'name' ) ); ?></h2>
 			<?php acf_print_menu_section( $core_tabs, 'core' ); ?>
 			<?php if ( $acf_more_items || $more_items ) { ?>
 				<div class="acf-more acf-header-tab-acf-more" tabindex="0">
@@ -201,13 +221,33 @@ function acf_print_menu_section( $menu_items, $section = '' ) {
 			<?php } ?>
 		</div>
 		<div class="acf-nav-upgrade-wrap">
-			<?php if ( ! acf_is_pro() ) : ?>
-				<a target="_blank" href="<?php echo acf_add_url_utm_tags( 'https://www.advancedcustomfields.com/pro/', 'ACF upgrade', 'header' ); ?>" class="btn-upgrade acf-admin-toolbar-upgrade-btn">
+			<?php
+			if ( ! acf_is_pro() || ! acf_pro_is_license_active() ) {
+				$unlock_url    = acf_add_url_utm_tags( 'https://www.advancedcustomfields.com/pro/', 'ACF upgrade', 'header' );
+				$unlock_target = '_blank';
+				$unlock_text   = __( 'Unlock Extra Features with ACF PRO', 'acf' );
+
+				if ( acf_is_pro() ) {
+					if ( acf_pro_is_updates_page_visible() ) {
+						$unlock_url    = admin_url( 'edit.php?post_type=acf-field-group&page=acf-settings-updates#acf_pro_license' );
+						$unlock_target = '';
+					}
+
+					if ( acf_pro_is_license_expired() ) {
+						$unlock_url    = acf_add_url_utm_tags( acf_pro_get_manage_license_url(), 'ACF renewal', 'header' );
+						$unlock_target = '_blank';
+						$unlock_text   = __( 'Renew ACF PRO License', 'acf' );
+					}
+				}
+				?>
+				<a target="<?php echo esc_attr( $unlock_target ); ?>" href="<?php echo esc_url( $unlock_url ); ?>" class="btn-upgrade acf-admin-toolbar-upgrade-btn">
 					<i class="acf-icon acf-icon-stars"></i>
-					<p><?php esc_html_e( 'Unlock Extra Features with ACF PRO', 'acf' ); ?></p>
+					<p><?php echo esc_html( $unlock_text ); ?></p>
 				</a>
-			<?php endif; ?>
-			<a href="<?php echo $acf_wpengine_logo_link; ?>" target="_blank" class="acf-nav-wpengine-logo">
+				<?php
+			}
+			?>
+			<a href="<?php echo $acf_wpengine_logo_link; ?>" target="_blank" class="acf-nav-wpengine-logo" aria-label="<?php esc_attr_e( 'WP Engine', 'acf' ); ?>"><?php //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped on generation. ?>
 				<img src="<?php echo esc_url( acf_get_url( 'assets/images/wp-engine-horizontal-white.svg' ) ); ?>" alt="<?php esc_html_e( 'WP Engine logo', 'acf' ); ?>" />
 			</a>
 		</div>
@@ -224,6 +264,8 @@ if ( ! in_array( $screen->id, acf_get_internal_post_types(), true ) ) {
 		$acf_page_title = __( 'Tools', 'acf' );
 	} elseif ( $plugin_page == 'acf-settings-updates' ) {
 		$acf_page_title = __( 'Updates', 'acf' );
+	} elseif ( $plugin_page == 'acf_options_preview' && ! acf_is_pro() ) {
+		$acf_page_title = __( 'Options Pages', 'acf' );
 	}
 	acf_get_view( 'global/header' );
 }

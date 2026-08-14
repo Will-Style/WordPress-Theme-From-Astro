@@ -15,6 +15,8 @@
  * limitations under the License.
  */
 
+if (!defined('ABSPATH')) die('No direct access allowed');
+
 if (!class_exists('UDP_Google_Client')) {
   require_once dirname(__FILE__) . '/../autoload.php';
 }
@@ -706,7 +708,7 @@ class UDP_Google_Client
    */
   public function isAppEngine()
   {
-    return (isset($_SERVER['SERVER_SOFTWARE']) &&
-        strpos($_SERVER['SERVER_SOFTWARE'], 'Google App Engine') !== false);
+    $server_software = UpdraftPlus_Manipulation_Functions::fetch_superglobal('server', 'SERVER_SOFTWARE', '');
+    return (isset($server_software) && strpos($server_software, 'Google App Engine') !== false);
   }
 }

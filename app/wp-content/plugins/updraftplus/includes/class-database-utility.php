@@ -1,29 +1,49 @@
 <?php
-
-if (!defined('UPDRAFTPLUS_DIR')) die('No direct access allowed');
+// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, PHPCompatibility.Extensions.RemovedExtensions.mysql_DeprecatedRemoved -- Direct $wpdb query is required for this operation, legacy compatibility for very old PHP versions.
+// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching -- some query operations need to always receive the most up-to-date or actual data directly from the database, reducing the risk of serving stale information.
+if (!defined('ABSPATH')) die('No direct access allowed');
 
 class UpdraftPlus_Database_Utility {
 
-	private $whichdb;
-
-	private $table_prefix_raw;
-
-	private $dbhandle;
-
 	/**
-	 * Constructor
+	 * Indicated which database is being used
+	 *
+	 * @var String
 	 */
+	private static $whichdb;
+
 	/**
-	 * Constructor
+	 * The unfiltered table prefix - i.e. the real prefix that things are relative to
+	 *
+	 * @var String
+	 */
+	private static $table_prefix_raw;
+
+	/**
+	 * The object to perform database operations
+	 *
+	 * @var Object
+	 */
+	private static $dbhandle;
+
+	/**
+	 * The array of table status, used as a cache to reduce unnecessary DB reads for doing the same thing over and over
+	 *
+	 * @var Array
+	 */
+	private static $table_status = array();
+
+	/**
+	 * Initialize required variables
 	 *
 	 * @param String $whichdb          - which database is being backed up
 	 * @param String $table_prefix_raw - the base table prefix
 	 * @param Object $dbhandle         - WPDB object
 	 */
-	public function __construct($whichdb, $table_prefix_raw, $dbhandle) {
-		$this->whichdb = $whichdb;
-		$this->table_prefix_raw = $table_prefix_raw;
-		$this->dbhandle = $dbhandle;
+	public static function init($whichdb, $table_prefix_raw, $dbhandle) {
+		self::$whichdb = $whichdb;
+		self::$table_prefix_raw = $table_prefix_raw;
+		self::$dbhandle = $dbhandle;
 	}
 
 	/**
@@ -34,8 +54,7 @@ class UpdraftPlus_Database_Utility {
 	 *
 	 * @return Integer - the sort result, according to the rules of PHP custom sorting functions
 	 */
-	public function backup_db_sorttables($a_arr, $b_arr) {
-
+	public static function backup_db_sorttables($a_arr, $b_arr) {
 		$a = $a_arr['name'];
 		$a_table_type = $a_arr['type'];
 		$b = $b_arr['name'];
@@ -45,11 +64,11 @@ class UpdraftPlus_Database_Utility {
 		if ('VIEW' == $a_table_type && 'VIEW' != $b_table_type) return 1;
 		if ('VIEW' == $b_table_type && 'VIEW' != $a_table_type) return -1;
 	
-		if ('wp' != $this->whichdb) return strcmp($a, $b);
+		if ('wp' != self::$whichdb) return strcmp($a, $b);
 
 		global $updraftplus;
 		if ($a == $b) return 0;
-		$our_table_prefix = $this->table_prefix_raw;
+		$our_table_prefix = self::$table_prefix_raw;
 		if ($a == $our_table_prefix.'options') return -1;
 		if ($b == $our_table_prefix.'options') return 1;
 		if ($a == $our_table_prefix.'site') return -1;
@@ -64,7 +83,7 @@ class UpdraftPlus_Database_Utility {
 		if (empty($our_table_prefix)) return strcmp($a, $b);
 
 		try {
-			$core_tables = array_merge($this->dbhandle->tables, $this->dbhandle->global_tables, $this->dbhandle->ms_global_tables);
+			$core_tables = array_merge(self::$dbhandle->tables, self::$dbhandle->global_tables, self::$dbhandle->ms_global_tables);
 		} catch (Exception $e) {
 			$updraftplus->log($e->getMessage());
 		}
@@ -90,6 +109,7 @@ class UpdraftPlus_Database_Utility {
 	
 		$wpdb = (null === $wpdb_obj) ? $GLOBALS['wpdb'] : $wpdb_obj;
 	
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- DESCRIBE is a DDL command that cannot be parameterized; $table is a SQL identifier sanitized using backquote().
 		$table_structure = $wpdb->get_results("DESCRIBE ".UpdraftPlus_Manipulation_Functions::backquote($table));
 		if (!$table_structure) return false;
 		
@@ -120,11 +140,9 @@ class UpdraftPlus_Database_Utility {
 
 		$sql = "SET SESSION %s='%s'";
 		if ($is_mysqli) {
-			// @codingStandardsIgnoreLine
-			$res = @mysqli_query($db_handle, sprintf($sql, mysqli_real_escape_string($db_handle, $variable), mysqli_real_escape_string($db_handle, $value)));
+			$res = @mysqli_query($db_handle, sprintf($sql, mysqli_real_escape_string($db_handle, $variable), mysqli_real_escape_string($db_handle, $value)));// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged, WordPress.DB.RestrictedFunctions.mysql_mysqli_query, WordPress.DB.RestrictedFunctions.mysql_mysqli_real_escape_string -- Silenced to suppress errors that may arise because of the function, direct mysql function used for low-level database operations outside of $wpdb.
 		} else {
-			// @codingStandardsIgnoreLine
-			$res = @mysql_query(sprintf($sql, mysql_real_escape_string($variable, $db_handle), mysql_real_escape_string($value, $db_handle)), $db_handle);
+			$res = @mysql_query(sprintf($sql, mysql_real_escape_string($variable, $db_handle), mysql_real_escape_string($value, $db_handle)), $db_handle);// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged, WordPress.DB.RestrictedFunctions.mysql_mysql_query, WordPress.DB.RestrictedFunctions.mysql_mysql_real_escape_string -- Silenced to suppress errors that may arise because of the function, direct mysql function used for low-level database operations outside of $wpdb.
 		}
 
 		return $res;
@@ -145,22 +163,20 @@ class UpdraftPlus_Database_Utility {
 		$sql = 'SELECT @@SESSION.%s';
 
 		if ($is_mysqli) {
-			// @codingStandardsIgnoreLine
-			$res = @mysqli_query($db_handle, sprintf($sql, mysqli_real_escape_string($db_handle, $variable)));
+			$res = @mysqli_query($db_handle, sprintf($sql, mysqli_real_escape_string($db_handle, $variable)));// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged, WordPress.DB.RestrictedFunctions.mysql_mysqli_query, WordPress.DB.RestrictedFunctions.mysql_mysqli_real_escape_string -- Silenced to suppress errors that may arise because of the function, direct mysql function used for low-level database operations outside of $wpdb.
 		} else {
-			// @codingStandardsIgnoreLine
-			$res = @mysql_query(sprintf($sql, mysql_real_escape_string($variable, $db_handle)), $db_handle);
+			$res = @mysql_query(sprintf($sql, mysql_real_escape_string($variable, $db_handle)), $db_handle);// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged, WordPress.DB.RestrictedFunctions.mysql_mysql_query, WordPress.DB.RestrictedFunctions.mysql_mysql_real_escape_string -- Silenced to suppress errors that may arise because of the function, direct mysql function used for low-level database operations outside of $wpdb.
 		}
 		if (false === $res) {
 			return $res;
 		}
 		if ($is_mysqli) {
 			// @codingStandardsIgnoreLine
-			$res = mysqli_fetch_array($res);
+			$res = mysqli_fetch_array($res);// phpcs:ignore WordPress.DB.RestrictedFunctions.mysql_mysqli_fetch_array -- direct mysql function used for low-level database operations outside of $wpdb.
 			return isset($res[0]) ? $res[0] : null;
 		} else {
 			// @codingStandardsIgnoreLine
-			$res = mysql_result($res, 0);
+			$res = mysql_result($res, 0);// phpcs:ignore WordPress.DB.RestrictedFunctions.mysql_mysql_result -- direct mysql function used for low-level database operations outside of $wpdb.
 			return false === $res ? null : $res;
 		}
 	}
@@ -202,7 +218,7 @@ class UpdraftPlus_Database_Utility {
 			'TRADITIONAL',
 		), $strict_modes));
 
-		$class = get_class();
+		$class = __CLASS__;
 
 		if (is_null($db_handle) || is_a($db_handle, 'WPDB')) {
 			$initial_modes_str = $wpdb_handle_if_used->get_var('SELECT @@SESSION.sql_mode');
@@ -443,7 +459,7 @@ class UpdraftPlus_Database_Utility {
 
 		global $table_prefix, $wpdb;
 
-		$random_table_name = $table_prefix.'updraft_tmp_'.rand(0, 9999999).md5(microtime(true));
+		$random_table_name = $table_prefix.'updraft_tmp_'.wp_rand(0, 9999999).md5(microtime(true));
 		
 		$drop_statement = "DROP TABLE IF EXISTS `$random_table_name`;";
 
@@ -461,18 +477,21 @@ class UpdraftPlus_Database_Utility {
 		);
 
 		$old_val = $wpdb->suppress_errors();
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- DDL DROP TABLE statement; $drop_statement uses an internally-generated table name and cannot be parameterized.
 		$wpdb->query($drop_statement);
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- DDL CREATE TABLE statement; these DDL statements cannot use $wpdb->prepare().
 		$is_generated_column_supported = $wpdb->query($sql[0]);
 		if ($is_generated_column_supported) {
 			$is_generated_column_supported = array(
-				'is_persistent_supported' => $wpdb->query($sql[1]),
-				'is_not_null_supported' => $wpdb->query($sql[2]),
-				'can_insert_ignore_to_generated_column' => (bool) $wpdb->query($sql[3]),
-				'is_virtual_index_supported' => $wpdb->query($sql[4])
+				'is_persistent_supported' => $wpdb->query($sql[1]), // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- DDL ALTER TABLE statements; cannot be parameterized.
+				'is_not_null_supported' => $wpdb->query($sql[2]), // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- DDL ALTER TABLE statements; cannot be parameterized.
+				'can_insert_ignore_to_generated_column' => (bool) $wpdb->query($sql[3]), // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- DDL INSERT IGNORE statement; cannot be parameterized.
+				'is_virtual_index_supported' => $wpdb->query($sql[4]) // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- DDL CREATE INDEX statement; cannot be parameterized.
 			);
 		} else {
 			$is_generated_column_supported = false;
 		}
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- DDL DROP TABLE statement; cannot be parameterized.
 		$wpdb->query($drop_statement);
 		$wpdb->suppress_errors($old_val);
 		
@@ -556,7 +575,9 @@ class UpdraftPlus_Database_Utility {
 		);
 
 		$old_val = $wpdb->suppress_errors();
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- DDL DROP FUNCTION statement; cannot be parameterized.
 		$wpdb->query($sql['DROP_FUNCTION']);
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- DDL CREATE FUNCTION statement; cannot be parameterized.
 		$is_stored_routine_supported = $wpdb->query($sql['CREATE_FUNCTION']);
 		if ($is_stored_routine_supported) {
 			$is_binary_logging_enabled = 1 == $wpdb->get_var('SELECT @@GLOBAL.log_bin');
@@ -566,15 +587,17 @@ class UpdraftPlus_Database_Utility {
 			$is_binary_logging_enabled = is_string($is_binary_logging_enabled) && ('ON' === strtoupper($is_binary_logging_enabled) || '1' === $is_binary_logging_enabled) ? true : $is_binary_logging_enabled;
 			$is_binary_logging_enabled = is_string($is_binary_logging_enabled) && ('OFF' === strtoupper($is_binary_logging_enabled) || '0' === $is_binary_logging_enabled) ? false : $is_binary_logging_enabled;
 			$is_stored_routine_supported = array(
-				'is_create_or_replace_supported' => $wpdb->query($sql['CREATE_REPLACE_FUNCTION']),
-				'is_if_not_exists_function_supported' => $wpdb->query($sql['CREATE_FUNCTION_IF_NOT_EXISTS']),
-				'is_aggregate_function_supported' => $wpdb->query($sql['CREATE_REPLACE_AGGREGATE']),
+				'is_create_or_replace_supported' => $wpdb->query($sql['CREATE_REPLACE_FUNCTION']), // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- DDL CREATE FUNCTION variants; cannot be parameterized.
+				'is_if_not_exists_function_supported' => $wpdb->query($sql['CREATE_FUNCTION_IF_NOT_EXISTS']), // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- DDL CREATE FUNCTION variants; cannot be parameterized.
+				'is_aggregate_function_supported' => $wpdb->query($sql['CREATE_REPLACE_AGGREGATE']), // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- DDL CREATE AGGREGATE FUNCTION variant; cannot be parameterized.
 				'is_binary_logging_enabled' => $is_binary_logging_enabled,
 				'is_function_creators_trusted' => 1 == $wpdb->get_var('SELECT @@GLOBAL.log_bin_trust_function_creators'),
 			);
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- DDL DROP FUNCTION statement; cannot be parameterized.
 			$wpdb->query($sql['DROP_FUNCTION']);
 		} else {
-			$is_stored_routine_supported = new WP_Error('routine_creation_error', sprintf(__('An error occurred while attempting to check the support of stored routines creation (%s %s)', 'updraftplus'), $wpdb->last_error.' -', $sql['CREATE_FUNCTION']));
+			/* translators: 1: Last database error, 2: SQL create function statement. */
+			$is_stored_routine_supported = new WP_Error('routine_creation_error', sprintf(__('An error occurred while attempting to check the support of stored routines creation (%1$s %2$s)', 'updraftplus'), $wpdb->last_error.' -', $sql['CREATE_FUNCTION']));
 		}
 		$wpdb->suppress_errors($old_val);
 
@@ -642,7 +665,8 @@ class UpdraftPlus_Database_Utility {
 
 		$old_val = $wpdb->suppress_errors();
 		try {
-			$err_msg = __('An error occurred while attempting to retrieve routine status (%s %s)', 'updraftplus');
+			/* translators: 1: Last database error, 2: Additional error details. */
+			$err_msg = __('An error occurred while attempting to retrieve routine status (%1$s %2$s)', 'updraftplus');
 			$function_status = $wpdb->get_results($wpdb->prepare('SHOW FUNCTION STATUS WHERE DB = %s', DB_NAME), ARRAY_A);
 			if (!empty($wpdb->last_error)) throw new Exception(sprintf($err_msg, $wpdb->last_error.' -', $wpdb->last_query), 0);
 			$procedure_status = $wpdb->get_results($wpdb->prepare('SHOW PROCEDURE STATUS WHERE DB = %s', DB_NAME), ARRAY_A);
@@ -653,8 +677,9 @@ class UpdraftPlus_Database_Utility {
 				$routine_name = $routine['Name'];
 				// Since routine name can include backquotes and routine name is typically enclosed with backquotes as well, the backquote escaping for the routine name can be done by adding a leading backquote
 				$quoted_escaped_routine_name = UpdraftPlus_Manipulation_Functions::backquote(str_replace('`', '``', $routine_name));
-				$routine = $wpdb->get_results($wpdb->prepare('SHOW CREATE %1$s %2$s', $routine['Type'], $quoted_escaped_routine_name), ARRAY_A);
-				if (!empty($wpdb->last_error)) throw new Exception(sprintf(__('An error occurred while attempting to retrieve the routine SQL/DDL statement (%s %s)', 'updraftplus'), $wpdb->last_error.' -', $wpdb->last_query), 1);
+				$routine = $wpdb->get_results($wpdb->prepare('SHOW CREATE %1$s %2$s', $routine['Type'], $quoted_escaped_routine_name), ARRAY_A);// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder -- No direct schema change here; this is a false positive. We use the unquoted placeholders because they are used for identifiers (the routine name and type).
+				/* translators: 1: Last database error, 2: Last executed SQL query. */
+				if (!empty($wpdb->last_error)) throw new Exception(sprintf(__('An error occurred while attempting to retrieve the routine SQL/DDL statement (%1$s %2$s)', 'updraftplus'), $wpdb->last_error.' -', $wpdb->last_query), 1);
 				$stored_routines[$key] = array_merge($stored_routines[$key], $routine ? $routine[0] : array());
 			}
 		} catch (Exception $ex) {
@@ -727,6 +752,16 @@ class UpdraftPlus_Database_Utility {
 			}
 		}
 		return false;
+	}
+	
+	/**
+	 * Safely escape and backquote a table name.
+	 *
+	 * @param string $table Table name.
+	 * @return string Escaped and backquoted table name.
+	 */
+	public static function escape_table_name($table) {
+		return UpdraftPlus_Manipulation_Functions::backquote(str_replace('`', '``', $table));
 	}
 }
 

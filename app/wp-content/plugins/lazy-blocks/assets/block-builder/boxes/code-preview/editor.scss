@@ -1,0 +1,15 @@
+@import "../../../variables";
+
+.lzb-block-builder .lzb-block-builder-code-preview {
+	.lzb-block-builder-code-preview-frame {
+		padding: 4px;
+		border: 1px solid #ddd;
+		border-radius: 4px;
+		background-color: #fff;
+		margin-bottom: 8px;
+	}
+
+	iframe {
+		width: 100%;
+	}
+}

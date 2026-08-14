@@ -1,0 +1,85 @@
+<?php
+
+require_once '../../../wp-load.php';
+global $wp_version;
+if ( (int) $wp_version > 4 ) {
+	include_once( ABSPATH . 'wp-admin/includes/plugin-install.php' ); //for plugins_api..
+}
+include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+include_once( ABSPATH . 'wp-admin/includes/file.php' );
+include_once( ABSPATH . 'wp-admin/includes/misc.php' );
+include_once( ABSPATH . 'wp-admin/includes/class-wp-upgrader.php' );
+include_once( ABSPATH . 'wp-content/plugins/google-sitemap-generator/upgrade-plugin.php' );
+include_once( ABSPATH . 'wp-includes/pluggable.php' );
+include_once( ABSPATH . 'wp-content/plugins/google-sitemap-generator/class-googlesitemapgeneratorloader.php' );
+
+		if ( isset( $_GET['action'] ) ) {
+			if ( 'yes' === sanitize_text_field( wp_unslash( $_GET['action'] ) ) ) {
+				if ( ! current_user_can( 'manage_options' ) ) {
+					wp_die( 'Forbidden', '', array( 'response' => 403 ) );
+				}
+
+				if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'user_consent_yesno_nonce' ) ) {
+					wp_die( 'Forbidden', '', array( 'response' => 403 ) );
+				}
+			}
+
+		update_option( 'sm_user_consent', 'yes' );
+		$plugin_version = GoogleSitemapGeneratorLoader::get_version();
+		global $wp_version;
+		$user      = wp_get_current_user();
+		$user_id   = $user->ID;
+		$mydomain  = $user->user_url ? $user->user_url : home_url();
+		$user_name = $user->user_nicename;
+		$useremail = $user->user_email;
+		global $wpdb;
+		$result             = $wpdb->get_results( $wpdb->prepare( "SELECT user_id, meta_value FROM {$wpdb->usermeta} WHERE meta_key = %s AND user_id = %d", 'session_tokens', (int) $user_id ) );
+		$user_login_details = array();
+		$last_login         = '';
+		if ( ! empty( $result ) && isset( $result[0]->meta_value ) ) {
+			$user_login_details = maybe_unserialize( $result[0]->meta_value );
+		}
+		if ( is_array( $user_login_details ) ) {
+			foreach ( $user_login_details as $item ) {
+				if ( isset( $item['login'] ) ) {
+					$last_login = $item['login'];
+				}
+			}
+		$data     = array(
+			'domain'         => $mydomain,
+			'userID'         => $user_id,
+			'userEmail'      => $useremail,
+			'userName'       => $user_name,
+			'lastLogin'      => $last_login,
+			'wp_version'     => $wp_version,
+			'plugin_version' => $plugin_version,
+			'phpVersion'     => PHP_VERSION,
+		);
+		$args     = array(
+			'headers' => array(
+				'Content-type : application/json',
+			),
+			'method'  => 'POST',
+			'body'    => wp_json_encode( $data ),
+		);
+		$response = wp_remote_post( SM_BETA_USER_INFO_URL, $args );
+		$body     = json_decode( $response['body'] );
+		if ( 200 === $body->status ) {
+			add_option( 'sm_show_beta_banner', 'false' );
+			add_option( 'sm_beta_opt_in', true );
+			update_option( 'sm_beta_banner_discarded_count', (int) 2 );			
+			GoogleSitemapGeneratorLoader::setup_rewrite_hooks();
+			GoogleSitemapGeneratorLoader::activate_rewrite();
+			GoogleSitemapGeneratorLoader::activation_indexnow_setup(); //activtion indexNow
+			echo "<script>
+					window.addEventListener('DOMContentLoaded', (event) => {
+							var url = '" . SM_LEARN_MORE_API_URL . "/?utm_source=wordpress&utm_medium=notification&utm_campaign=beta&utm_id=v4'
+							var link = document.createElement('a');
+							link.href = url;
+							document.body.appendChild(link);
+							link.click();
+					});
+			</script>";
+		}
+	}
+}

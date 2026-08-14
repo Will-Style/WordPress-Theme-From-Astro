@@ -15,6 +15,8 @@
  * limitations under the License.
  */
 
+if (!defined('ABSPATH')) die('No direct access allowed');
+
 if (!class_exists('UDP_Google_Client')) {
   require_once dirname(__FILE__) . '/../autoload.php';
 }
@@ -397,7 +399,7 @@ abstract class Google_Logger_Abstract
     }
 
     throw new Google_Logger_Exception(
-        sprintf("Unknown LogLevel: '%s'", $level)
+        sprintf("Unknown LogLevel: '%s'", $level) // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- Error message to be escaped when caught and printed.
     );
   }
 

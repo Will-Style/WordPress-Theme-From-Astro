@@ -63,6 +63,8 @@ class Post_Republisher {
 
 		// Clean up after the redirect to the original post.
 		\add_action( 'load-post.php', [ $this, 'clean_up_after_redirect' ] );
+		// Clean up orphaned R&R copies when opening a post for editing.
+		\add_action( 'load-post.php', [ $this, 'clean_up_orphaned_copy' ], 11 );
 		// Clean up the original when the copy is manually deleted from the trash.
 		\add_action( 'before_delete_post', [ $this, 'clean_up_when_copy_manually_deleted' ] );
 		// Ensure scheduled Rewrite and Republish posts are properly handled.
@@ -126,11 +128,15 @@ class Post_Republisher {
 	 * @return void
 	 */
 	public function republish_request( $post ) {
-		if (
-			! $post instanceof WP_Post
-			|| ! $this->permissions_helper->is_rewrite_and_republish_copy( $post )
-			|| ! $this->permissions_helper->is_copy_allowed_to_be_republished( $post )
-		) {
+		if ( ! $post instanceof WP_Post || ! $this->permissions_helper->is_rewrite_and_republish_copy( $post ) ) {
+			return;
+		}
+
+		$is_republishing = $this->permissions_helper->is_copy_allowed_to_be_republished( $post );
+		$is_scheduling   = ( $post->post_status === 'future' );
+
+		// Only act on a republish submission or the scheduling of a republish.
+		if ( ! $is_republishing && ! $is_scheduling ) {
 			return;
 		}
 
@@ -140,11 +146,25 @@ class Post_Republisher {
 			return;
 		}
 
-		$this->republish( $post, $original_post );
+		if ( ! \current_user_can( 'edit_post', $original_post->ID ) ) {
+			// Undo the republish or scheduling but keep the copy's content, so the original is never overwritten.
+			$this->revert_unauthorized_copy( $post );
 
-		// Trigger the redirect in the Classic Editor.
-		if ( $this->is_classic_editor_post_request() ) {
-			$this->redirect( $original_post->ID, $post->ID );
+			\wp_die(
+				\esc_html__( 'You are not allowed to republish this post.', 'duplicate-post' ),
+				\esc_html__( 'Permission denied', 'duplicate-post' ),
+				[ 'response' => 403 ],
+			);
+		}
+
+		// A scheduled copy is republished by cron at the scheduled time, not now.
+		if ( $is_republishing ) {
+			$this->republish( $post, $original_post );
+
+			// Trigger the redirect in the Classic Editor.
+			if ( $this->is_classic_editor_post_request() ) {
+				$this->redirect( $original_post->ID, $post->ID );
+			}
 		}
 	}
 
@@ -206,6 +226,39 @@ class Post_Republisher {
 	}
 
 	/**
+	 * Cleans up orphaned Rewrite & Republish copies when opening a post for editing.
+	 *
+	 * This ensures that if a copy is stuck in the dp-rewrite-republish status,
+	 * it gets deleted automatically to unblock the R&R functionality.
+	 *
+	 * @return void
+	 */
+	public function clean_up_orphaned_copy() {
+		if ( empty( $_GET['post'] ) || empty( $_GET['action'] ) || $_GET['action'] !== 'edit' ) {
+			return;
+		}
+
+		$post_id = \intval( \wp_unslash( $_GET['post'] ) );
+		$post    = \get_post( $post_id );
+
+		if ( ! $post || $this->permissions_helper->is_rewrite_and_republish_copy( $post ) ) {
+			return;
+		}
+
+		// Check if this post has an orphaned R&R copy.
+		$copy = $this->permissions_helper->get_rewrite_and_republish_copy( $post );
+
+		if ( ! $copy ) {
+			return;
+		}
+
+		// If the copy is in dp-rewrite-republish status, it's orphaned and should be deleted.
+		if ( $copy->post_status === 'dp-rewrite-republish' ) {
+			$this->delete_copy( $copy->ID, $post->ID );
+		}
+	}
+
+	/**
 	 * Cleans up the copied post and temporary metadata after the user has been redirected.
 	 *
 	 * @return void
@@ -217,7 +270,7 @@ class Post_Republisher {
 
 			\check_admin_referer( 'dp-republish', 'dpnonce' );
 
-			if ( \intval( \get_post_meta( $copy_id, '_dp_has_been_republished', true ) ) === 1 ) {
+			if ( (int) \get_post_meta( $copy_id, '_dp_has_been_republished', true ) === 1 ) {
 				$this->delete_copy( $copy_id, $post_id );
 			}
 			else {
@@ -257,6 +310,21 @@ class Post_Republisher {
 	 * @return void
 	 */
 	public function republish( WP_Post $post, WP_Post $original_post ) {
+
+		/**
+		 * Fires before the Rewrite & Republish copy is republished to the original post.
+		 *
+		 * This action runs before any content, taxonomies, or meta are copied from the
+		 * Rewrite & Republish copy to the original post. Use this hook to perform actions
+		 * or modifications before the republishing process begins.
+		 *
+		 * @since 4.6
+		 *
+		 * @param WP_Post $post          The Rewrite & Republish copy.
+		 * @param WP_Post $original_post The original post that will be overwritten.
+		 */
+		\do_action( 'duplicate_post_before_republish', $post, $original_post );
+
 		// Remove WordPress default filter so a new revision is not created on republish.
 		\remove_action( 'post_updated', 'wp_save_post_revision', 10 );
 
@@ -272,6 +340,21 @@ class Post_Republisher {
 
 		// Re-enable the creation of a new revision.
 		\add_action( 'post_updated', 'wp_save_post_revision', 10, 1 );
+
+		/**
+		 * Fires after the Rewrite & Republish copy has been republished to the original post.
+		 *
+		 * This action runs after all content, taxonomies, and meta have been copied from
+		 * the Rewrite & Republish copy to the original post. The copy is marked as republished
+		 * but has not yet been deleted. Use this hook to perform cleanup or additional
+		 * processing after the republishing is complete.
+		 *
+		 * @since 4.6
+		 *
+		 * @param WP_Post $post          The Rewrite & Republish copy.
+		 * @param WP_Post $original_post The original post that has been updated.
+		 */
+		\do_action( 'duplicate_post_after_republish', $post, $original_post );
 	}
 
 	/**
@@ -295,7 +378,7 @@ class Post_Republisher {
 		// Delete the copy bypassing the trash so it also deletes the copy post meta.
 		\wp_delete_post( $copy_id, $permanently_delete );
 
-		if ( ! \is_null( $post_id ) ) {
+		if ( $post_id !== null ) {
 			// Delete the meta that marks the original post has having a copy.
 			\delete_post_meta( $post_id, '_dp_has_rewrite_republish_copy' );
 		}
@@ -386,10 +469,29 @@ class Post_Republisher {
 					'dpcopy'        => $copy_id,
 					'dpnonce'       => \wp_create_nonce( 'dp-republish' ),
 				],
-				\admin_url( 'post.php?action=edit&post=' . $original_post_id )
-			)
+				\admin_url( 'post.php?action=edit&post=' . $original_post_id ),
+			),
 		);
 		exit();
+	}
+
+	/**
+	 * Reverts a copy that the current user is not allowed to republish back to draft.
+	 *
+	 * Preserves the copy's content while undoing the republish or scheduling, so the original
+	 * is never overwritten and the copy is not left published or in a republish-pending state.
+	 *
+	 * @param WP_Post $post The copy's post object.
+	 *
+	 * @return void
+	 */
+	protected function revert_unauthorized_copy( WP_Post $post ) {
+		\wp_update_post(
+			[
+				'ID'          => $post->ID,
+				'post_status' => 'draft',
+			],
+		);
 	}
 
 	/**

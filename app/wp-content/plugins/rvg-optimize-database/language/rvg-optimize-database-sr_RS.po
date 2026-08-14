@@ -1,0 +1,624 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Optimize Database after Deleting Revisions v2.8.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-11-20 17:04+0100\n"
+"PO-Revision-Date: 2015-11-20 17:04+0100\n"
+"Last-Translator: Rolf van Gelder <info@cagewebdev.com>\n"
+"Language-Team: CAGE <info@cagewebdev.com>\n"
+"Language: sr_RS\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Poedit 1.7.4\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;"
+"_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2\n"
+"X-Poedit-Basepath: C:\\My Dropbox\\WordPress\\wp-plugins\\rvg-optimize-db\n"
+"X-Textdomain-Support: yes\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: classes/odb-cleaner.php:35
+msgid "Cleaning Database"
+msgstr ""
+
+#: classes/odb-cleaner.php:78
+msgid "DELETED REVISIONS"
+msgstr ""
+
+#: classes/odb-cleaner.php:83 classes/odb-cleaner.php:142
+#: classes/odb-cleaner.php:203
+msgid "prefix"
+msgstr ""
+
+#: classes/odb-cleaner.php:84
+msgid "post / page"
+msgstr "post/stranica"
+
+#: classes/odb-cleaner.php:85
+msgid "revision date"
+msgstr "datum revizije"
+
+#: classes/odb-cleaner.php:86
+msgid "revisions deleted"
+msgstr "revizija obrisana"
+
+#: classes/odb-cleaner.php:98
+msgid "total number of revisions deleted"
+msgstr "ukupan broj obrisanih revizija"
+
+#: classes/odb-cleaner.php:110
+msgid "No REVISIONS found to delete"
+msgstr "NISU PRONAĐENE REVIZIJE za brisanje"
+
+#: classes/odb-cleaner.php:137
+msgid "DELETED TRASHED ITEMS"
+msgstr ""
+
+#: classes/odb-cleaner.php:143
+msgid "type"
+msgstr "tip"
+
+#: classes/odb-cleaner.php:144
+msgid "IP address / title"
+msgstr "IP adresa/naslov"
+
+#: classes/odb-cleaner.php:145
+msgid "date"
+msgstr "datum"
+
+#: classes/odb-cleaner.php:157
+msgid "total number of trashed items deleted"
+msgstr ""
+
+#: classes/odb-cleaner.php:170
+msgid "No TRASHED ITEMS found to delete"
+msgstr "NISU PRONAĐENE STAVKE za brisanje u korpi za otpatke "
+
+#: classes/odb-cleaner.php:198
+msgid "DELETEED SPAMMED ITEMS"
+msgstr ""
+
+#: classes/odb-cleaner.php:204
+msgid "comment author"
+msgstr "komentarišite autora"
+
+#: classes/odb-cleaner.php:205
+msgid "comment author email"
+msgstr "komentarišite email autora"
+
+#: classes/odb-cleaner.php:206
+msgid "comment date"
+msgstr "komentarišite datum"
+
+#: classes/odb-cleaner.php:218
+msgid "total number of spammed items deleted"
+msgstr ""
+
+#: classes/odb-cleaner.php:231
+msgid "No SPAMMED ITEMS found to delete"
+msgstr "NISU PRONAĐENE SPAM STAVKE za brisanje"
+
+#: classes/odb-cleaner.php:256
+msgid "NUMBER OF UNUSED TAGS DELETED"
+msgstr "BROJ NEUPOTREBLJENIH OBRISANIH OZNAKA"
+
+#: classes/odb-cleaner.php:266
+msgid "No UNUSED TAGS found to delete"
+msgstr "NISU PRONAĐENE NEUPOTREBLJENE OZNAKE za brisanje"
+
+#: classes/odb-cleaner.php:290
+msgid "NUMBER OF EXPIRED TRANSIENTS DELETED"
+msgstr "BROJ OBRISANIH, ISTEKLIH PROLAZNIH STAVKI "
+
+#: classes/odb-cleaner.php:300
+msgid "No EXPIRED TRANSIENTS found to delete"
+msgstr "Nisu pronađene istekle, prolazne stavke za brisanje "
+
+#: classes/odb-cleaner.php:324
+msgid "NUMBER OF PINGBACKS AND TRACKBACKS DELETED"
+msgstr ""
+
+#: classes/odb-cleaner.php:334
+msgid "No PINGBACKS nor TRACKBACKS found to delete"
+msgstr ""
+
+#: classes/odb-cleaner.php:355
+msgid "NUMBER OF POSTMETA ORPHANS DELETED"
+msgstr "BROJ OBRISANIH POSTMETA SIROČIĆA "
+
+#: classes/odb-cleaner.php:365
+msgid "No POSTMETA ORPHANS found to delete"
+msgstr "Nisu pronađeni postmeta siročići za brisanje"
+
+#: classes/odb-cleaner.php:393
+msgid "Optimizing Database Tables"
+msgstr ""
+
+#: classes/odb-cleaner.php:400
+msgid "table name"
+msgstr "naziv tabele"
+
+#: classes/odb-cleaner.php:401
+msgid "optimization result"
+msgstr "rezultat optimizacije"
+
+#: classes/odb-cleaner.php:402
+msgid "engine"
+msgstr "sredstvo"
+
+#: classes/odb-cleaner.php:403
+msgid "table rows"
+msgstr "redovi tabele"
+
+#: classes/odb-cleaner.php:404
+msgid "table size"
+msgstr "veličina tabele"
+
+#: classes/odb-cleaner.php:452
+msgid "Savings"
+msgstr ""
+
+#: classes/odb-cleaner.php:459
+msgid "size of the database"
+msgstr "veličina baze podataka"
+
+#: classes/odb-cleaner.php:462
+msgid "BEFORE optimization"
+msgstr "PRE optimizacije"
+
+#: classes/odb-cleaner.php:466
+msgid "AFTER optimization"
+msgstr "POSLE optimizacije"
+
+#: classes/odb-cleaner.php:470
+msgid "SAVINGS THIS TIME"
+msgstr "KOLIKO JE SAČUVANO STAVKI OVOG PUTA"
+
+#: classes/odb-cleaner.php:474
+msgid "TOTAL SAVINGS SINCE THE FIRST RUN"
+msgstr "UKUPNO SAČUVANIH STAVKI OD PRVOG POKRETANJA"
+
+#: classes/odb-cleaner.php:501
+msgid "DONE!"
+msgstr ""
+
+#: classes/odb-cleaner.php:506
+msgid "Optimization took"
+msgstr ""
+
+#: classes/odb-cleaner.php:506
+msgid "seconds"
+msgstr ""
+
+#: classes/odb-cleaner.php:514 classes/odb-displayer.php:131
+msgid "View Log File"
+msgstr "Pregledaj datoteku dnevnika"
+
+#: classes/odb-cleaner.php:516 classes/odb-displayer.php:133
+msgid "Delete Log File"
+msgstr "Obriši datoteku dnevnika"
+
+#: classes/odb-cleaner.php:1043
+msgid "InnoDB table: skipped..."
+msgstr ""
+
+#: classes/odb-cleaner.php:1049
+msgid "<span class=\"odb-optimized\">TABLE OPTIMIZED</span>"
+msgstr ""
+
+#: classes/odb-cleaner.php:1050
+msgid "Table is already up to date"
+msgstr ""
+
+#: classes/odb-displayer.php:28
+msgid "YES"
+msgstr "DA"
+
+#: classes/odb-displayer.php:29
+msgid "NO"
+msgstr "NE"
+
+#: classes/odb-displayer.php:40
+msgid "EVERY FIVE MINUTES"
+msgstr ""
+
+#: classes/odb-displayer.php:42
+msgid "ONCE HOURLY"
+msgstr "SVAKOG SATA"
+
+#: classes/odb-displayer.php:44
+msgid "TWICE DAILY"
+msgstr "DVA PUTA DNEVNO"
+
+#: classes/odb-displayer.php:46
+msgid "ONCE DAILY"
+msgstr "JEDNOM DNEVNO"
+
+#: classes/odb-displayer.php:48
+msgid "ONCE WEEKLY"
+msgstr "JEDNOM NEDELJNO"
+
+#: classes/odb-displayer.php:49 includes/settings-page.php:174
+msgid "NOT SCHEDULED"
+msgstr "NIJE PLANIRANO"
+
+#: classes/odb-displayer.php:54
+msgid "Current settings"
+msgstr ""
+
+#: classes/odb-displayer.php:57
+msgid "Maximum number of - most recent - revisions to keep per post / page"
+msgstr ""
+"Najveći broj - najskorijih - revizija koje treba održavati za svaki post/"
+"stranicu"
+
+#: classes/odb-displayer.php:58 includes/settings-page.php:133
+msgid "Delete trashed items"
+msgstr ""
+
+#: classes/odb-displayer.php:59 includes/settings-page.php:139
+msgid "Delete spammed items"
+msgstr ""
+
+#: classes/odb-displayer.php:60 includes/settings-page.php:145
+msgid "Delete unused tags"
+msgstr "Obriši neiskorišćene oznake"
+
+#: classes/odb-displayer.php:61 includes/settings-page.php:151
+msgid "Delete expired transients"
+msgstr "Obriši sve prolazne stavke koje su istekle"
+
+#: classes/odb-displayer.php:62 includes/settings-page.php:157
+msgid "Delete pingbacks and trackbacks"
+msgstr ""
+
+#: classes/odb-displayer.php:63 includes/settings-page.php:163
+msgid "Keep a log"
+msgstr "Vodi dnevnik"
+
+#: classes/odb-displayer.php:64
+msgid "Last run"
+msgstr ""
+
+#: classes/odb-displayer.php:64 classes/odb-displayer.php:73
+#: includes/settings-page.php:208
+msgid "hrs"
+msgstr "Sat"
+
+#: classes/odb-displayer.php:65
+msgid "Number of excluded tables"
+msgstr "Broj isključenih tabela"
+
+#: classes/odb-displayer.php:66 includes/settings-page.php:170
+msgid "Scheduler"
+msgstr "Planer"
+
+#: classes/odb-displayer.php:73
+msgid "Next scheduled run"
+msgstr "Sledeća planirana optimizacija"
+
+#: classes/odb-displayer.php:73
+msgid "current server time"
+msgstr ""
+
+#: classes/odb-displayer.php:78
+msgid "Total savings since the first run"
+msgstr "Ukupno sačuvanih od prvog pokretanja "
+
+#: classes/odb-displayer.php:95
+msgid "Optimize Database after Deleting Revisions"
+msgstr ""
+
+#: classes/odb-displayer.php:98
+msgid ""
+"A popular 'one-click' plugin to clean and optimize your WordPress database."
+msgstr ""
+
+#: classes/odb-displayer.php:101
+msgid "Plugin version"
+msgstr ""
+
+#: classes/odb-displayer.php:102
+msgid "Plugin page"
+msgstr ""
+
+#: classes/odb-displayer.php:103
+msgid "Download page"
+msgstr ""
+
+#: classes/odb-displayer.php:104
+msgid "Author"
+msgstr "Autor"
+
+#: classes/odb-displayer.php:105
+msgid "Company"
+msgstr ""
+
+#: classes/odb-displayer.php:106
+msgid "Donation page"
+msgstr ""
+
+#: classes/odb-displayer.php:124
+msgid "Change Settings"
+msgstr ""
+
+#: classes/odb-displayer.php:139
+msgid "Start Optimization"
+msgstr "Pokreni optimizaciju"
+
+#: classes/odb-logger.php:55
+msgid "A WordPress Plugin by"
+msgstr "WordPress Plugin kreirao:"
+
+#: classes/odb-logger.php:55
+msgid "The Netherlands"
+msgstr "Holandija"
+
+#: classes/odb-logger.php:59
+msgid "time"
+msgstr "vreme"
+
+#: classes/odb-logger.php:60
+msgid "deleted<br />revisions"
+msgstr "obrisane <br />revizije"
+
+#: classes/odb-logger.php:61
+msgid "deleted<br />trash"
+msgstr "obrisano <br /> iz korpe za otpatke "
+
+#: classes/odb-logger.php:62
+msgid "deleted<br />spam"
+msgstr "obrisani <br />spam"
+
+#: classes/odb-logger.php:63
+msgid "deleted<br />tags"
+msgstr "obrisane <br /> oznake"
+
+#: classes/odb-logger.php:64
+msgid "deleted<br />transients"
+msgstr "obrisane <br /> prolazne stavke"
+
+#: classes/odb-logger.php:65
+msgid "deleted<br />pingbacks<br />trackbacks"
+msgstr ""
+
+#: classes/odb-logger.php:66
+msgid "deleted<br />orphans"
+msgstr "obrisani <br /> siročići"
+
+# @ rvg-optimize-database
+#: classes/odb-logger.php:67
+msgid "nr of optimized tables"
+msgstr "broj optimizovanih tabela"
+
+#: classes/odb-logger.php:68
+msgid "database size BEFORE"
+msgstr "baza podataka PRE"
+
+#: classes/odb-logger.php:69
+msgid "database size AFTER"
+msgstr "baza podataka POSLE"
+
+#: classes/odb-logger.php:70
+msgid "SAVINGS"
+msgstr "SAČUVANO"
+
+# @ default
+#: classes/odb-scheduler.php:34
+msgid "Once Weekly"
+msgstr "Jednom nedeljno"
+
+#: classes/odb-scheduler.php:39
+msgid "Every Five Minutes"
+msgstr ""
+
+#: includes/settings-page.php:82
+msgid "Optimize Database after Deleting Revisions SETTINGS UPDATED"
+msgstr ""
+
+#: includes/settings-page.php:84
+msgid ""
+"Click <a href=\"tools.php?page=rvg-optimize-database\" class=\"odb-bold"
+"\">HERE</a> to run the optimization"
+msgstr ""
+
+#: includes/settings-page.php:120 rvg-optimize-db.php:257
+msgid "Settings"
+msgstr ""
+
+#: includes/settings-page.php:125
+msgid "Maximum number of - most recent - revisions<br>to keep per post / page"
+msgstr ""
+
+#: includes/settings-page.php:129
+msgid "('0' means: delete <u>ALL</u> revisions)"
+msgstr "('0' znači: obriši <u>SVE</u> revizije)"
+
+#: includes/settings-page.php:184
+msgid "run optimization HOURLY"
+msgstr "pokreni optimizaciju NA SVAKI SAT"
+
+#: includes/settings-page.php:187
+msgid "run optimization TWICE A DAY"
+msgstr "pokreni optimizaciju DVA PUTA DNEVNO"
+
+#: includes/settings-page.php:190
+msgid "run optimization DAILY"
+msgstr "pokreni optimizaciju JEDNOM DNEVNO"
+
+#: includes/settings-page.php:193
+msgid "run optimization WEEKLY"
+msgstr "pokreni optimizaciju JEDNOM NEDELJNO"
+
+#: includes/settings-page.php:200
+msgid "Time"
+msgstr "Vreme"
+
+#: includes/settings-page.php:223
+msgid "Show '1-click' link in Admin Bar"
+msgstr "Prikaži ‘1-klik’ link u traci za meni administratora"
+
+#: includes/settings-page.php:226 includes/settings-page.php:233
+msgid "(change will be visible after loading the next page)"
+msgstr "(promena će biti vidljiva nakon učitavanja sledeće stranice)"
+
+#: includes/settings-page.php:230
+msgid "Show an icon in the Admin Menu"
+msgstr ""
+
+#: includes/settings-page.php:239
+msgid ""
+"EXCLUDE DATABASE TABLES FROM OPTIMIZATION: <span class=\"odb-underline-red"
+"\">CHECKED</span> TABLES <span class=\"odb-underline-red\">WON'T</span> BE "
+"OPTIMIZED!</span>"
+msgstr ""
+
+#: includes/settings-page.php:245
+msgid "check all tables"
+msgstr "štikliraj sve tabele"
+
+#: includes/settings-page.php:247
+msgid "uncheck all tables"
+msgstr "poništi štikliranje svih tabela"
+
+#: includes/settings-page.php:249
+msgid "check all NON-WordPress tables"
+msgstr "štikliraj sve tabele koje NISU WordPress "
+
+#: includes/settings-page.php:276
+msgid "Save Settings"
+msgstr ""
+
+#: includes/settings-page.php:278
+msgid "Go To Optimizer"
+msgstr "Pokreni optimizator"
+
+# @ rvg-optimize-database
+#: rvg-optimize-db.php:229 rvg-optimize-db.php:230 rvg-optimize-db.php:244
+#: rvg-optimize-db.php:245 rvg-optimize-db.php:286 rvg-optimize-db.php:287
+#: rvg-optimize-db.php:305 rvg-optimize-db.php:306
+msgid "Optimize Database"
+msgstr "Optimize Database"
+
+# @ optimize_db
+#: rvg-optimize-db.php:273
+msgid "Optimize DB (1 click)"
+msgstr "Optimizuj bazu podataka (1 klik)"
+
+#: rvg-optimize-db.php:451
+msgid "Optimize Database after Deleting Revisions LOG FILE HAS BEEN DELETED"
+msgstr ""
+
+#~ msgid "is an one-click plugin to clean and optimize your WordPress database"
+#~ msgstr ""
+#~ "je plugin na 1 klik koji čisti i unapređuje vašu WordPress bazu podataka"
+
+# @ rvg-optimize-database
+#~ msgid "Optimize your WordPress Database"
+#~ msgstr "Optimizujte svoju WordPress bazu podataka"
+
+#~ msgid "Plugin version:"
+#~ msgstr "Plugin verzija:"
+
+#~ msgid "Plugin URL:"
+#~ msgstr "URL Plugin-a:"
+
+#~ msgid "Download URL:"
+#~ msgstr "Download URL:"
+
+# @ default
+#~ msgctxt "timezone date format"
+#~ msgid "YmdGis"
+#~ msgstr "YmdGis"
+
+#~ msgid "Using Optimize Database after Deleting Revisions"
+#~ msgstr "Upotreba Optimize Database after Deleting Revisions"
+
+#~ msgid "Delete all trashed items"
+#~ msgstr "Obriši sve stavke u korpi za otpatke"
+
+#~ msgid "Delete all spammed items"
+#~ msgstr "Obriši sve spam stavke"
+
+# @ default
+#~ msgctxt "timezone date format"
+#~ msgid "G:i"
+#~ msgstr "G:i"
+
+#~ msgid "Starting Optimization"
+#~ msgstr "Optimizacija počinje"
+
+# @ default
+#~ msgctxt "timezone date format"
+#~ msgid "m/d/YH:i:s"
+#~ msgstr "m/d/YH:i:s"
+
+#~ msgid "DELETING REVISIONS"
+#~ msgstr "BRISANJE REVIZIJA"
+
+#~ msgid "DELETING TRASHED ITEMS"
+#~ msgstr "BRISANJE STAVKI U KORPI ZA OTPATKE"
+
+#~ msgid "DELETING SPAMMED ITEMS"
+#~ msgstr "BRISANJE SPAM STAVKI"
+
+#~ msgid "OPTIMIZING DATABASE TABLES"
+#~ msgstr "Optimizovanje tabela baze podataka"
+
+#~ msgid "DONE"
+#~ msgstr "URAĐENO"
+
+# @ default
+#~ msgid "Optimize DB Options"
+#~ msgstr "Optimize DB opcije"
+
+#~ msgid "Optimize Database after Deleting Revisions OPTIONS UPDATED"
+#~ msgstr "Optimize Database after Deleting Revisions OPCIJE AŽURIRANE"
+
+#~ msgid ""
+#~ "Click <a href=\"tools.php?page=rvg-optimize-db.php\" style=\"font-weight:"
+#~ "bold\">HERE</a> to run the optimization"
+#~ msgstr ""
+#~ "Kliknite <a href=\"tools.php?page=rvg-optimize-db.php\" style=\"font-"
+#~ "weight:bold\">OVDE</a> da biste pokrenuli optimizaciju "
+
+#~ msgid "To start the optimization:"
+#~ msgstr "Da biste započeli optimizaciju:"
+
+#~ msgid ""
+#~ "<strong>WP Admin Panel</strong> &raquo; <strong>Tools</strong> &raquo; "
+#~ "<strong>Optimize Database</strong>. Then click the '<strong>Start "
+#~ "Optimization</strong>'-button. Et voila!"
+#~ msgstr ""
+#~ "<strong>WP Admin Panel</strong> &raquo; <strong>Alati</strong> &raquo; "
+#~ "<strong>Optimizuj bazu podataka</strong>. Zatim kliknite na<strong>Počni "
+#~ "optimizaciju</strong>'-taster. To je to!"
+
+#~ msgid ""
+#~ "Note: if you use the Scheduler the Optimization will run automatically!"
+#~ msgstr ""
+#~ "Napomena: ako koristite planer, optimizacija će se pokrenuti automatski"
+
+#~ msgid "Optimize Database after Deleting Revisions - Options"
+#~ msgstr "Optimize Database after Deleting Revisions - Opcije"
+
+#~ msgid ""
+#~ "EXCLUDE DATABASE TABLES FROM OPTIMIZATION: <span style=\"text-decoration:"
+#~ "underline;color:#F00;\">CHECKED</span> TABLES <span style=\"text-"
+#~ "decoration:underline;color:#F00;\">WON'T</span> BE OPTIMIZED!</span>"
+#~ msgstr ""
+#~ "ISKLJUČI TABELE BAZE PODATAKA IZ OPTIMIZACIJE: <span style=\"text-"
+#~ "decoration:underline;color:#F00;\">CHECKED</span> TABLES <span style="
+#~ "\"text-decoration:underline;color:#F00;\">WON'T</span> BE OPTIMIZED!</"
+#~ "span>"
+
+#~ msgid "Save Options"
+#~ msgstr "Sačuvaj opcije"
+
+#~ msgid "Current options"
+#~ msgstr "Trenutne opcije"
+
+#~ msgid "Change Options"
+#~ msgstr "Promeni opcije"

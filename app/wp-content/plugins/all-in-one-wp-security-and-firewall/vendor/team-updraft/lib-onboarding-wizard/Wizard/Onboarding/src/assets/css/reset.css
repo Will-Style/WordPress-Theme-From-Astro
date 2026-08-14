@@ -1,0 +1,198 @@
+/*
+! tailwindcss reset when preflight false
+*/
+
+#teamupdraft-onboarding *,
+#teamupdraft-onboarding *::before,
+#teamupdraft-onboarding *::after {
+    box-sizing: border-box; /* 1 */
+    border-width: 0; /* 2 */
+    border-style: solid; /* 2 */
+    border-color: #e9ecef; /* 2 */
+}
+#teamupdraft-onboarding *::before,
+#teamupdraft-onboarding *::after {
+    --tw-content: '';
+}
+#teamupdraft-onboarding  hr {
+    height: 0; /* 1 */
+    color: inherit; /* 2 */
+    border-top-width: 1px; /* 3 */
+}
+#teamupdraft-onboarding abbr:where([title]) {
+    -webkit-text-decoration: underline dotted;
+    text-decoration: underline dotted;
+}
+#teamupdraft-onboarding h1,
+#teamupdraft-onboarding h2,
+#teamupdraft-onboarding h3,
+#teamupdraft-onboarding h4,
+#teamupdraft-onboarding h5,
+#teamupdraft-onboarding h6 {
+    font-size: inherit;
+    font-weight: inherit;
+}
+#teamupdraft-onboarding a {
+    color: inherit;
+    text-decoration: inherit;
+}
+#teamupdraft-onboarding b,
+#teamupdraft-onboarding strong {
+    font-weight: bolder;
+}
+#teamupdraft-onboarding code,
+#teamupdraft-onboarding kbd,
+#teamupdraft-onboarding samp,
+#teamupdraft-onboarding pre {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; /* 1 */
+    font-feature-settings: normal; /* 2 */
+    font-variation-settings: normal; /* 3 */
+    font-size: 1em; /* 4 */
+}
+#teamupdraft-onboarding small {
+    font-size: 80%;
+}
+#teamupdraft-onboarding sub,
+#teamupdraft-onboarding sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+}
+#teamupdraft-onboarding sub {
+    bottom: -0.25em;
+}
+#teamupdraft-onboarding sup {
+    top: -0.5em;
+}
+#teamupdraft-onboarding table {
+    text-indent: 0; /* 1 */
+    border-color: inherit; /* 2 */
+    border-collapse: collapse; /* 3 */
+}
+#teamupdraft-onboarding button,
+#teamupdraft-onboarding input,
+#teamupdraft-onboarding optgroup,
+#teamupdraft-onboarding select,
+#teamupdraft-onboarding textarea {
+    font-family: inherit; /* 1 */
+    font-feature-settings: inherit; /* 1 */
+    font-variation-settings: inherit; /* 1 */
+    font-size: 100%; /* 1 */
+    font-weight: inherit; /* 1 */
+    line-height: inherit; /* 1 */
+    letter-spacing: inherit; /* 1 */
+    color: inherit; /* 1 */
+    margin: 0; /* 2 */
+    padding: 0; /* 3 */
+}
+#teamupdraft-onboarding button,
+#teamupdraft-onboarding select {
+    text-transform: none;
+}
+#teamupdraft-onboarding button,
+#teamupdraft-onboarding input:where([type='button']),
+#teamupdraft-onboarding input:where([type='reset']),
+#teamupdraft-onboarding input:where([type='submit']) {
+    -webkit-appearance: button; /* 1 */
+    background-color: transparent; /* 2 */
+    background-image: none; /* 2 */
+}
+#teamupdraft-onboarding :-moz-focusring {
+    outline: auto;
+}
+#teamupdraft-onboarding :-moz-ui-invalid {
+    box-shadow: none;
+}
+#teamupdraft-onboarding progress {
+    vertical-align: baseline;
+}
+#teamupdraft-onboarding ::-webkit-inner-spin-button,
+#teamupdraft-onboarding ::-webkit-outer-spin-button {
+    height: auto;
+}
+#teamupdraft-onboarding [type='search'] {
+    -webkit-appearance: textfield; /* 1 */
+    outline-offset: -2px; /* 2 */
+}
+#teamupdraft-onboarding ::-webkit-search-decoration {
+    -webkit-appearance: none;
+}
+#teamupdraft-onboarding ::-webkit-file-upload-button {
+    -webkit-appearance: button; /* 1 */
+    font: inherit; /* 2 */
+}
+#teamupdraft-onboarding summary {
+    display: list-item;
+}
+#teamupdraft-onboarding blockquote,
+#teamupdraft-onboarding dl,
+#teamupdraft-onboarding dd,
+#teamupdraft-onboarding h1,
+#teamupdraft-onboarding h2,
+#teamupdraft-onboarding h3,
+#teamupdraft-onboarding h4,
+#teamupdraft-onboarding h5,
+#teamupdraft-onboarding h6,
+#teamupdraft-onboarding hr,
+#teamupdraft-onboarding figure,
+#teamupdraft-onboarding p,
+#teamupdraft-onboarding pre {
+    margin: 0;
+}
+#teamupdraft-onboarding fieldset {
+    margin: 0;
+    padding: 0;
+}
+#teamupdraft-onboarding legend {
+    padding: 0;
+}
+#teamupdraft-onboarding ol,
+#teamupdraft-onboarding ul,
+#teamupdraft-onboarding menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+#teamupdraft-onboarding dialog {
+    padding: 0;
+}
+#teamupdraft-onboarding textarea {
+    resize: vertical;
+}
+#teamupdraft-onboarding input::-moz-placeholder,
+#teamupdraft-onboarding textarea::-moz-placeholder {
+    opacity: 1; /* 1 */
+    color: #ced4da; /* 2 */
+}
+#teamupdraft-onboarding input::placeholder,
+#teamupdraft-onboarding textarea::placeholder {
+    opacity: 1; /* 1 */
+    color: #ced4da; /* 2 */
+}
+#teamupdraft-onboarding button,
+#teamupdraft-onboarding [role="button"] {
+    cursor: pointer;
+}
+#teamupdraft-onboarding :disabled {
+    cursor: default;
+}
+#teamupdraft-onboarding img,
+#teamupdraft-onboarding svg,
+#teamupdraft-onboarding video,
+#teamupdraft-onboarding canvas,
+#teamupdraft-onboarding audio,
+#teamupdraft-onboarding iframe,
+#teamupdraft-onboarding embed,
+#teamupdraft-onboarding object {
+    display: block; /* 1 */
+    vertical-align: middle; /* 2 */
+}
+#teamupdraft-onboarding img,
+#teamupdraft-onboarding video {
+    max-width: 100%;
+    height: auto;
+}
+#teamupdraft-onboarding [hidden]:where(:not([hidden="until-found"])) {
+    display: none;
+}

@@ -30,11 +30,11 @@ class RequestData
     {
         $this->plugin_slug = $plugin_slug;
     }
-    public function get_plugin_slug() : string
+    public function get_plugin_slug(): string
     {
         return $this->plugin_slug;
     }
-    public function set_reason_key(string $reason_key = null) : self
+    public function set_reason_key(?string $reason_key = null): self
     {
         $this->reason_key = $reason_key;
         return $this;
@@ -46,7 +46,7 @@ class RequestData
     {
         return $this->reason_key;
     }
-    public function set_additional_info(string $additional_info = null) : self
+    public function set_additional_info(?string $additional_info = null): self
     {
         $this->additional_info = $additional_info;
         return $this;
@@ -58,17 +58,17 @@ class RequestData
     {
         return $this->additional_info;
     }
-    public function set_additional_data(array $additional_data) : self
+    public function set_additional_data(array $additional_data): self
     {
         $this->additional_data = $additional_data;
         return $this;
     }
-    public function set_additional_data_item(string $data_key, string $data_value) : self
+    public function set_additional_data_item(string $data_key, string $data_value): self
     {
         $this->additional_data[$data_key] = $data_value;
         return $this;
     }
-    public function get_additional_data() : array
+    public function get_additional_data(): array
     {
         return $this->additional_data;
     }

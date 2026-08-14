@@ -39,10 +39,10 @@ class Post_States {
 	/**
 	 * Shows link to original post in the post states.
 	 *
-	 * @param array   $post_states The array of post states.
-	 * @param WP_Post $post        The current post.
+	 * @param array<string, string> $post_states The array of post states.
+	 * @param WP_Post               $post        The current post.
 	 *
-	 * @return array The updated post states array.
+	 * @return array<string, string> The updated post states array.
 	 */
 	public function show_original_in_post_states( $post_states, $post ) {
 		if ( ! $post instanceof WP_Post
@@ -62,7 +62,7 @@ class Post_States {
 			return $post_states;
 		}
 
-		if ( \intval( \get_option( 'duplicate_post_show_original_in_post_states' ) ) === 1 ) {
+		if ( (int) \get_option( 'duplicate_post_show_original_in_post_states' ) === 1 ) {
 			/* translators: %s: Original item link (to view or edit) or title. */
 			$post_states['duplicate_post_original_item'] = \sprintf( \__( 'Original: %s', 'duplicate-post' ), Utils::get_edit_or_view_link( $original_item ) );
 		}

@@ -10,6 +10,7 @@ use WebpConverter\Service\StatsManager;
 use WebpConverter\Settings\Option\ConversionMethodOption;
 use WebpConverter\Settings\Option\ExtraFeaturesOption;
 use WebpConverter\Settings\Option\OutputFormatsOption;
+use WebpConverter\Settings\Option\ServiceModeOption;
 use WebpConverter\Settings\Option\SupportedDirectoriesOption;
 
 /**
@@ -22,37 +23,22 @@ class PathsFinder {
 	const PATHS_PER_REQUEST_REMOTE_MEDIUM = 5;
 	const PATHS_PER_REQUEST_REMOTE_LARGE  = 10;
 
-	/**
-	 * @var PluginData
-	 */
-	private $plugin_data;
+	private PluginData $plugin_data;
 
-	/**
-	 * @var TokenRepository
-	 */
-	private $token_repository;
+	private TokenRepository $token_repository;
 
-	/**
-	 * @var StatsManager
-	 */
-	private $stats_manager;
+	private StatsManager $stats_manager;
 
-	/**
-	 * @var OutputPathGenerator
-	 */
-	private $output_path;
+	private OutputPathGenerator $output_path;
 
-	/**
-	 * @var DirectoryFilesFinder
-	 */
-	private $files_finder;
+	private DirectoryFilesFinder $files_finder;
 
 	public function __construct(
 		PluginData $plugin_data,
 		TokenRepository $token_repository,
 		FormatFactory $format_factory,
-		StatsManager $stats_manager = null,
-		OutputPathGenerator $output_path = null
+		?StatsManager $stats_manager = null,
+		?OutputPathGenerator $output_path = null
 	) {
 		$this->plugin_data      = $plugin_data;
 		$this->token_repository = $token_repository;
@@ -72,7 +58,7 @@ class PathsFinder {
 	 * @type string[]       $files                  Files paths.
 	 *                                              }
 	 */
-	public function get_paths_by_chunks( bool $skip_converted = false, array $allowed_output_formats = null ): array {
+	public function get_paths_by_chunks( bool $skip_converted = false, ?array $allowed_output_formats = null ): array {
 		$allowed_output_formats = $allowed_output_formats
 			?: $this->plugin_data->get_plugin_settings()[ OutputFormatsOption::OPTION_NAME ];
 
@@ -100,7 +86,7 @@ class PathsFinder {
 	 *
 	 * @return string[] Server paths of source images to be converted.
 	 */
-	public function get_paths( bool $skip_converted = false, array $allowed_output_formats = null ): array {
+	public function get_paths( bool $skip_converted = false, ?array $allowed_output_formats = null ): array {
 		$allowed_output_formats = $allowed_output_formats
 			?: $this->plugin_data->get_plugin_settings()[ OutputFormatsOption::OPTION_NAME ];
 
@@ -126,7 +112,7 @@ class PathsFinder {
 	 */
 	public function skip_converted_paths(
 		array $source_paths,
-		array $allowed_output_formats = null,
+		?array $allowed_output_formats = null,
 		bool $force_convert_modified = false
 	): array {
 		$plugin_settings        = $this->plugin_data->get_plugin_settings();
@@ -161,12 +147,12 @@ class PathsFinder {
 	private function skip_converted_paths_chunks(
 		array $source_dirs,
 		bool $skip_converted,
-		array $allowed_output_formats = null
+		?array $allowed_output_formats = null
 	): array {
 		$plugin_settings        = $this->plugin_data->get_plugin_settings();
 		$allowed_output_formats = $allowed_output_formats ?: $plugin_settings[ OutputFormatsOption::OPTION_NAME ];
 		$force_convert_deleted  = ( ! in_array( ExtraFeaturesOption::OPTION_VALUE_ONLY_SMALLER, $plugin_settings[ ExtraFeaturesOption::OPTION_NAME ] ) );
-		$force_convert_crashed  = ( in_array( ExtraFeaturesOption::OPTION_VALUE_SERVICE_MODE, $plugin_settings[ ExtraFeaturesOption::OPTION_NAME ] ) );
+		$force_convert_crashed  = ( $plugin_settings[ ServiceModeOption::OPTION_NAME ] === 'yes' );
 
 		foreach ( $source_dirs as $dir_name => $dir_data ) {
 			foreach ( $dir_data['files'] as $path_index => $source_file ) {
@@ -250,6 +236,10 @@ class PathsFinder {
 	 */
 	private function get_paths_chunk_size( int $paths_count ): int {
 		$settings = $this->plugin_data->get_plugin_settings();
+		if ( $settings[ ServiceModeOption::OPTION_NAME ] === 'yes' ) {
+			return ( self::PATHS_PER_REQUEST_REMOTE_LARGE * 2 );
+		}
+
 		if ( $settings[ ConversionMethodOption::OPTION_NAME ] !== RemoteMethod::METHOD_NAME ) {
 			return self::PATHS_PER_REQUEST_LOCAL;
 		}

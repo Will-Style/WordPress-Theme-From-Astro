@@ -89,25 +89,40 @@ function upload_image_callback(\WP_REST_Request $req) {
         return new WP_Error( 'upload_error', 'アップロードに失敗しました。', array( 'status' => 400 ) );
     }
 
-    // サイズ制限(10MB)
+    // サイズ制限(10MB / フロント側のmaxsize属性と同値)
     $max_size = 10 * 1024 * 1024;
     if ( ! empty( $img['size'] ) && $img['size'] > $max_size ) {
         return new WP_Error( 'too_large', 'ファイルサイズが大きすぎます。', array( 'status' => 413 ) );
     }
 
-    // 画像限定のホワイトリスト検証(拡張子 + 実ファイルの中身)
+    // 画像・PDF・ZIP限定のホワイトリスト検証(拡張子 + 実ファイルの中身)
     $allowed = array(
         'jpg|jpeg|jpe' => 'image/jpeg',
         'png'          => 'image/png',
         'gif'          => 'image/gif',
         'webp'         => 'image/webp',
+        'pdf'          => 'application/pdf',
+        'zip'          => 'application/zip',
     );
     $checked = wp_check_filetype_and_ext( $img['tmp_name'], $img['name'], $allowed );
     if ( empty( $checked['ext'] ) || empty( $checked['type'] ) ) {
-        return new WP_Error( 'invalid_type', '画像ファイル(jpg/png/gif/webp)のみアップロードできます。', array( 'status' => 400 ) );
+        return new WP_Error( 'invalid_type', '画像ファイル(jpg/png/gif/webp)・PDF・ZIPのみアップロードできます。', array( 'status' => 400 ) );
     }
-    // 実際に画像として読み込めるか二重チェック(拡張子偽装の防止)
-    if ( getimagesize( $img['tmp_name'] ) === false ) {
+    if ( 'application/pdf' === $checked['type'] ) {
+        // 先頭に%PDFシグネチャがあるか確認(拡張子偽装の防止)
+        $head = (string) file_get_contents( $img['tmp_name'], false, null, 0, 5 );
+        if ( 0 !== strpos( $head, '%PDF-' ) ) {
+            return new WP_Error( 'invalid_pdf', '有効なPDFファイルではありません。', array( 'status' => 400 ) );
+        }
+    } elseif ( 'application/zip' === $checked['type'] ) {
+        // 先頭にPKシグネチャ(通常/空/分割)があるか確認(拡張子偽装の防止)
+        $head       = (string) file_get_contents( $img['tmp_name'], false, null, 0, 4 );
+        $signatures = array( "PK\x03\x04", "PK\x05\x06", "PK\x07\x08" );
+        if ( ! in_array( $head, $signatures, true ) ) {
+            return new WP_Error( 'invalid_zip', '有効なZIPファイルではありません。', array( 'status' => 400 ) );
+        }
+    } elseif ( getimagesize( $img['tmp_name'] ) === false ) {
+        // 実際に画像として読み込めるか二重チェック(拡張子偽装の防止)
         return new WP_Error( 'invalid_image', '有効な画像ファイルではありません。', array( 'status' => 400 ) );
     }
 

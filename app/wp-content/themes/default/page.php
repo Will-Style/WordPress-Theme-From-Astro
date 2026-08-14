@@ -1,7 +1,6 @@
 <?php get_header();?>
 <?php
 $uri = $_SERVER['REQUEST_URI'];
-
 $uri = preg_replace('/\?.+$/', '', $uri);
 $slug = str_replace( '/', '-' ,trim( $uri ,'/'));
 //

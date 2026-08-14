@@ -9,10 +9,10 @@ import './editor.scss';
 import { __ } from '@wordpress/i18n';
 import { PanelBody, BaseControl } from '@wordpress/components';
 
-const { lazyblocksConstructorData } = window;
+const { lazyblocksBlockBuilderData } = window;
 
 export default function ProNotice() {
-	if (lazyblocksConstructorData.is_pro) {
+	if (lazyblocksBlockBuilderData.is_pro) {
 		return null;
 	}
 
@@ -22,17 +22,24 @@ export default function ProNotice() {
 				id="lazyblocks-pro-notice"
 				label={__('Lazy Blocks Pro', 'lazy-blocks')}
 				className="lazyblocks-component-pro-notice"
+				__nextHasNoMarginBottom
 			>
 				<div>
 					<a
 						className="lazyblocks-component-pro-notice-btn"
 						target="_blank"
 						rel="noreferrer"
-						href={lazyblocksConstructorData.pro_url}
+						href={lazyblocksBlockBuilderData.pro_url}
 					>
 						{__('Upgrade Now', 'lazy-blocks')}
 					</a>
 					<ul className="ul-square">
+						<li>
+							{__(
+								'Custom block collections and slug namespaces',
+								'lazy-blocks'
+							)}
+						</li>
 						<li>
 							{__('Controls Conditional Logic', 'lazy-blocks')}
 						</li>
@@ -49,7 +56,7 @@ export default function ProNotice() {
 							<a
 								target="_blank"
 								rel="noreferrer"
-								href={lazyblocksConstructorData.pro_url}
+								href={lazyblocksBlockBuilderData.pro_url}
 							>
 								{__('And much more…', 'lazy-blocks')}
 							</a>

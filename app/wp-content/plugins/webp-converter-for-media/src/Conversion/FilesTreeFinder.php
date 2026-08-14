@@ -10,6 +10,7 @@ use WebpConverter\PluginData;
 use WebpConverter\Service\ServerConfigurator;
 use WebpConverter\Service\StatsManager;
 use WebpConverter\Settings\Option\ExtraFeaturesOption;
+use WebpConverter\Settings\Option\ServiceModeOption;
 use WebpConverter\Settings\Option\SupportedDirectoriesOption;
 use WebpConverter\Settings\Option\SupportedExtensionsOption;
 
@@ -18,42 +19,30 @@ use WebpConverter\Settings\Option\SupportedExtensionsOption;
  */
 class FilesTreeFinder {
 
-	/**
-	 * @var PluginData
-	 */
-	private $plugin_data;
+	private PluginData $plugin_data;
 
-	/**
-	 * @var ServerConfigurator
-	 */
-	private $server_configurator;
+	private ServerConfigurator $server_configurator;
 
-	/**
-	 * @var StatsManager
-	 */
-	private $stats_manager;
+	private StatsManager $stats_manager;
 
-	/**
-	 * @var OutputPathGenerator
-	 */
-	private $output_path;
+	private OutputPathGenerator $output_path;
 
 	/**
 	 * @var int[]
 	 */
-	private $files_converted;
+	private array $files_converted = [];
 
 	/**
 	 * @var int[]
 	 */
-	private $files_unconverted;
+	private array $files_unconverted = [];
 
 	public function __construct(
 		PluginData $plugin_data,
 		FormatFactory $format_factory,
-		ServerConfigurator $server_configurator = null,
-		StatsManager $stats_manager = null,
-		OutputPathGenerator $output_path = null
+		?ServerConfigurator $server_configurator = null,
+		?StatsManager $stats_manager = null,
+		?OutputPathGenerator $output_path = null
 	) {
 		$this->plugin_data         = $plugin_data;
 		$this->server_configurator = $server_configurator ?: new ServerConfigurator();
@@ -84,7 +73,7 @@ class FilesTreeFinder {
 
 		$plugin_settings       = $this->plugin_data->get_plugin_settings();
 		$force_convert_deleted = ( ! in_array( ExtraFeaturesOption::OPTION_VALUE_ONLY_SMALLER, $plugin_settings[ ExtraFeaturesOption::OPTION_NAME ] ) );
-		$force_convert_crashed = ( in_array( ExtraFeaturesOption::OPTION_VALUE_SERVICE_MODE, $plugin_settings[ ExtraFeaturesOption::OPTION_NAME ] ) );
+		$force_convert_crashed = ( $plugin_settings[ ServiceModeOption::OPTION_NAME ] === 'yes' );
 
 		$values = [];
 		foreach ( $plugin_settings[ SupportedDirectoriesOption::OPTION_NAME ] as $dir_name ) {
@@ -98,10 +87,10 @@ class FilesTreeFinder {
 			);
 		}
 
-		$this->stats_manager->set_images_webp_all( $this->files_converted[ WebpFormat::FORMAT_EXTENSION ] + $this->files_unconverted[ WebpFormat::FORMAT_EXTENSION ] );
-		$this->stats_manager->set_images_webp_unconverted( $this->files_unconverted[ WebpFormat::FORMAT_EXTENSION ] );
-		$this->stats_manager->set_images_avif_all( $this->files_converted[ AvifFormat::FORMAT_EXTENSION ] + $this->files_unconverted[ AvifFormat::FORMAT_EXTENSION ] );
-		$this->stats_manager->set_images_avif_unconverted( $this->files_unconverted[ AvifFormat::FORMAT_EXTENSION ] );
+		$this->stats_manager->set_images_webp_all( ( $this->files_converted[ WebpFormat::FORMAT_EXTENSION ] ?? 0 ) + ( $this->files_unconverted[ WebpFormat::FORMAT_EXTENSION ] ?? 0 ) );
+		$this->stats_manager->set_images_webp_unconverted( $this->files_unconverted[ WebpFormat::FORMAT_EXTENSION ] ?? 0 );
+		$this->stats_manager->set_images_avif_all( ( $this->files_converted[ AvifFormat::FORMAT_EXTENSION ] ?? 0 ) + ( $this->files_unconverted[ AvifFormat::FORMAT_EXTENSION ] ?? 0 ) );
+		$this->stats_manager->set_images_avif_unconverted( $this->files_unconverted[ AvifFormat::FORMAT_EXTENSION ] ?? 0 );
 
 		return [
 			'files_converted'   => $this->files_converted,
@@ -159,7 +148,7 @@ class FilesTreeFinder {
 			} else {
 				$filename = basename( $current_path );
 				$parts    = array_reverse( explode( '.', $filename ) );
-				if ( in_array( strtolower( $parts[0] ?? '' ), $source_formats ) && ! in_array( strtolower( $parts[1] ?? '' ), ExcludedPathsOperator::EXCLUDED_SUB_EXTENSIONS ) ) {
+				if ( in_array( strtolower( $parts[0] ), $source_formats ) && ! in_array( strtolower( $parts[1] ?? '' ), ExcludedPathsOperator::EXCLUDED_SUB_EXTENSIONS ) ) {
 					if ( apply_filters( 'webpc_supported_source_file', true, $filename, $current_path )
 						&& ! $this->is_converted_file( $current_path, $output_formats, $force_convert_deleted, $force_convert_crashed ) ) {
 						$list['files'][] = $path;

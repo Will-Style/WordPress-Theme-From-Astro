@@ -1,0 +1,12 @@
+/*
+XO Reatured Image Tools - Options page
+*/
+
+.media-frame select.attachment-filters {
+	min-width: 102px;
+}
+
+#default-image-area img {
+	margin: 10px 0;
+	border: #ccc solid 1px;
+}

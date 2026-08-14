@@ -52,21 +52,23 @@ function breadcrumb($echo=true,$args = array()){
 		$str.='<li class="c-breadcrumb-item"><span>'. get_post_type_object($cpt)->label . '</span></li>'; 
 	}elseif($cpt && is_singular($cpt)){  //カスタム投稿の個別記事ページ
 		$taxes = get_object_taxonomies( $cpt  );
-		$mytax = $taxes[0];
-        if(get_post_type_object($cpt)){
-		    $str.='<li class="c-breadcrumb-item"><a href="' .get_post_type_archive_link($cpt).'"><span>'. get_post_type_object($cpt)->label.'</span></a></li>';  //カスタム投稿のアーカイブへのリンクを出力
-        }
-		$taxes = get_the_terms($post->ID, $mytax); 
-		if($taxes){
-			$tax = $taxes[0];  //print_r($tax);
-			if($tax -> parent != 0){
-				$ancestors = array_reverse(get_ancestors( $tax -> term_id, $mytax ));
-				foreach($ancestors as $ancestor){
-					$str.='<li class="c-breadcrumb-item"><a href="'. get_term_link($ancestor, $mytax).'"><span>'. get_term($ancestor, $mytax)->name . '</span></a></li>';            
-				}
-			}
-			$str.='<li class="c-breadcrumb-item"><a href="'. get_term_link($tax, $mytax).'"><span>'. $tax -> name . '</span></a></li>';  	
-		}
+        // if(!empty($taxes)):
+            $mytax = $taxes[0];
+            if(get_post_type_object($cpt)){
+                $str.='<li class="c-breadcrumb-item"><a href="' .get_post_type_archive_link($cpt).'"><span>'. get_post_type_object($cpt)->label.'</span></a></li>';  //カスタム投稿のアーカイブへのリンクを出力
+            }
+            $taxes = get_the_terms($post->ID, $mytax); 
+            if($taxes){
+                $tax = $taxes[0];  //print_r($tax);
+                if($tax -> parent != 0){
+                    $ancestors = array_reverse(get_ancestors( $tax -> term_id, $mytax ));
+                    foreach($ancestors as $ancestor){
+                        $str.='<li class="c-breadcrumb-item"><a href="'. get_term_link($ancestor, $mytax).'"><span>'. get_term($ancestor, $mytax)->name . '</span></a></li>';            
+                    }
+                }
+                $str.='<li class="c-breadcrumb-item"><a href="'. get_term_link($tax, $mytax).'"><span>'. $tax -> name . '</span></a></li>';  	
+            }
+        // endif;
 		$str.= '<li class="c-breadcrumb-item"><span>'. $post -> post_title .'</span></li>';
 	}elseif(is_single()){  //個別記事ページ
 		$categories = get_the_category($post->ID);

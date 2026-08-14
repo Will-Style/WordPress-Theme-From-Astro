@@ -38,7 +38,7 @@ class LoaderTypeOption extends OptionAbstract {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function get_label(): string {
+	public static function get_label(): string {
 		return __( 'Image loading mode', 'webp-converter-for-media' );
 	}
 
@@ -88,15 +88,38 @@ class LoaderTypeOption extends OptionAbstract {
 
 	/**
 	 * {@inheritdoc}
+	 *
+	 * @return mixed[]
 	 */
-	public function get_default_value( array $settings = null ): string {
+	public function get_values_warnings( array $settings ): array {
+		return [
+			HtaccessLoader::LOADER_TYPE          => null,
+			HtaccessBypassingLoader::LOADER_TYPE => sprintf(
+			/* translators: %1$s: open anchor tag, %2$s: close anchor tag */
+				__( 'If you are using this alternative setting, please read %1$sour guide%2$s which explains how it works.', 'webp-converter-for-media' ),
+				'<a href="https://url.mattplugins.com/converter-field-loader-type-alert-bypassing-nginx" target="_blank">',
+				'</a>'
+			),
+			PassthruLoader::LOADER_TYPE          => sprintf(
+			/* translators: %1$s: open anchor tag, %2$s: close anchor tag */
+				__( 'If you are using this alternative setting, please read %1$sour guide%2$s which explains how it works.', 'webp-converter-for-media' ),
+				'<a href="https://url.mattplugins.com/converter-field-loader-type-alert-pass-thru" target="_blank">',
+				'</a>'
+			),
+		];
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function get_default_value(): string {
 		return HtaccessLoader::LOADER_TYPE;
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function validate_value( $current_value, array $available_values = null, array $disabled_values = null ) {
+	public function validate_value( $current_value, ?array $available_values = null, ?array $disabled_values = null ) {
 		if ( ! array_key_exists( $current_value, $available_values ?: [] )
 			|| in_array( $current_value, $disabled_values ?: [] ) ) {
 			return null;

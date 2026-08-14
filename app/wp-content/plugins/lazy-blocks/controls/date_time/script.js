@@ -8,18 +8,25 @@ import classnames from 'classnames/dedupe';
  */
 import { __ } from '@wordpress/i18n';
 import { addFilter } from '@wordpress/hooks';
-import {
-	__experimentalGetSettings as getSettings,
-	dateI18n,
-} from '@wordpress/date';
+import { getSettings, dateI18n } from '@wordpress/date';
 import {
 	Dropdown,
 	PanelBody,
-	ButtonGroup,
 	Button,
 	DatePicker,
 	TimePicker,
+	ToggleGroupControl as StableToggleGroupControl,
+	ToggleGroupControlOption as StableToggleGroupControlOption,
+	// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
+	__experimentalToggleGroupControl,
+	// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
+	__experimentalToggleGroupControlOption,
 } from '@wordpress/components';
+
+const ToggleGroupControl =
+	StableToggleGroupControl || __experimentalToggleGroupControl;
+const ToggleGroupControlOption =
+	StableToggleGroupControlOption || __experimentalToggleGroupControlOption;
 
 /**
  * Internal dependencies.
@@ -93,7 +100,7 @@ function DateTimePicker(props) {
 					}}
 					renderToggle={({ isOpen, onToggle }) => (
 						<Button
-							isLink
+							variant="tertiary"
 							aria-expanded={isOpen}
 							onClick={onToggle}
 							className="lzb-date-time-picker-toggle"
@@ -162,6 +169,20 @@ function DateTimePicker(props) {
 							) : (
 								''
 							)}
+							{value ? (
+								<div className="lzb-date-time-picker-reset">
+									<Button
+										variant="tertiary"
+										onClick={() => {
+											onChange(null);
+										}}
+									>
+										{__('Reset', 'lazy-blocks')}
+									</Button>
+								</div>
+							) : (
+								''
+							)}
 						</div>
 					)}
 				/>
@@ -169,6 +190,39 @@ function DateTimePicker(props) {
 		</BaseControl>
 	);
 }
+
+/**
+ * Required check.
+ *
+ * @param {Object} validationData
+ * @param {number} value
+ * @param {Object} data
+ *
+ * @return {Object} validation data.
+ */
+function validate(validationData, value, data) {
+	if (!value) {
+		if ('date' === data.date_time_picker) {
+			return {
+				valid: false,
+				message: 'Please select date.',
+			};
+		} else if ('time' === data.date_time_picker) {
+			return {
+				valid: false,
+				message: 'Please select time.',
+			};
+		}
+
+		return {
+			valid: false,
+			message: 'Please select date and time.',
+		};
+	}
+
+	return validationData;
+}
+addFilter('lzb.editor.control.date_time.validate', 'lzb.editor', validate);
 
 /**
  * Control render in editor.
@@ -194,7 +248,7 @@ addFilter(
 );
 
 /**
- * Control settings render in constructor.
+ * Control settings render in block builder.
  */
 addFilter(
 	'lzb.constructor.control.date_time.settings',
@@ -206,52 +260,31 @@ addFilter(
 
 		return (
 			<PanelBody>
-				<ButtonGroup>
-					<Button
-						isSmall
-						isPrimary={/date/.test(dateTimePicker)}
-						isPressed={/date/.test(dateTimePicker)}
-						onClick={() => {
-							let result = 'date';
-
-							if (dateTimePicker === 'date_time') {
-								result = 'time';
-							} else if (dateTimePicker === 'date') {
-								result = 'date';
-							} else if (dateTimePicker === 'time') {
-								result = 'date_time';
-							}
-
-							updateData({
-								date_time_picker: result,
-							});
-						}}
-					>
-						{__('Date', 'lazy-blocks')}
-					</Button>
-					<Button
-						isSmall
-						isPrimary={/time/.test(dateTimePicker)}
-						isPressed={/time/.test(dateTimePicker)}
-						onClick={() => {
-							let result = 'time';
-
-							if (dateTimePicker === 'date_time') {
-								result = 'date';
-							} else if (dateTimePicker === 'time') {
-								result = 'time';
-							} else if (dateTimePicker === 'date') {
-								result = 'date_time';
-							}
-
-							updateData({
-								date_time_picker: result,
-							});
-						}}
-					>
-						{__('Time', 'lazy-blocks')}
-					</Button>
-				</ButtonGroup>
+				<ToggleGroupControl
+					value={dateTimePicker}
+					onChange={(value) => {
+						updateData({
+							date_time_picker: value,
+						});
+					}}
+					className="lzb-date-time-picker-mode-control"
+					isBlock
+					__nextHasNoMarginBottom
+					__next40pxDefaultSize
+				>
+					<ToggleGroupControlOption
+						value="date"
+						label={__('Date', 'lazy-blocks')}
+					/>
+					<ToggleGroupControlOption
+						value="date_time"
+						label={__('Date & Time', 'lazy-blocks')}
+					/>
+					<ToggleGroupControlOption
+						value="time"
+						label={__('Time', 'lazy-blocks')}
+					/>
+				</ToggleGroupControl>
 			</PanelBody>
 		);
 	}

@@ -17,7 +17,7 @@ import useBlockControlProps from '../../assets/hooks/use-block-control-props';
 import FileControl from './file-control';
 
 const { allowed_mime_types: wpAllowedMimeTypes } =
-	window.lazyblocksConstructorData || window.lazyblocksGutenberg;
+	window.lazyblocksBlockBuilderData || window.lazyblocksGutenberg;
 
 /**
  * Control render in editor.
@@ -37,7 +37,7 @@ addFilter('lzb.editor.control.file.render', 'lzb.editor', (render, props) => (
 							id: val.id || '',
 							link: val.link || '',
 							url: val.url || '',
-					  }
+						}
 					: '';
 
 				props.onChange(result);
@@ -53,7 +53,13 @@ addFilter('lzb.editor.control.file.getValue', 'lzb.editor', (value) => {
 	// change string value to array.
 	if (typeof value === 'string') {
 		try {
-			value = JSON.parse(decodeURI(value));
+			// WPML decodes string in a different way, so we have to use decodeURIComponent
+			// when string does not contains ':'.
+			if (value.includes(':')) {
+				value = JSON.parse(decodeURI(value));
+			} else {
+				value = JSON.parse(decodeURIComponent(value));
+			}
 		} catch (e) {
 			value = [];
 		}
@@ -75,7 +81,7 @@ addFilter('lzb.editor.control.file.updateValue', 'lzb.editor', (value) => {
 });
 
 /**
- * Control settings render in constructor.
+ * Control settings render in block builder.
  */
 addFilter(
 	'lzb.constructor.control.file.settings',

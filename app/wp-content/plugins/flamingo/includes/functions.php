@@ -6,7 +6,7 @@
 function flamingo_plugin_url( $path = '' ) {
 	$url = plugins_url( $path, FLAMINGO_PLUGIN );
 
-	if ( is_ssl() and 'http:' == substr( $url, 0, 5 ) ) {
+	if ( is_ssl() and 'http:' === substr( $url, 0, 5 ) ) {
 		$url = 'https:' . substr( $url, 5 );
 	}
 
@@ -45,20 +45,16 @@ function flamingo_schedule_move_trash() {
 	}
 
 	$posts_to_move = Flamingo_Inbound_Message::find( array(
-		'posts_per_page' => 100,
+		'posts_per_page' => 20,
 		'meta_key' => '_spam_meta_time',
 		'meta_value' => time() - ( DAY_IN_SECONDS * FLAMINGO_MOVE_TRASH_DAYS ),
 		'meta_compare' => '<',
+		'orderby' => 'meta_value_num',
+		'order' => 'ASC',
 		'post_status' => Flamingo_Inbound_Message::spam_status,
 	) );
 
 	foreach ( $posts_to_move as $post ) {
-
-		if ( $post->trash() ) {
-
-			// delete spam meta time to stop trashing in cron job
-			delete_post_meta( $post->id(), '_spam_meta_time' );
-		}
-
+		$post->trash();
 	}
 }

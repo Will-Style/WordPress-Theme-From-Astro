@@ -8,50 +8,20 @@ import shorthash from 'shorthash';
  */
 import { addFilter } from '@wordpress/hooks';
 import { useEffect, useRef, useCallback } from '@wordpress/element';
-import { useSelect } from '@wordpress/data';
 import { getBlockType } from '@wordpress/blocks';
 import { createHigherOrderComponent, useThrottle } from '@wordpress/compose';
+import { useDispatch } from '@wordpress/data';
+
+import useAllBlocks from '../../hooks/use-all-blocks';
 
 function useBlockID(props) {
-	const { setAttributes, attributes, clientId, name } = props;
+	const { attributes, clientId, name } = props;
 	const blockSettings = getBlockType(name);
 	const didMountRef = useRef(false);
 
-	const { getBlocks } = useSelect((select) => {
-		return select('core/block-editor');
-	});
+	const allBlocks = useAllBlocks();
 
-	/**
-	 * Get recursive all blocks of the current page
-	 *
-	 * @param {boolean} blocks - block list
-	 *
-	 * @return {Array} block list
-	 */
-	const getAllBlocks = useCallback(
-		(blocks = false) => {
-			let result = [];
-
-			if (!blocks) {
-				blocks = getBlocks();
-			}
-
-			if (!blocks) {
-				return result;
-			}
-
-			blocks.forEach((data) => {
-				result.push(data);
-
-				if (data.innerBlocks && data.innerBlocks.length) {
-					result = [...result, ...getAllBlocks(data.innerBlocks)];
-				}
-			});
-
-			return result;
-		},
-		[getBlocks]
-	);
+	const { updateBlockAttributes } = useDispatch('core/block-editor');
 
 	const onUpdate = useCallback(
 		(checkDuplicates) => {
@@ -62,7 +32,6 @@ function useBlockID(props) {
 
 				// prevent unique ID duplication after block duplicated.
 				if (checkDuplicates) {
-					const allBlocks = getAllBlocks();
 					allBlocks.forEach((data) => {
 						if (
 							data.clientId &&
@@ -104,7 +73,14 @@ function useBlockID(props) {
 					if (ID !== blockId) {
 						const newClass = `${name.replace('/', '-')}-${ID}`;
 
-						setAttributes({
+						/**
+						 * IMPORTANT!
+						 * We can't use `setAttributes` here because it is not working correctly
+						 * when we duplicate multiple blocks at once. `updateBlockAttributes` resolves this issue.
+						 *
+						 * @see https://github.com/nk-crew/lazy-blocks/issues/32#issuecomment-2681280713
+						 */
+						updateBlockAttributes(clientId, {
 							blockId: ID,
 							blockUniqueClass: newClass,
 						});
@@ -112,7 +88,7 @@ function useBlockID(props) {
 				}
 			}
 		},
-		[attributes, clientId, getAllBlocks, name, setAttributes]
+		[attributes, clientId, allBlocks, name, updateBlockAttributes]
 	);
 
 	const onUpdateThrottle = useThrottle(onUpdate, 60);

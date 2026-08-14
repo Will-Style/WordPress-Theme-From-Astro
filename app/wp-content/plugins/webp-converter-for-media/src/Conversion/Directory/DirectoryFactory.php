@@ -14,17 +14,9 @@ use WebpConverter\Settings\Option\SupportedDirectoriesOption;
  */
 class DirectoryFactory implements HookableInterface {
 
-	/**
-	 * @var FormatFactory
-	 */
-	private $format_factory;
+	private FormatFactory $format_factory;
 
-	/**
-	 * Object of directories integration.
-	 *
-	 * @var DirectoryIntegrator
-	 */
-	private $directories_integration;
+	private ?DirectoryIntegrator $directories_integration = null;
 
 	public function __construct( FormatFactory $format_factory ) {
 		$this->format_factory = $format_factory;
@@ -34,45 +26,43 @@ class DirectoryFactory implements HookableInterface {
 		$this->set_integration( new SourceDirectory( 'plugins' ) );
 		$this->set_integration( new SourceDirectory( 'themes' ) );
 		$this->set_integration( new UploadsDirectory() );
+		$this->set_integration( new UploadsWebpcDirectory() );
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function init_hooks(): void {
+		add_action( 'init', [ $this, 'init_hooks_after_setup' ], 0 );
+		add_action( 'webpc_settings_updated', [ $this, 'remove_unused_output_directories' ], 10, 2 );
+		add_action( 'webpc_settings_updated', [ $this, 'remove_unused_output_format' ], 10, 2 );
+
+		if ( $this->directories_integration !== null ) {
+			$this->directories_integration->init_hooks();
+		}
+	}
+
+	/**
+	 * Loads hooks before other init_hooks_after_setup() functions.
+	 *
+	 * @internal
+	 */
+	public function init_hooks_after_setup(): void {
 		foreach ( apply_filters( 'webpc_source_directories', [] ) as $directory_name ) {
 			$this->set_integration( new SourceDirectory( $directory_name ) );
 		}
-		$this->set_integration( new UploadsWebpcDirectory() );
 	}
 
 	/**
 	 * Sets integration for directory.
 	 *
 	 * @param DirectoryInterface $directory .
-	 *
-	 * @return void
 	 */
-	private function set_integration( DirectoryInterface $directory ) {
+	private function set_integration( DirectoryInterface $directory ): void {
 		if ( $this->directories_integration === null ) {
 			$this->directories_integration = new DirectoryIntegrator( $this->format_factory );
 		}
 		$this->directories_integration->add_directory( $directory );
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function init_hooks() {
-		$this->directories_integration->init_hooks();
-		add_action( 'init', [ $this, 'init_hooks_after_setup' ] );
-		add_action( 'webpc_settings_updated', [ $this, 'remove_unused_output_directories' ], 10, 2 );
-		add_action( 'webpc_settings_updated', [ $this, 'remove_unused_output_format' ], 10, 2 );
-	}
-
-	/**
-	 * @return void
-	 * @internal
-	 */
-	public function init_hooks_after_setup() {
-		foreach ( apply_filters( 'webpc_source_directories', [] ) as $directory_name ) {
-			$this->set_integration( new SourceDirectory( $directory_name ) );
-		}
-		$this->directories_integration->init_hooks();
 	}
 
 	/**
@@ -81,22 +71,23 @@ class DirectoryFactory implements HookableInterface {
 	 * @return string[] Types of directories with labels.
 	 */
 	public function get_directories(): array {
-		return $this->directories_integration->get_source_directories();
+		return ( $this->directories_integration !== null )
+			? $this->directories_integration->get_source_directories()
+			: [];
 	}
 
 	/**
 	 * @param mixed[] $plugin_settings          .
 	 * @param mixed[] $previous_plugin_settings .
 	 *
-	 * @return void
 	 * @internal
 	 */
-	public function remove_unused_output_directories( array $plugin_settings, array $previous_plugin_settings ) {
+	public function remove_unused_output_directories( array $plugin_settings, array $previous_plugin_settings ): void {
 		if ( $plugin_settings[ SupportedDirectoriesOption::OPTION_NAME ] === $previous_plugin_settings[ SupportedDirectoriesOption::OPTION_NAME ] ) {
 			return;
 		}
 
-		$all_dirs = $this->directories_integration->get_output_directories();
+		$all_dirs = ( $this->directories_integration !== null ) ? $this->directories_integration->get_output_directories() : [];
 		foreach ( $all_dirs as $output_dir => $output_path ) {
 			if ( in_array( $output_dir, $plugin_settings[ SupportedDirectoriesOption::OPTION_NAME ] ) ) {
 				continue;
@@ -112,10 +103,9 @@ class DirectoryFactory implements HookableInterface {
 	 * @param mixed[] $plugin_settings          .
 	 * @param mixed[] $previous_plugin_settings .
 	 *
-	 * @return void
 	 * @internal
 	 */
-	public function remove_unused_output_format( array $plugin_settings, array $previous_plugin_settings ) {
+	public function remove_unused_output_format( array $plugin_settings, array $previous_plugin_settings ): void {
 		if ( ( $plugin_settings[ OutputFormatsOption::OPTION_NAME ] === $previous_plugin_settings[ OutputFormatsOption::OPTION_NAME ] )
 			|| in_array( WebpFormat::FORMAT_EXTENSION, $plugin_settings[ OutputFormatsOption::OPTION_NAME ] ) ) {
 			return;

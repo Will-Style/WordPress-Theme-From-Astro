@@ -3,9 +3,9 @@
  * WP Multibyte Patch Japanese Locale Extension
  *
  * @package WP_Multibyte_Patch
- * @version 2.9
+ * @version 2.9.3
  * @author Seisuke Kuraishi <210pura@gmail.com>
- * @copyright Copyright (c) 2020 Seisuke Kuraishi, Tinybit Inc.
+ * @copyright Copyright (c) 2025 Seisuke Kuraishi, Tinybit Inc.
  * @license https://opensource.org/licenses/gpl-2.0.php GPLv2
  * @link https://eastcoder.com/code/wp-multibyte-patch/
  */
@@ -49,9 +49,16 @@ if ( class_exists( 'multibyte_patch' ) ) :
 			require_once ABSPATH . WPINC . '/PHPMailer/PHPMailer.php';
 			require_once ABSPATH . WPINC . '/PHPMailer/SMTP.php';
 			require_once ABSPATH . WPINC . '/PHPMailer/Exception.php';
-			require_once dirname( dirname( dirname( __FILE__ ) ) ) . '/includes/class-wpmp-phpmailer.php';
 
-			$phpmailer = new WPMP_PHPMailer( true );
+			if( file_exists( ABSPATH . WPINC . '/class-wp-phpmailer.php' ) ) {
+				require_once ABSPATH . WPINC . '/class-wp-phpmailer.php';
+				require_once dirname( dirname( dirname( __FILE__ ) ) ) . '/includes/class-wpmp-phpmailer-wp68.php';
+				$phpmailer = new WPMP_PHPMailer_WP68( true );
+			}
+			else {
+				require_once dirname( dirname( dirname( __FILE__ ) ) ) . '/includes/class-wpmp-phpmailer.php';
+				$phpmailer = new WPMP_PHPMailer( true );
+			}
 
 			$phpmailer::$validator = static function ( $email ) {
 				return (bool) is_email( $email );

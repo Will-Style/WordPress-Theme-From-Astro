@@ -33,7 +33,7 @@ class SupportedExtensionsOption extends OptionAbstract {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function get_label(): string {
+	public static function get_label(): string {
 		return __( 'Supported files extensions', 'webp-converter-for-media' );
 	}
 
@@ -41,7 +41,7 @@ class SupportedExtensionsOption extends OptionAbstract {
 	 * {@inheritdoc}
 	 */
 	public function get_info(): string {
-		return __( 'Files from supported directories that will be converted to output formats.', 'webp-converter-for-media' );
+		return __( 'Files from supported directories that will be converted to next-gen formats.', 'webp-converter-for-media' );
 	}
 
 	/**
@@ -67,14 +67,14 @@ class SupportedExtensionsOption extends OptionAbstract {
 	 *
 	 * @return string[]
 	 */
-	public function get_default_value( array $settings = null ): array {
+	public function get_default_value(): array {
 		return [ 'jpg', 'jpeg', 'png', 'webp' ];
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function validate_value( $current_value, array $available_values = null, array $disabled_values = null ) {
+	public function validate_value( $current_value, ?array $available_values = null, ?array $disabled_values = null ) {
 		$valid_values = [];
 		if ( ! $current_value ) {
 			return $valid_values;
@@ -90,7 +90,7 @@ class SupportedExtensionsOption extends OptionAbstract {
 			$valid_values[] = 'jpeg';
 		}
 
-		return $valid_values;
+		return array_unique( $valid_values );
 	}
 
 	/**

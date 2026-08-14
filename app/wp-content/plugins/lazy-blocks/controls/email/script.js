@@ -28,13 +28,39 @@ addFilter('lzb.editor.control.email.render', 'lzb.editor', (render, props) => {
 				placeholder={props.data.placeholder}
 				value={props.getValue()}
 				onChange={props.onChange}
+				__next40pxDefaultSize
+				__nextHasNoMarginBottom
 			/>
 		</BaseControl>
 	);
 });
 
 /**
- * Control settings render in constructor.
+ * Required check.
+ *
+ * @param {Object} validationData
+ * @param {number} value
+ *
+ * @return {Object} validation data.
+ */
+function validate(validationData, value) {
+	if (!value) {
+		return { valid: false };
+	}
+
+	if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+		return {
+			valid: false,
+			message: 'Please enter a valid email address.',
+		};
+	}
+
+	return validationData;
+}
+addFilter('lzb.editor.control.email.validate', 'lzb.editor', validate);
+
+/**
+ * Control settings render in block builder.
  */
 addFilter(
 	'lzb.constructor.control.email.settings',
@@ -49,6 +75,8 @@ addFilter(
 						label={__('Placeholder', 'lazy-blocks')}
 						value={data.placeholder}
 						onChange={(value) => updateData({ placeholder: value })}
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
 					/>
 				</PanelBody>
 				<PanelBody>
@@ -69,6 +97,8 @@ addFilter(
 						onChange={(value) =>
 							updateData({ characters_limit: `${value}` })
 						}
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
 					/>
 				</PanelBody>
 			</>

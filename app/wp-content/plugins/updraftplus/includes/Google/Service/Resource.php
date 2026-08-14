@@ -15,6 +15,8 @@
  * limitations under the License.
  */
 
+if (!defined('ABSPATH')) die('No direct access allowed');
+
 if (!class_exists('UDP_Google_Client')) {
   require_once dirname(__FILE__) . '/../autoload.php';
 }
@@ -93,7 +95,7 @@ class UDP_Google_Service_Resource
 
       throw new Google_Exception(
           "Unknown function: " .
-          "{$this->serviceName}->{$this->resourceName}->{$name}()"
+          "{$this->serviceName}->{$this->resourceName}->{$name}()" // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- Error message to be escaped when caught and printed.
       );
     }
     $method = $this->methods[$name];
@@ -145,7 +147,7 @@ class UDP_Google_Service_Resource
                 'parameter' => $key
             )
         );
-        throw new Google_Exception("($name) unknown parameter: '$key'");
+        throw new Google_Exception("($name) unknown parameter: '$key'"); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- Error message to be escaped when caught and printed.
       }
     }
 
@@ -163,7 +165,7 @@ class UDP_Google_Service_Resource
                 'parameter' => $paramName
             )
         );
-        throw new Google_Exception("($name) missing required param: '$paramName'");
+        throw new Google_Exception("($name) missing required param: '$paramName'"); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- Error message to be escaped when caught and printed.
       }
       if (isset($parameters[$paramName])) {
         $value = $parameters[$paramName];

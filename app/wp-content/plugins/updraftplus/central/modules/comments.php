@@ -1,6 +1,6 @@
 <?php
 
-if (!defined('UPDRAFTCENTRAL_CLIENT_DIR')) die('No access.');
+if (!defined('ABSPATH')) die('No access.');
 
 class UpdraftCentral_Comments_Commands extends UpdraftCentral_Commands {
 
@@ -172,7 +172,7 @@ class UpdraftCentral_Comments_Commands extends UpdraftCentral_Commands {
 			$network_sites = get_sites();
 		} else {
 			if (function_exists('wp_get_sites')) {
-				$network_sites = wp_get_sites();
+				$network_sites = wp_get_sites();// phpcs:ignore WordPress.WP.DeprecatedFunctions.wp_get_sitesFound -- This function was only intended for backward compatibility with versions below 4.6.
 			}
 		}
 		
@@ -312,7 +312,7 @@ class UpdraftCentral_Comments_Commands extends UpdraftCentral_Commands {
 				// We're formatting the comment_date to be exactly the same
 				// with that of WP Comments table (e.g. 2016/12/21 at 10:30 PM)
 				
-				$comment['comment_date'] = date('Y/m/d \a\t g:i a', strtotime($comment['comment_date']));
+				$comment['comment_date'] = date('Y/m/d \a\t g:i a', strtotime($comment['comment_date'])); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date -- comment_date is stored in WP local timezone; gmdate() would produce incorrect values.
 				
 				$status = wp_get_comment_status($comment['comment_ID']);
 				if ($status) {
@@ -347,16 +347,16 @@ class UpdraftCentral_Comments_Commands extends UpdraftCentral_Commands {
 	public function get_comment_filters() {
 		// Options for comment_types field
 		$comment_types = apply_filters('admin_comment_types_dropdown', array(
-			'comment' => __('Comments'),
-			'pings' => __('Pings'),
+			'comment' => __('Comments'),// phpcs:ignore WordPress.WP.I18n.MissingArgDomain -- The string exists within the WordPress core.
+			'pings' => __('Pings'),// phpcs:ignore WordPress.WP.I18n.MissingArgDomain -- The string exists within the WordPress core.
 		));
 				
 		// Options for comment_status field
 		$comment_statuses = array(
-			'approve' => __('Approve'),
-			'hold' => __('Hold or Unapprove'),
-			'trash' => __('Trash'),
-			'spam' => __('Spam'),
+			'approve' => __('Approve'),// phpcs:ignore WordPress.WP.I18n.MissingArgDomain -- The string exists within the WordPress core.
+			'hold' => __('Hold or Unapprove', 'updraftplus'),
+			'trash' => __('Trash', 'updraftplus'),
+			'spam' => __('Spam', 'updraftplus'),
 		);
 		
 		// Pull sites options if available.
@@ -393,7 +393,7 @@ class UpdraftCentral_Comments_Commands extends UpdraftCentral_Commands {
 		// If user does not have sufficient privileges to manage and edit
 		// WP options then we return with error.
 		
-		if (!current_user_can_for_blog($blog_id, 'manage_options')) {
+		if (!$this->current_user_can_for_site($blog_id, 'manage_options')) {
 			$result = array('error' => true, 'message' => 'insufficient_permission');
 			return $this->_response($result);
 		}
@@ -464,7 +464,7 @@ class UpdraftCentral_Comments_Commands extends UpdraftCentral_Commands {
 		// If user does not have sufficient privileges to manage and edit
 		// WP options then we return with error.
 		
-		if (!current_user_can_for_blog($blog_id, 'manage_options')) {
+		if (!$this->current_user_can_for_site($blog_id, 'manage_options')) {
 			$result = array('error' => true, 'message' => 'insufficient_permission');
 			return $this->_response($result);
 		}
@@ -514,7 +514,7 @@ class UpdraftCentral_Comments_Commands extends UpdraftCentral_Commands {
 		// If user does not have sufficient privileges to moderate or edit
 		// a comment then we return with error.
 		
-		if (!current_user_can_for_blog($blog_id, 'moderate_comments')) {
+		if (!$this->current_user_can_for_site($blog_id, 'moderate_comments')) {
 			$result = array('error' => true, 'message' => 'insufficient_permission');
 			return $this->_response($result);
 		}
@@ -566,7 +566,7 @@ class UpdraftCentral_Comments_Commands extends UpdraftCentral_Commands {
 		// If user does not have sufficient privileges to moderate or edit
 		// a comment then we return with error.
 		
-		if (!current_user_can_for_blog($blog_id, 'moderate_comments')) {
+		if (!$this->current_user_can_for_site($blog_id, 'moderate_comments')) {
 			$result = array('error' => true, 'message' => 'comment_reply_no_permission');
 			return $this->_response($result);
 		}
@@ -660,7 +660,7 @@ class UpdraftCentral_Comments_Commands extends UpdraftCentral_Commands {
 		// If user does not have sufficient privileges to moderate or edit
 		// a comment then we return with error.
 		
-		if (!current_user_can_for_blog($blog_id, 'moderate_comments')) {
+		if (!$this->current_user_can_for_site($blog_id, 'moderate_comments')) {
 			$result = array('error' => true, 'message' => 'comment_edit_no_permission');
 			return $this->_response($result);
 		}
@@ -742,7 +742,7 @@ class UpdraftCentral_Comments_Commands extends UpdraftCentral_Commands {
 		// If user does not have sufficient privileges to moderate or edit
 		// a comment then we return with error.
 		
-		if (!current_user_can_for_blog($blog_id, 'moderate_comments')) {
+		if (!$this->current_user_can_for_site($blog_id, 'moderate_comments')) {
 			$result = array('error' => true, 'message' => 'comment_change_status_no_permission');
 			return $this->_response($result);
 		}
@@ -772,7 +772,7 @@ class UpdraftCentral_Comments_Commands extends UpdraftCentral_Commands {
 			// We're formatting the comment_date to be exactly the same
 			// with that of WP Comments table (e.g. 2016/12/21 at 10:30 PM)
 
-			$comment->comment_date = date('Y/m/d \a\t g:i a', strtotime($comment->comment_date));
+			$comment->comment_date = date('Y/m/d \a\t g:i a', strtotime($comment->comment_date)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date -- comment_date is stored in WP local timezone; gmdate() would produce incorrect values.
 
 			$status = wp_get_comment_status($comment->comment_ID);
 			if ($status) {
@@ -838,5 +838,22 @@ class UpdraftCentral_Comments_Commands extends UpdraftCentral_Commands {
 		}
 		
 		return $this->_response($result);
+	}
+	/**
+	 * Check if the current user has a specific capability for a given site.
+	 *
+	 * Uses current_user_can_for_site() when available (newer WordPress versions),
+	 * otherwise falls back to current_user_can_for_blog() for backward compatibility.
+	 *
+	 * @param int    $blog_id    The site/blog ID to check against.
+	 * @param string $capability The capability to verify.
+	 *
+	 * @return bool True if the user has the specified capability, false otherwise.
+	 */
+	private function current_user_can_for_site($blog_id, $capability) {
+		if (function_exists('current_user_can_for_site')) {
+			return current_user_can_for_site($blog_id, $capability);
+		}
+		return current_user_can_for_blog($blog_id, $capability);
 	}
 }

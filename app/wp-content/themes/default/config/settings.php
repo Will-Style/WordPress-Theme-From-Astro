@@ -5,8 +5,31 @@
 =========================================================*/
 add_action( 'after_setup_theme', function(){
 	add_theme_support( 'editor-styles' );
-	add_editor_style( get_stylesheet_directory_uri() . '/editor-style.css' );
+    add_editor_style( 'editor-style.css' );
 });
+
+add_filter('should_load_separate_core_block_assets', '__return_true');
+
+/* ========================================================
+ブロックエディタ：カラーパレット
+　色はCSS変数（/assets/css/style.css の :root）を参照する
+　slugはクラス名（.has-<slug>-color）になるため後から変更しないこと
+=========================================================*/
+add_action( 'after_setup_theme', function () {
+	add_theme_support( 'editor-color-palette', array(
+		array( 'name' => '白',         'slug' => 'white',     'color' => 'var(--color-white)' ),
+		array( 'name' => '背景',       'slug' => 'bg',        'color' => 'var(--color-bg)' ),
+		array( 'name' => 'プライマリ', 'slug' => 'primary',   'color' => 'var(--color-primary)' ),
+		array( 'name' => 'セカンダリ', 'slug' => 'primary',   'color' => 'var(--color-secondary)' ),
+		array( 'name' => 'グレー',     'slug' => 'gray',      'color' => 'var(--color-gray)' ),
+		array( 'name' => 'グレー濃',   'slug' => 'gray-dark', 'color' => 'var(--color-gray-dark)' ),
+	) );
+
+	// パレット以外の色を選べないようにする
+	add_theme_support( 'disable-custom-colors' );
+	add_theme_support( 'editor-gradient-presets', array() );
+	add_theme_support( 'disable-custom-gradients' );
+} );
 
 add_action('admin_enqueue_scripts', function ($hook_suffix) {
 	// 新規・編集投稿ページのみ読み込み
@@ -108,8 +131,10 @@ function remove_default_post_screen_metaboxes() {
 add_action('admin_menu','remove_default_post_screen_metaboxes');
 
 add_action( 'wp_print_styles', 'my_deregister_styles', 100 );
+
 function my_deregister_styles() {
     wp_deregister_style( 'wp-pagenavi' );
+    wp_deregister_style( "post-views-counter-frontend" );
 }
 
 
@@ -145,6 +170,16 @@ add_filter( 'lazyblock/container/frontend_allow_wrapper', '__return_false' );
 add_filter( 'lazyblock/container/allow_inner_blocks_wrapper', '__return_false' );
 add_filter( 'lazyblock/content-wrapper/frontend_allow_wrapper', '__return_false' );
 add_filter( 'lazyblock/content-wrapper/allow_inner_blocks_wrapper', '__return_false' );
+add_filter( 'lazyblock/faq/allow_inner_blocks_wrapper', '__return_false' );
+add_filter( 'lazyblock/faq/frontend_allow_wrapper', '__return_false' );
+
+
+add_filter( 'lazyblock/qa/allow_inner_blocks_wrapper', '__return_false' );
+add_filter( 'lazyblock/qa/frontend_allow_wrapper', '__return_false' );
+add_filter( 'lazyblock/members/allow_inner_blocks_wrapper', '__return_false' );
+add_filter( 'lazyblock/members/frontend_allow_wrapper', '__return_false' );
+add_filter( 'lazyblock/requirement/allow_inner_blocks_wrapper', '__return_false' );
+add_filter( 'lazyblock/requirement/frontend_allow_wrapper', '__return_false' );
 
 
 
@@ -152,3 +187,107 @@ function usort_add_admin_head() {
     include(get_template_directory(). "/components/Meta.php");
 }
 add_action('admin_head', 'usort_add_admin_head');
+
+
+function is_parent_slug() {
+	global $post;
+    if($post){
+        if ($post->post_parent) {
+            $post_data = get_post($post->post_parent);
+            return $post_data->post_name;
+	    }
+    }
+}
+
+
+add_action( 'init', function () {
+    register_taxonomy( 'post_tag', [ 'post' ],
+        [
+            'hierarchical' => false,
+            'query_var'    => 'tag',
+        ]
+    );
+});
+add_action('pre_get_posts', function ($query){
+    if ( is_admin() && ! $query->is_main_query() ) {
+        return;
+    }
+    if ( $query->is_category() || $query->is_tag() ) {
+        $query->set('post_type', ['post','blog']);
+    }
+});
+
+function adjust_date_title( $title, $sep, $seplocation ) {
+    $m = get_query_var( 'm' );
+    $year = get_query_var( 'year' );
+    $monthnum = get_query_var( 'monthnum' );
+    $day = get_query_var( 'day' );
+    $date_title = "";
+    if ( is_archive() && ! empty( $m ) ) {
+        $my_year = substr( $m, 0, 4 );
+        $my_month = substr( $m, 4, 2 );
+        $my_day = substr( $m, 6, 2 );
+        $date_title = $my_year . '年' . ( $my_month ? $my_month . '月' : "" ) . ( $my_day ? $my_day . '日' : "" );
+    }
+
+    if ( is_archive() && ! empty( $year ) ) {
+        $date_title = $year . '年';
+        if ( ! empty( $monthnum ) ) {
+            $date_title .= zeroise( $monthnum, 2 ) . '月';
+        }
+        if ( ! empty( $day ) ) {
+            $date_title .= zeroise( $day, 2 ) . '日';
+        }
+    }
+
+    if ( "" != $date_title ) {
+        if ( 'right' == $seplocation ) {
+            $title = $date_title . $sep ;
+        } else {
+            $title = $sep . $date_title;
+        }
+    }
+
+    return $title;
+}
+add_filter( 'wp_title', 'adjust_date_title', 10, 3 );
+
+
+
+function gutenberg_support_setup() {
+ 
+    //Gutenberg用スタイルの読み込み
+    add_theme_support( 'wp-block-styles' );
+   
+    //「幅広」と「全幅」に対応
+    add_theme_support( 'align-wide' );
+   
+}
+add_action( 'after_setup_theme', 'gutenberg_support_setup' );
+
+// カスタム投稿の編集画面に「投稿者」を表示する
+add_action('admin_menu', 'myplugin_add_custom_box');
+function myplugin_add_custom_box()
+{
+  if (function_exists('add_meta_box')) {
+      add_meta_box('myplugin_sectionid', __('投稿者', 'myplugin_textdomain'), 'post_author_meta_box', 'test', 'advanced');
+  }
+}
+function manage_test_columns ($columns) {
+  $columns['author'] = '投稿者';
+  return $columns;
+}
+function add_test_column ($column, $post_id) {
+  if ('author' == $column) {
+      $value = get_the_term_list($post_id, 'author');
+      echo attribute_escape($value);
+  }
+}
+add_filter('manage_posts_columns', 'manage_test_columns');
+add_action('manage_posts_custom_column', 'add_test_column', 10, 2);
+
+function add_webm_upload( $mimes ) {
+    $mimes['webm'] = 'video/webm';
+    return $mimes;
+}
+add_filter( 'upload_mimes', 'add_webm_upload' );

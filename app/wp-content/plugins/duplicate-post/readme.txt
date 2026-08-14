@@ -2,10 +2,10 @@
 Contributors: 		yoast, lopo
 Donate link: 		https://yoast.com/wordpress/plugins/duplicate-post/
 Tags: 				duplicate post, copy, clone
-Requires at least: 	5.9
-Tested up to: 		6.2
-Stable tag: 		4.5
-Requires PHP:		5.6.20
+Requires at least: 	6.8
+Tested up to: 		7.0
+Stable tag: 		4.7
+Requires PHP:		7.4
 License: 			GPLv2 or later
 License URI: 		http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -31,7 +31,7 @@ How it works:
 
 There is also a **template tag**, so you can put it in your templates and clone your posts/pages from the front-end. Clicking on the link will lead you to the edit page for the new draft, just like the admin bar link.
 
-Duplicate Post has many useful settings to customize its behavior and restrict its use to certain roles or post types. Check out the extensive documentation [on yoast.com](https://yoast.com/wordpress/plugins/duplicate-post/) and our [developer docs](https://developer.yoast.com/duplicate-post/).
+Duplicate Post has many useful settings to customize its behavior and restrict its use to certain roles or post types. Check out the extensive documentation on [yoast.com](https://yoast.com/wordpress/plugins/duplicate-post/) and our [developer docs](https://developer.yoast.com/duplicate-post/overview/).
 
 == Installation ==
 
@@ -71,40 +71,7 @@ If Duplicate Post is still in English, or if there are some untranslated strings
 
 == Changelog ==
 
-= 4.5 =
-Release Date: June 28th, 2022
-
-Enhancements:
-
-* Improves the impact of the plugin on the performance of the site by avoiding useless calls on the `gettext` filter.
-
-Bugfixes:
-
-* Fixes a bug where a section in the Classic Editor's submitbox would be displayed with incorrect margins.
-
-Other:
-
-* Sets the WordPress tested up to version to 6.0.
-
-= 4.4 =
-Release Date: January 25th, 2022
-
-Enhancements:
-
-* Converts the upgrade notice into a welcome notice for first-time users.
-
-Bugfixes:
-
-* Fixes a bug where HTML tags in a Custom HTML block would be removed when republishing a scheduled Rewrite & Republish copy.
-* Fixes a bug where the button style would be broken in the Classic Editor.
-* Fixes a bug where a fatal error would be triggered in the Widgets page in combination with some themes or plugins.
-
-Other:
-
-* Sets the WordPress tested up to version to 5.9.
-
-= Earlier versions =
-For the changelog of earlier versions, please refer to [the changelog on yoast.com](https://yoa.st/duplicate-post-changelog).
+[See the full changelog on yoast.com](https://yoa.st/duplicate-post-changelog).
 
 == Contribute ==
 

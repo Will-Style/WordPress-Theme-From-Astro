@@ -10,7 +10,12 @@ interface PageInterface {
 	/**
 	 * @return string|null
 	 */
-	public function get_slug();
+	public function get_slug(): ?string;
+
+	/**
+	 * @return bool
+	 */
+	public function is_available(): bool;
 
 	/**
 	 * @return string
@@ -20,12 +25,12 @@ interface PageInterface {
 	/**
 	 * @return string|null
 	 */
-	public function get_menu_url();
+	public function get_menu_url(): ?string;
 
 	/**
 	 * @return string
 	 */
-	public function get_label(): string;
+	public static function get_label(): string;
 
 	/**
 	 * @return string
@@ -37,13 +42,7 @@ interface PageInterface {
 	 */
 	public function get_template_vars(): array;
 
-	/**
-	 * @return void
-	 */
-	public function do_action_before_load();
+	public function do_action_before_load(): void;
 
-	/**
-	 * @return void
-	 */
-	public function do_action_after_load();
+	public function do_action_after_load(): void;
 }

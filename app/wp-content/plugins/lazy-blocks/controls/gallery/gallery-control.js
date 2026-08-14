@@ -2,7 +2,7 @@
  * WordPress dependencies.
  */
 import { __ } from '@wordpress/i18n';
-import { Button, DropZone, withNotices } from '@wordpress/components';
+import { Button, Tooltip, DropZone, withNotices } from '@wordpress/components';
 import { MediaPlaceholder, MediaUpload } from '@wordpress/block-editor';
 import { useSelect } from '@wordpress/data';
 
@@ -26,14 +26,16 @@ function GalleryControl(props) {
 	} = props;
 
 	const { mediaUpload, imagesPreviewData } = useSelect((select) => {
-		const { getMedia } = select('core');
+		const { getEntityRecord } = select('core');
 
 		const preview = {};
 
 		if (value && Object.keys(value).length) {
 			value.forEach((img) => {
 				if (!preview[img.id]) {
-					const mediaImg = getMedia(img.id) || false;
+					const mediaImg =
+						getEntityRecord('postType', 'attachment', img.id) ||
+						false;
 
 					if (mediaImg) {
 						preview[img.id] = {
@@ -121,10 +123,67 @@ function GalleryControl(props) {
 									});
 								}}
 							/>
-							<div className="lzb-gutenberg-gallery-button">
-								<Button isSecondary isSmall>
+							<div
+								role="group"
+								aria-label={__(
+									'Gallery actions',
+									'lazy-blocks'
+								)}
+								className="components-button-group lzb-gutenberg-gallery-button"
+							>
+								<Button
+									variant="secondary"
+									size="compact"
+									className="lzb-gutenberg-gallery-button-edit"
+								>
 									{__('Edit Gallery', 'lazy-blocks')}
 								</Button>
+								<Tooltip
+									text={__(
+										'Clear the gallery',
+										'lazy-blocks'
+									)}
+								>
+									<Button
+										variant="secondary"
+										size="compact"
+										className="lzb-gutenberg-gallery-button-remove"
+										onClick={(e) => {
+											e.preventDefault();
+											e.stopPropagation();
+
+											onChange([]);
+										}}
+									>
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											width="24"
+											height="24"
+											viewBox="0 0 24 24"
+											fill="none"
+											stroke="currentColor"
+											strokeWidth="2"
+											strokeLinecap="round"
+											strokeLinejoin="round"
+										>
+											<path d="M3 6h18" />
+											<path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+											<path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+											<line
+												x1="10"
+												x2="10"
+												y1="11"
+												y2="17"
+											/>
+											<line
+												x1="14"
+												x2="14"
+												y1="11"
+												y2="17"
+											/>
+										</svg>
+									</Button>
+								</Tooltip>
 							</div>
 							{value.map((img) => (
 								<div

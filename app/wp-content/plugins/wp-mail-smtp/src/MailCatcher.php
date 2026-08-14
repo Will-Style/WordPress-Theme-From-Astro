@@ -2,6 +2,8 @@
 
 namespace WPMailSMTP;
 
+use phpmailerException;
+
 // Load PHPMailer class, so we can subclass it.
 if ( ! class_exists( 'PHPMailer', false ) ) {
 	require_once ABSPATH . WPINC . '/class-phpmailer.php';
@@ -16,18 +18,6 @@ if ( ! class_exists( 'PHPMailer', false ) ) {
 class MailCatcher extends \PHPMailer implements MailCatcherInterface {
 
 	use MailCatcherTrait;
-
-	/**
-	 * Callback Action function name.
-	 *
-	 * The function that handles the result of the send email action.
-	 * It is called out by send() for each email sent.
-	 *
-	 * @since 1.3.0
-	 *
-	 * @var string
-	 */
-	public $action_function = '\WPMailSMTP\Processor::send_callback';
 
 	/**
 	 * Returns all custom headers.
@@ -53,5 +43,19 @@ class MailCatcher extends \PHPMailer implements MailCatcherInterface {
 	public function get_line_ending() {
 
 		return $this->LE; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+	}
+
+	/**
+	 * Throw PHPMailer exception.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @param string $error Error message.
+	 *
+	 * @throws phpmailerException PHPMailer exception.
+	 */
+	protected function throw_exception( $error ) {
+
+		throw new phpmailerException( $error );
 	}
 }

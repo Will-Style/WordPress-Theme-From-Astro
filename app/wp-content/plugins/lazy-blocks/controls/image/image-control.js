@@ -27,13 +27,15 @@ function ImageControl(props) {
 	} = props;
 
 	const { mediaUpload, imagePreviewData } = useSelect((select) => {
-		const { getMedia } = select('core');
+		const { getEntityRecord } = select('core');
 
 		let preview = false;
 
 		if (value && Object.keys(value).length) {
 			if (value.id) {
-				const mediaImg = getMedia(value.id) || false;
+				const mediaImg =
+					getEntityRecord('postType', 'attachment', value.id) ||
+					false;
 
 				if (mediaImg) {
 					preview = {
@@ -71,7 +73,12 @@ function ImageControl(props) {
 	}
 
 	return (
-		<BaseControl id={label} label={label} help={help}>
+		<BaseControl
+			id={label}
+			label={label}
+			help={help}
+			__nextHasNoMarginBottom
+		>
 			<div className="lzb-gutenberg-image-wrap">
 				{!value || !Object.keys(value).length ? (
 					<MediaPlaceholder
@@ -98,7 +105,7 @@ function ImageControl(props) {
 							allowInsertFromURL
 								? (url) => {
 										onChange({ url });
-								  }
+									}
 								: null
 						}
 						notices={noticeUI}
@@ -130,8 +137,8 @@ function ImageControl(props) {
 						/>
 						<div className="lzb-gutenberg-image-button">
 							<Button
-								isSecondary
-								isSmall
+								variant="secondary"
+								size="small"
 								onClick={() => {
 									onChange('');
 								}}

@@ -1,12 +1,24 @@
 <?php
 
-if (!defined('UPDRAFTPLUS_DIR')) die('No direct access allowed.');
+if (!defined('ABSPATH')) die('No direct access allowed');
 
 // Files can easily get too big for this method
 
 if (!class_exists('UpdraftPlus_BackupModule')) updraft_try_include_file('methods/backup-module.php', 'require_once');
 
 class UpdraftPlus_BackupModule_email extends UpdraftPlus_BackupModule {
+
+	/**
+	 * Input and option field mappings with default values and supported contexts.
+	 *
+	 * @var array
+	 */
+	protected $input_option_field_mappings = array(
+		'email_address' => array(
+			'default_value' => '',
+			'contexts' => array('input'),
+		),
+	);
 
 	public function backup($backup_array) {
 
@@ -27,6 +39,7 @@ class UpdraftPlus_BackupModule_email extends UpdraftPlus_BackupModule {
 			if (file_exists($fullpath) && filesize($fullpath) > UPDRAFTPLUS_WARN_EMAIL_SIZE) {
 				$size_in_mb_of_big_file = round(filesize($fullpath)/1048576, 1);
 				$toobig_hash = md5($file);
+				/* translators: %s: Backup file size in MB */
 				$this->log($file.': '.sprintf(__('This backup archive is %s MB in size - the attempt to send this via email is likely to fail (few email servers allow attachments of this size).', 'updraftplus'), $size_in_mb_of_big_file).' '.__('If so, you should switch to using a different remote storage method.', 'updraftplus'), 'warning', 'toobigforemail_'.$toobig_hash);
 			}
 
@@ -54,6 +67,7 @@ class UpdraftPlus_BackupModule_email extends UpdraftPlus_BackupModule {
 								add_filter('wp_mail_from_name', array($updraftplus, 'get_email_from_name_header'), 9);
 							}
 							add_action('wp_mail_failed', array($updraftplus, 'log_email_delivery_failure'));
+							/* translators: %s: Site URL and description type */
 							$sent = wp_mail(trim($sendmail_addr), $subject, sprintf(__("Backup is of: %s.", 'updraftplus'), site_url().' ('.$descrip_type.')'), $headers, array($fullpath));
 							remove_action('wp_mail_failed', array($updraftplus, 'log_email_delivery_failure'));
 							if ($use_wp_from_name_filter) remove_filter('wp_mail_from_name', array($this, 'get_email_from_name_header'), 9);
@@ -103,15 +117,24 @@ class UpdraftPlus_BackupModule_email extends UpdraftPlus_BackupModule {
 		global $updraftplus;
 		?>
 		<tr class="updraftplusmethod email">
-			<th><?php _e('Note:', 'updraftplus');?></th>
+			<th><?php esc_html_e('Email:', 'updraftplus');?></th>
 			<td><?php
 
 				$used = apply_filters('updraftplus_email_whichaddresses',
+					/* translators: %s: Admin email address */
 					sprintf(__("Your site's admin email address (%s) will be used.", 'updraftplus'), get_bloginfo('admin_email').' - <a href="'.esc_attr(admin_url('options-general.php')).'">'.__("configure it here", 'updraftplus').'</a>').
-					' <a href="'.$updraftplus->get_url('premium').'" target="_blank">'.__('For more options, use Premium', 'updraftplus').'</a>'
+					' <a href="'.$updraftplus->get_url('premium_email').'" target="_blank">'.__('For more options, use Premium', 'updraftplus').'</a>'
 				);
 
-				echo $used.' '.sprintf(__('Be aware that mail servers tend to have size limits; typically around %s MB; backups larger than any limits will likely not arrive.', 'updraftplus'), '10-20');
+				$allowed_html = array(
+					'a' => array(
+						'href'   => array(),
+						'target' => array(),
+					)
+				);
+
+				/* translators: %s: Approximate email size limit in MB */
+				echo wp_kses($used.' '.sprintf(__('Be aware that mail servers tend to have size limits; typically around %s MB; backups larger than any limits will likely not arrive.', 'updraftplus'), '10-20'), $allowed_html);
 				?>
 			</td>
 		</tr>
@@ -120,5 +143,21 @@ class UpdraftPlus_BackupModule_email extends UpdraftPlus_BackupModule {
 
 	public function delete($files, $data = null, $sizeinfo = array()) {// phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- Unused parameter is present because the caller uses 3 arguments.
 		return true;
+	}
+
+	/**
+	 * Retrieve a list of template properties by taking all the persistent variables and methods of the parent class and combining them with the ones that are unique to this module, also the necessary HTML element attributes and texts which are also unique only to this backup module
+	 * NOTE: Please sanitise all strings that are required to be shown as HTML content on the frontend side (i.e. wp_kses()), or any other technique to prevent XSS attacks that could come via WP hooks
+	 *
+	 * @return array an associative array keyed by names that describe themselves as they are
+	 */
+	public function get_template_properties() {
+		$properties = array(
+			'input_email_address_type' => 'email',
+			'input_email_address_label' => __('Email address', 'updraftplus'),
+			'input_email_address_placeholder' => __('Enter your email address', 'updraftplus')
+		);
+		
+		return wp_parse_args($properties, $this->get_persistent_variables_and_methods());
 	}
 }

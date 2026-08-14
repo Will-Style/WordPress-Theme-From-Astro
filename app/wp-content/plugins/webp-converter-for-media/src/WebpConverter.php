@@ -28,7 +28,7 @@ class WebpConverter {
 		( new Action\ConvertAttachmentAction( $plugin_data ) )->init_hooks();
 		( new Action\ConvertPathsAction( $plugin_data, $method_factory ) )->init_hooks();
 		( new Action\DeleteFileHandler() )->init_hooks();
-		( new Action\DeletePathsAction( $plugin_data, $format_factory ) )->init_hooks();
+		( new Action\DeletePathsAction( $format_factory ) )->init_hooks();
 		( new Action\UploadFileHandler( $plugin_data, $token_repository, $format_factory ) )->init_hooks();
 		$directory_factory->init_hooks();
 		( new Endpoint\EndpointIntegrator( new Endpoint\CronConversionEndpoint( $plugin_data, $token_repository, $format_factory ) ) )->init_hooks();
@@ -50,7 +50,7 @@ class WebpConverter {
 		( new Loader\LoaderIntegrator( new Loader\HtaccessLoader( $plugin_info, $plugin_data, $format_factory ) ) )->init_hooks();
 		( new Loader\LoaderIntegrator( new Loader\HtaccessBypassingLoader( $plugin_info, $plugin_data, $format_factory ) ) )->init_hooks();
 		( new Loader\LoaderIntegrator( new Loader\PassthruLoader( $plugin_info, $plugin_data, $format_factory ) ) )->init_hooks();
-		( new Plugin\ActivationHandler( $plugin_info, $plugin_data, $token_repository ) )->init_hooks();
+		( new Plugin\ActivationHandler( $plugin_info ) )->init_hooks();
 		( new Plugin\DeactivationHandler( $plugin_info ) )->init_hooks();
 		( new Plugin\PluginLinksGenerator( $plugin_info, $token_repository ) )->init_hooks();
 		( new Plugin\UninstallHandler( $plugin_info ) )->init_hooks();
@@ -60,12 +60,14 @@ class WebpConverter {
 			->set_page_integration( new Page\CdnSettingsPage( $plugin_info, $plugin_data, $token_repository, $format_factory ) )
 			->set_page_integration( new Page\DebugPage( $plugin_info, $plugin_data ) )
 			->set_page_integration( new Page\BulkOptimizationPage( $plugin_info, $plugin_data, $token_repository, $format_factory ) )
+			->set_page_integration( new Page\ExpertSettingsPage( $plugin_info, $plugin_data, $token_repository, $format_factory ) )
 			->init_hooks();
 		( new Service\BackupExcluder( $plugin_data ) )->init_hooks();
 		( new Service\CacheIntegrator( $plugin_info ) )->init_hooks();
 		( new Service\CloudflareConfigurator( $plugin_info, $plugin_data ) )->init_hooks();
 		( new Service\DeactivationModalLoader( $plugin_info, $plugin_data ) )->init_hooks();
 		( new Service\MediaStatusViewer( $plugin_data, $token_repository, $format_factory ) )->init_hooks();
+		( new Service\SiteHealthDetector( $plugin_data ) )->init_hooks();
 		( new Service\RestApiUnlocker() )->init_hooks();
 		( new Service\WpCliManager( $plugin_data, $token_repository, $method_factory, $format_factory ) )->init_hooks();
 		( new Settings\AdminAssetsLoader( $plugin_info ) )->init_hooks();

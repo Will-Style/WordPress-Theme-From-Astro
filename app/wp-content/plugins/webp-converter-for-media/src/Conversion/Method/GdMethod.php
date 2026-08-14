@@ -58,7 +58,7 @@ class GdMethod extends LibraryMethodAbstract {
 	 *
 	 * @return string|null Function name using for conversion.
 	 */
-	private static function get_format_function( string $format ) {
+	private static function get_format_function( string $format ): ?string {
 		switch ( $format ) {
 			case WebpFormat::FORMAT_EXTENSION:
 				return 'imagewebp';
@@ -185,7 +185,7 @@ class GdMethod extends LibraryMethodAbstract {
 	 * @throws FunctionUnavailableException
 	 * @throws ResolutionOversizeException
 	 */
-	public function convert_image_to_output( $image, string $source_path, string $output_path, string $format, array $plugin_settings ) {
+	public function convert_image_to_output( $image, string $source_path, string $output_path, string $format, array $plugin_settings ): void {
 		$function = self::get_format_function( $format );
 		if ( $function === null ) {
 			return;

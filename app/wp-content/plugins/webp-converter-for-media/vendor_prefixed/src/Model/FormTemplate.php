@@ -30,10 +30,6 @@ class FormTemplate
     /**
      * @var string|null
      */
-    private $logo_url;
-    /**
-     * @var string|null
-     */
     private $notice_message;
     /**
      * @var string
@@ -43,42 +39,34 @@ class FormTemplate
      * @var string
      */
     private $field_name_comment = 'request_comment_%s';
-    public function __construct(string $api_url, string $form_title, string $form_desc, string $button_submit_label, string $button_skip_label, string $logo_url = null, string $notice_message = null)
+    public function __construct(string $api_url, string $form_title, string $form_desc, string $button_submit_label, string $button_skip_label, ?string $notice_message = null)
     {
         $this->api_url = $api_url;
         $this->form_title = $form_title;
         $this->form_desc = $form_desc;
         $this->button_submit_label = $button_submit_label;
         $this->button_skip_label = $button_skip_label;
-        $this->logo_url = $logo_url;
         $this->notice_message = $notice_message;
     }
-    public function get_api_url() : string
+    public function get_api_url(): string
     {
         return $this->api_url;
     }
-    public function get_form_title() : string
+    public function get_form_title(): string
     {
         return $this->form_title;
     }
-    public function get_form_desc() : string
+    public function get_form_desc(): string
     {
         return $this->form_desc;
     }
-    public function get_button_submit_label() : string
+    public function get_button_submit_label(): string
     {
         return $this->button_submit_label;
     }
-    public function get_button_skip_label() : string
+    public function get_button_skip_label(): string
     {
         return $this->button_skip_label;
-    }
-    /**
-     * @return string|null
-     */
-    public function get_logo_url()
-    {
-        return $this->logo_url;
     }
     /**
      * @return string|null
@@ -87,11 +75,11 @@ class FormTemplate
     {
         return $this->notice_message;
     }
-    public function get_field_name_reason() : string
+    public function get_field_name_reason(): string
     {
         return $this->field_name_reason;
     }
-    public function get_field_name_comment() : string
+    public function get_field_name_comment(): string
     {
         return $this->field_name_comment;
     }

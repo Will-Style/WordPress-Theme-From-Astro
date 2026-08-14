@@ -25,6 +25,7 @@
 
 	.lzb-content-title {
 		display: flex;
+		color: #000;
 		align-items: center;
 		padding: 20px;
 		padding-top: 0;
@@ -51,6 +52,7 @@
 		}
 
 		h6 {
+			color: currentColor;
 			margin: 0;
 			font-size: 13px;
 			font-weight: 600;
@@ -80,6 +82,7 @@
 	// Columns
 	.lzb-content-controls {
 		display: flex;
+		color: #000;
 		flex-wrap: wrap;
 		margin-bottom: calc(-1 * var(--lzb-controls-columns-gap));
 		margin-left: calc(-1 * var(--lzb-controls-columns-gap));
@@ -120,6 +123,17 @@
 			right: 11px;
 		}
 	}
+}
+
+/**
+ * Block validation.
+ */
+.lzb-invalid {
+	box-shadow: 0 0 0 2px #cc1818 !important;
+}
+.lzb-invalid-notice {
+	padding: 16px;
+	background-color: #f4a2a2;
 }
 
 /**
@@ -197,13 +211,20 @@
 }
 
 .lzb-date-time-picker-toggle.components-button {
-	padding: 7px 0;
+	padding: 7px;
+	margin-left: -7px;
 	text-decoration: none;
 
 	svg {
 		width: 20px;
 		margin-right: 5px;
 	}
+}
+
+.lzb-date-time-picker-reset {
+	display: flex;
+	justify-content: flex-end;
+	margin-top: 0.5rem;
 }
 
 // Color Picker control
@@ -276,7 +297,13 @@
 	position: relative;
 
 	.block-editor-link-control {
-		min-width: 100%;
+		width: 100%;
+		max-width: 100%;
+		min-width: 0;
+	}
+
+	.components-input-control {
+		margin-bottom: 0;
 	}
 
 	.block-editor-link-control__settings,
@@ -296,9 +323,9 @@
 
 		&:focus {
 			color: #191e23;
-			border-color: #007cba;
+			border-color: var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9));
 			outline: 2px solid transparent;
-			box-shadow: 0 0 0 1px #007cba;
+			box-shadow: 0 0 0 1px var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9));
 		}
 	}
 
@@ -317,12 +344,47 @@
 
 	.block-editor-link-control__search-results {
 		padding-bottom: 0;
+		margin-top: 0;
 		margin-right: -16px;
 		margin-left: -16px;
 	}
 
 	.block-editor-link-control__search-item.is-current {
 		padding: 5px 0;
+	}
+
+	.lzb-inspector-controls & {
+		.block-editor-url-input {
+			min-width: 200px;
+		}
+		.components-menu-item__item {
+			min-width: 130px;
+		}
+	}
+}
+
+// URL control in content placement.
+.lazyblocks-control-url-in-content {
+	position: relative;
+
+	.lazyblocks-control-url-in-content-button {
+		position: absolute;
+		inset: -5px;
+		opacity: 0;
+		transition: opacity 140ms ease;
+		height: auto;
+		z-index: 2;
+	}
+
+	.lazyblocks-control-url-in-content-button:hover,
+	.lazyblocks-control-url-in-content-button:focus,
+	.lazyblocks-control-url-in-content-button[aria-expanded="true"] {
+		~ .lazyblocks-control-url input[type="text"] {
+			color: #191e23;
+			border-color: var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9));
+			outline: 2px solid transparent;
+			box-shadow: 0 0 0 1px var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9));
+		}
 	}
 }
 
@@ -359,15 +421,40 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		background-color: rgba(255, 255, 255, 0.5);
+		backdrop-filter: blur(2px);
 		width: 100%;
 		height: 100%;
 		opacity: 0;
 		transition: 0.15s opacity;
+
+		> .components-button {
+			background-color: #fff;
+			color: #000;
+		}
 	}
 
 	&:hover .lzb-gutenberg-gallery-button,
 	&:hover .lzb-gutenberg-image-button {
 		opacity: 1;
+	}
+
+	.lzb-gutenberg-gallery-button-edit:hover,
+	.lzb-gutenberg-gallery-button-edit:focus {
+		color: var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9));
+	}
+
+	.lzb-gutenberg-gallery-button-remove {
+		&:hover,
+		&:focus {
+			color: #ea2c22;
+		}
+
+		svg {
+			width: 1em;
+			height: 1em;
+			fill: none;
+		}
 	}
 
 	.lzb-gutenberg-image-item,
@@ -376,7 +463,6 @@
 		display: block;
 		background-color: #e6e6e6;
 		border-radius: 3px;
-		transition: 0.15s opacity;
 
 		&::after {
 			display: block;
@@ -420,11 +506,6 @@
 	.lzb-gutenberg-image-item {
 		width: 30%;
 		margin: 0 auto;
-	}
-
-	&:hover .lzb-gutenberg-gallery-item,
-	&:hover .lzb-gutenberg-image-item {
-		opacity: 0.6;
 	}
 }
 
@@ -490,12 +571,20 @@
 }
 
 // Classic Editor control
-.lazyblocks-control-classic_editor {
+.lazyblocks-control-classic_editor-modal {
+	max-height: 70%;
+	max-width: calc(100% - 32px);
+	min-width: 350px;
+
 	.block-library-rich-text__tinymce {
 		padding: 20px;
 		border: 1px solid #757575;
 		border-radius: 0 0 2px 2px;
 		outline: none;
+	}
+
+	.mce-container-body {
+		min-width: 50vw;
 	}
 
 	.block-library-classic__toolbar {
@@ -548,9 +637,12 @@
 
 	.lzb-gutenberg-repeater-btn {
 		position: relative;
+		display: flex;
+		align-items: center;
 		width: 100%;
 		padding: 15px;
-		padding-left: 25px;
+		padding-left: 0;
+		padding-right: 0;
 		margin-bottom: -1px;
 		text-align: left;
 		cursor: pointer;
@@ -560,6 +652,8 @@
 	}
 
 	.lzb-gutenberg-repeater-btn-title {
+		flex: 1;
+
 		img {
 			width: auto;
 			height: 17px;
@@ -569,13 +663,9 @@
 
 	// Button Arrow.
 	.lzb-gutenberg-repeater-btn-arrow {
-		position: absolute;
-		top: 50%;
-		right: 0;
 		display: block;
 		font-size: 1.7em;
 		border-radius: 50%;
-		transform: translateY(-50%);
 
 		svg {
 			display: block;
@@ -592,14 +682,12 @@
 	.lzb-gutenberg-repeater-btn-active .lzb-gutenberg-repeater-btn-arrow {
 		color: #fff;
 		background-color: #1e1e1e;
-		transform: translateY(-50%) rotate(180deg);
+		transform: rotate(180deg);
 	}
 
-	// Button Remove.
+	// Button Clone & Remove.
+	.lzb-gutenberg-repeater-btn-duplicate,
 	.lzb-gutenberg-repeater-btn-remove {
-		position: absolute;
-		top: 12px;
-		right: 30px;
 		display: block;
 		width: 1.13em;
 		height: 1.13em;
@@ -608,22 +696,32 @@
 		cursor: pointer;
 		background: none;
 		border: none;
-		border-radius: 50%;
 		opacity: 0;
 
 		> svg {
 			display: block;
-			width: 1em;
-			height: 1em;
+			width: 0.8em;
+			height: 0.8em;
 			margin: 0 auto;
-			fill: currentcolor;
 		}
 	}
+	.lzb-gutenberg-repeater-btn-duplicate {
+		right: 50px;
+	}
 
-	&:hover .lzb-gutenberg-repeater-btn-remove {
+	&:hover .lzb-gutenberg-repeater-btn-duplicate,
+	.lzb-gutenberg-repeater-btn-duplicate:hover,
+	.lzb-gutenberg-repeater-btn-duplicate:focus,
+	&:hover .lzb-gutenberg-repeater-btn-remove,
+	.lzb-gutenberg-repeater-btn-remove:hover,
+	.lzb-gutenberg-repeater-btn-remove:focus {
 		opacity: 1;
 	}
 
+	.lzb-gutenberg-repeater-btn-duplicate:hover,
+	.lzb-gutenberg-repeater-btn-duplicate:focus {
+		color: var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9));
+	}
 	.lzb-gutenberg-repeater-btn-remove:hover,
 	.lzb-gutenberg-repeater-btn-remove:focus {
 		color: #ea2c22;
@@ -631,17 +729,15 @@
 
 	// Button Drag.
 	.lzb-gutenberg-repeater-btn-drag {
-		position: absolute;
-		top: 50%;
 		left: 0;
 		display: block;
 		height: auto;
 		padding: 0;
 		margin: 0;
+		margin-right: 5px;
 		font-size: 1.3em;
 		cursor: move;
 		opacity: 0.3;
-		transform: translateY(-50%);
 
 		svg {
 			display: block;
@@ -686,16 +782,40 @@
 }
 
 .lzb-gutenberg-repeater-items {
-	margin-bottom: 15px;
+	margin-bottom: 3px;
 }
 
 .lzb-gutenberg-repeater-options {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
+	text-align: center;
 
-	.components-toggle-control .components-form-toggle {
-		margin-right: 0;
+	.components-button {
+		&:not(.is-primary):not(:hover,:focus) {
+			--wp-components-color-accent: #949494;
+
+			color: #292929;
+		}
+
+		justify-content: center;
+		text-transform: uppercase;
+		font-size: 12px;
+		font-weight: 500;
+	}
+
+	.lzb-gutenberg-repeater-options-add {
+		flex: 1;
+	}
+	.lzb-gutenberg-repeater-options-expand {
+		padding-left: 6px;
+		padding-right: 6px;
+
+		svg {
+			fill: none;
+			width: 1.5em;
+			height: 1.5em;
+		}
 	}
 }
 
@@ -717,6 +837,10 @@
 
 	.components-notice {
 		margin: 0;
-		margin-top: 15px;
+		margin-top: -10px;
+		margin-bottom: 24px;
 	}
+}
+.lzb-inspector-controls-advanced > .components-panel__body {
+	margin: -16px;
 }

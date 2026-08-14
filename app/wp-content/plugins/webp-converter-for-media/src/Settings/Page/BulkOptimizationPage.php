@@ -8,11 +8,13 @@ namespace WebpConverter\Settings\Page;
  */
 class BulkOptimizationPage extends GeneralSettingsPage {
 
+	const PAGE_SLUG = null;
+
 	/**
 	 * {@inheritdoc}
 	 */
-	public function get_slug() {
-		return null;
+	public function get_slug(): ?string {
+		return self::PAGE_SLUG;
 	}
 
 	/**
@@ -25,7 +27,7 @@ class BulkOptimizationPage extends GeneralSettingsPage {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function get_menu_url() {
+	public function get_menu_url(): ?string {
 		if ( ( $_GET['page'] ?? '' ) !== PageIntegrator::UPLOAD_MENU_PAGE ) { // phpcs:ignore WordPress.Security
 			return null;
 		}
@@ -36,7 +38,7 @@ class BulkOptimizationPage extends GeneralSettingsPage {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function get_label(): string {
+	public static function get_label(): string {
 		return __( 'Bulk Optimization', 'webp-converter-for-media' );
 	}
 

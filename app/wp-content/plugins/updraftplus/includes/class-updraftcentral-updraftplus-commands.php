@@ -1,5 +1,5 @@
 <?php
-if (!defined('UPDRAFTPLUS_DIR')) die('No direct access allowed');
+if (!defined('ABSPATH')) die('No direct access allowed');
 
 /*
 This is a small glue class, which makes available all the commands in UpdraftPlus_Commands, and translates the response from UpdraftPlus_Commands (which is either data to return, or a WP_Error) into the format used by UpdraftCentral.

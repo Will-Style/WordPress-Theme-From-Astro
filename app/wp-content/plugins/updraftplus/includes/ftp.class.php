@@ -1,6 +1,8 @@
 <?php
+// phpcs:disable WordPress.WP.AlternativeFunctions.file_system_operations_fopen -- Using the default PHP fopen() function instead of the WP Filesystem API.
+// phpcs:disable WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- using the native PHP fclose() function instead of the WP Filesystem API.
 
-if (!defined('UPDRAFTPLUS_DIR')) die('No direct access allowed.');
+if (!defined('ABSPATH')) die('No direct access allowed.');
 
 /**
  * Adapted from http://www.solutionbot.com/2009/01/02/php-ftp-class/
@@ -55,9 +57,11 @@ class UpdraftPlus_ftp_wrapper {
 		if (time() - $time_start > 19) {
 			global $updraftplus_admin;
 			if (isset($updraftplus_admin->logged) && is_array($updraftplus_admin->logged)) {
+				/* translators: %s: Connection type (e.g., FTP) */
 				$updraftplus_admin->logged[] = sprintf(__('The %s connection timed out; if you entered the server correctly, then this is usually caused by a firewall blocking the connection - you should check with your web hosting company.', 'updraftplus'), 'FTP');
 			} else {
 				global $updraftplus;
+				/* translators: %s: Connection type (e.g., FTP) */
 				$updraftplus->log(sprintf(__('The %s connection timed out; if you entered the server correctly, then this is usually caused by a firewall blocking the connection - you should check with your web hosting company.', 'updraftplus'), 'FTP'), 'error');
 			}
 		}

@@ -1,0 +1,32 @@
+@use "../../helpers/responsive-variables-generator.scss" as *;
+@use "../../helpers/typography.scss" as *;
+
+tu-row {
+	display: flex;
+	flex-direction: row;
+	box-sizing: border-box;
+	gap: var(--tu-global-gap-h);
+	max-height: 100%;
+
+	&[no-column-scroll] {
+		max-height: unset;
+	}
+
+	&:not([no-wrap]) {
+		@media screen and (max-width: 1366px) {
+			flex-direction: column;
+		}
+
+		tu-column {
+			@media screen and (max-width: 1366px) {
+				flex: 1 !important;
+			}
+		}
+	}
+}
+
+tu-column {
+	overflow: scroll;
+	box-sizing: border-box;
+	flex: 1;
+}

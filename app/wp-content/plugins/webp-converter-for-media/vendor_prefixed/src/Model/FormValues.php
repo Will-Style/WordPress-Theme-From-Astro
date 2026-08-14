@@ -17,7 +17,7 @@ class FormValues
      *
      * @throws DuplicatedFormValueKeyException
      */
-    public function set_value(FormValue $new_value) : self
+    public function set_value(FormValue $new_value): self
     {
         foreach ($this->values as $value) {
             if ($value->get_key() === $new_value->get_key()) {
@@ -30,7 +30,7 @@ class FormValues
     /**
      * @return FormValue[]
      */
-    public function get_values() : array
+    public function get_values(): array
     {
         return $this->values;
     }

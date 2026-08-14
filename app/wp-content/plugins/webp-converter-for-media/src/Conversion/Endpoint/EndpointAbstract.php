@@ -12,8 +12,9 @@ abstract class EndpointAbstract implements EndpointInterface {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function is_valid_request( string $request_nonce ): bool {
-		return (bool) wp_verify_nonce( $request_nonce, 'wp_rest' );
+	public function is_valid_request( string $request_nonce, array $request_params ): bool {
+		return ( ( wp_verify_nonce( $request_nonce, 'wp_rest' ) !== false )
+			&& current_user_can( 'manage_options' ) );
 	}
 
 	/**
@@ -29,10 +30,12 @@ abstract class EndpointAbstract implements EndpointInterface {
 	public static function get_route_url(): string {
 		return get_rest_url(
 			null,
-			sprintf(
-				'%1$s/%2$s',
-				EndpointIntegrator::ROUTE_NAMESPACE,
-				static::get_route_name()
+			user_trailingslashit(
+				sprintf(
+					'%1$s/%2$s',
+					EndpointIntegrator::ROUTE_NAMESPACE,
+					static::get_route_name()
+				)
 			)
 		);
 	}

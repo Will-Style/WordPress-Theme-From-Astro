@@ -16,32 +16,20 @@ use WebpConverter\Service\ServerConfigurator;
  */
 abstract class MethodAbstract implements MethodInterface {
 
-	/**
-	 * @var CrashedFilesOperator
-	 */
-	protected $skip_crashed;
+	protected CrashedFilesOperator $skip_crashed;
 
-	/**
-	 * @var LargerFilesOperator
-	 */
-	protected $skip_larger;
+	protected LargerFilesOperator $skip_larger;
 
-	/**
-	 * @var ServerConfigurator
-	 */
-	protected $server_configurator;
+	protected ServerConfigurator $server_configurator;
 
-	/**
-	 * @var OutputPathGenerator
-	 */
-	private $output_path;
+	private OutputPathGenerator $output_path;
 
 	public function __construct(
 		FormatFactory $format_factory,
 		CrashedFilesOperator $skip_crashed,
 		LargerFilesOperator $skip_larger,
 		ServerConfigurator $server_configurator,
-		OutputPathGenerator $output_path = null
+		?OutputPathGenerator $output_path = null
 	) {
 		$this->skip_crashed        = $skip_crashed;
 		$this->skip_larger         = $skip_larger;
@@ -76,19 +64,11 @@ abstract class MethodAbstract implements MethodInterface {
 	protected $size_after = 0;
 
 	/**
-	 * @var int[]
+	 * @var mixed[]
 	 */
-	protected $files_available = [
-		WebpFormat::FORMAT_EXTENSION => 0,
-		AvifFormat::FORMAT_EXTENSION => 0,
-	];
-
-	/**
-	 * @var int[]
-	 */
-	protected $files_converted = [
-		WebpFormat::FORMAT_EXTENSION => 0,
-		AvifFormat::FORMAT_EXTENSION => 0,
+	protected $files_statuses = [
+		WebpFormat::FORMAT_EXTENSION => [],
+		AvifFormat::FORMAT_EXTENSION => [],
 	];
 
 	/**
@@ -123,14 +103,21 @@ abstract class MethodAbstract implements MethodInterface {
 	 * {@inheritdoc}
 	 */
 	public function get_files_available( string $output_format ): int {
-		return $this->files_available[ $output_format ];
+		return count( $this->files_statuses[ $output_format ] );
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
 	public function get_files_converted( string $output_format ): int {
-		return $this->files_converted[ $output_format ];
+		return count(
+			array_filter(
+				$this->files_statuses[ $output_format ],
+				function ( $value ) {
+					return ( $value === true );
+				}
+			)
+		);
 	}
 
 	/**
@@ -143,18 +130,18 @@ abstract class MethodAbstract implements MethodInterface {
 	/**
 	 * Checks server path of source image.
 	 *
-	 * @param string $source_path Server path of source image.
-	 *
-	 * @return string Server path of source image.
+	 * @param string   $source_path  Server path of source image.
+	 * @param int|null $max_filesize Maximum allowed filesize in bytes.
 	 *
 	 * @throws Exception\SourcePathException
+	 * @throws Exception\FilesizeOversizeException
 	 */
-	protected function get_image_source_path( string $source_path ): string {
+	protected function check_image_source_path( string $source_path, ?int $max_filesize = null ): void {
 		if ( ! is_readable( $source_path ) ) {
 			throw new Exception\SourcePathException( $source_path );
+		} elseif ( ( $max_filesize !== null ) && ( filesize( $source_path ) > $max_filesize ) ) {
+			throw new Exception\FilesizeOversizeException( [ $max_filesize, $source_path ] );
 		}
-
-		return $source_path;
 	}
 
 	/**
@@ -179,10 +166,8 @@ abstract class MethodAbstract implements MethodInterface {
 	 * @param string $source_path   Server path of source image.
 	 * @param string $output_path   Server path of output image.
 	 * @param string $output_format .
-	 *
-	 * @return void
 	 */
-	protected function update_conversion_stats( string $source_path, string $output_path, string $output_format ) {
+	protected function update_conversion_stats( string $source_path, string $output_path, string $output_format ): void {
 		$output_exist = file_exists( $output_path );
 		$size_before  = filesize( $source_path );
 		$size_after   = ( $output_exist ) ? filesize( $output_path ) : $size_before;
@@ -195,10 +180,8 @@ abstract class MethodAbstract implements MethodInterface {
 	 * @param string  $error_message   .
 	 * @param mixed[] $plugin_settings .
 	 * @param bool    $is_fatal_error  .
-	 *
-	 * @return void
 	 */
-	protected function save_conversion_error( string $error_message, array $plugin_settings, bool $is_fatal_error = false ) {
+	protected function save_conversion_error( string $error_message, array $plugin_settings, bool $is_fatal_error = false ): void {
 		if ( $is_fatal_error ) {
 			$this->is_fatal_error = true;
 		}

@@ -1,0 +1,70 @@
+$colors: (
+	"primary-50": #FFF5EB,
+	"primary-100": #FDE5CC,
+	"primary-200": #FDD1A5,
+	"primary-300": #FBB576,
+	"primary-400": #F79B4C,
+	"primary-500": #F38328,
+	"primary-600": #E97008,
+	"primary-700": #C4511C,
+	"primary-800": #AD2E00,
+	"primary-900": #7F1E00,
+	"secondary-0": #FFFFFF,
+	"secondary-20": #F8FBFC,
+	"secondary-50": #F1F5F8,
+	"secondary-100": #E5E7E9,
+	"secondary-200": #CED1D3,
+	"secondary-300": #B7BABD,
+	"secondary-400": #9FA4A7,
+	"secondary-500": #888D91,
+	"secondary-600": #696F72,
+	"secondary-700": #4F565B,
+	"secondary-800": #363E43,
+	"secondary-900": #1C252C,
+	"status-error-50": #FEF2F2,
+	"status-error-100": #FEE2E2,
+	"status-error-200": #FECACA,
+	"status-error-500": #F33535,
+	"status-error-600": #D90000,
+	"status-error-700": #B40000,
+	"status-error-800": #730000,
+	"status-success-50": #F2FAF2,
+	"status-success-100": #E0F2E0,
+	"status-success-200": #B8E6B8,
+	"status-success-500": #66CC66,
+	"status-success-600": #339900,
+	"status-success-700": #267300,
+	"status-success-800": #1F5C00,
+	"status-info-50": #EBF5FF,
+	"status-info-100": #E1EFFE,
+	"status-info-200": #C3DDFD,
+	"status-info-500": #3F83F8,
+	"status-info-600": #3F81D1,
+	"status-info-700": #1A56DB,
+	"status-info-800": #2C4C7C,
+	"status-warning-50": #FEFCE8,
+	"status-warning-100": #FEF9C3,
+	"status-warning-200": #FEF08A,
+	"status-warning-500": #EAB308,
+	"status-warning-600": #E9B200,
+	"status-warning-700": #997400,
+	"status-warning-800": #664E00,
+) !default;
+
+$gradients: (
+	"premium-gradient": linear-gradient(90deg, #E97008 0%, #BC2BFF 100%),
+	"premium-gradient-dark": linear-gradient(90deg, #C4511C 0%, #9E20E3 100%),
+	"premium-gradient-light": linear-gradient(270deg, #F9F4FE 0%, #FDF1F6 50%, #FEF7EF 100%),
+) !default;
+
+:root {
+	// Colors.
+	@each $name, $color in $colors {
+		--color-#{ $name }: #{ $color };
+	}
+
+	// Gradients.
+	@each $name, $color in $gradients {
+		--color-#{ $name }: #{ $color };
+	}
+}

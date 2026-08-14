@@ -23,13 +23,9 @@ input.labelauty + label
 {
 	display: inline-block;
 	font-size: 13px;
-	padding: 10px;
-	background-color: #efefef;
+	padding: 5px;
 	color: black;
 	cursor: pointer;
-	margin-top: 10px;
-	margin-right: 10px;
-	width: 96%;
 
 	border-radius: 3px 3px 3px 3px;
 	-moz-border-radius: 3px 3px 3px 3px;
@@ -48,6 +44,17 @@ input.labelauty + label
 }
 
 /* Stylish text inside label */
+input.labelauty + label {
+	display: inline-grid;
+	grid-template-columns: 30px auto auto;
+	-webkit-box-align: center;
+	    -ms-flex-align: center;
+	        align-items: center;
+	grid-column-gap: 7px;
+	-webkit-column-gap: 7px;
+	   -moz-column-gap: 7px;
+	        column-gap: 7px;
+}
 
 input.labelauty + label > span.labelauty-unchecked,
 input.labelauty + label > span.labelauty-checked
@@ -62,7 +69,7 @@ input.labelauty + label > span.labelauty-checked
 input.labelauty + label > span.labelauty-unchecked-image,
 input.labelauty + label > span.labelauty-checked-image
 {
-	display: inline-block;
+	grid-column: 1;
 	width: 30px;
 	height: 30px;
 	vertical-align: middle;
@@ -76,11 +83,12 @@ input.labelauty + label > span.labelauty-checked-image
 	-o-transition: background-image 0.5s linear;
 }
 
-/* When there's a label, add a little margin to the left */
 input.labelauty + label > span.labelauty-unchecked-image + span.labelauty-unchecked,
 input.labelauty + label > span.labelauty-checked-image + span.labelauty-checked
 {
-	margin-left: 7px;
+	grid-column: 2;
+	text-align: left;
+	justify-self: start;
 }
 
 /* When not Checked */
@@ -233,44 +241,25 @@ input.labelauty.googlecloud + label > span.labelauty-unchecked-image {
 }
 
 #remote-storage-container {
-    height: auto;
-    width: auto;
-	-moz-column-count: 2;
-	-webkit-column-count: 2;
-	column-count: 2;
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	grid-gap: 10px;
+	gap: 10px;
+	padding: 10px;
 }
 
-@media only screen and (min-width: 480px) {
+#remote-storage-container.available-remote-storages > label:first-of-type {
+	grid-column: 1 / -1;
+}
 
+@media (max-width: 768px) {
 	#remote-storage-container {
-		height: auto;
-		width: auto;
+		grid-template-columns: repeat(2, 1fr);
 	}
-
 }
 
-@media only screen and (min-width: 1000px) {
-
+@media (max-width: 480px) {
 	#remote-storage-container {
-		-moz-column-count: 3;
-		-webkit-column-count: 3;
-		column-count: 3;
-		height: auto;
-		width: auto;
+		grid-template-columns: 1fr;
 	}
-
-}
-
-@media only screen and (max-width: 480px) {
-
-	input.labelauty + label {
-		text-align: center;
-	}
-
-	input.labelauty + label > span.labelauty-unchecked-image, input.labelauty + label > span.labelauty-checked-image {
-		display: block;
-		margin: 0 auto;
-		margin-bottom: 4px;
-	}
-
 }

@@ -20,8 +20,30 @@ class Flamingo_Contact {
 				'name' => __( 'Flamingo Contacts', 'flamingo' ),
 				'singular_name' => __( 'Flamingo Contact', 'flamingo' ),
 			),
+			'public' => false,
+			'show_in_rest' => false,
 			'rewrite' => false,
 			'query_var' => false,
+			'capability_type' => array(
+			    'flamingo_edit_options',
+				'flamingo_edit_options',
+			),
+			'capabilities' => array(
+          		'edit_post' => 'flamingo_edit_contact',
+          		'read_post' => 'flamingo_edit_contact',
+          		'delete_post' => 'flamingo_delete_contact',
+          		'edit_posts' => 'flamingo_edit_contacts',
+          		'edit_others_posts' => 'flamingo_edit_contacts',
+          		'delete_posts' => 'flamingo_delete_contacts',
+          		'publish_posts' => 'flamingo_edit_contacts',
+          		'read_private_posts' => 'flamingo_edit_contacts',
+          		'read' => 'flamingo_edit_contacts',
+          		'delete_private_posts' => 'flamingo_delete_contacts',
+          		'delete_published_posts' => 'flamingo_delete_contacts',
+          		'delete_others_posts' => 'flamingo_delete_contacts',
+          		'edit_private_posts' => 'flamingo_edit_contacts',
+          		'edit_published_posts' => 'flamingo_edit_contacts',
+			),
 		) );
 
 		register_taxonomy( self::contact_tag_taxonomy, self::post_type, array(
@@ -30,8 +52,15 @@ class Flamingo_Contact {
 				'singular_name' => __( 'Flamingo Contact Tag', 'flamingo' ),
 			),
 			'public' => false,
+			'show_in_rest' => false,
 			'rewrite' => false,
 			'query_var' => false,
+			'capabilities' => array(
+				'manage_terms' => 'flamingo_edit_options',
+				'edit_terms' => 'flamingo_edit_options',
+				'delete_terms' => 'flamingo_edit_options',
+				'assign_terms' => 'flamingo_edit_options',
+			),
 		) );
 	}
 
@@ -157,20 +186,7 @@ class Flamingo_Contact {
 	}
 
 	public function __get( $name ) {
-		/* translators: 1: Property, 2: Version, 3: Class, 4: Method. */
-		$message = __( 'The visibility of the %1$s property has been changed in %2$s. Now the property may only be accessed by the %3$s class. You can use the %4$s method instead.', 'flamingo' );
-
-		if ( 'id' == $name ) {
-			if ( WP_DEBUG ) {
-				trigger_error( sprintf(
-					$message,
-					sprintf( '<code>%s</code>', 'id' ),
-					esc_html( __( 'Flamingo 2.2', 'flamingo' ) ),
-					sprintf( '<code>%s</code>', self::class ),
-					sprintf( '<code>%s</code>', 'id()' )
-				) );
-			}
-
+		if ( 'id' === $name ) {
 			return $this->id;
 		}
 	}

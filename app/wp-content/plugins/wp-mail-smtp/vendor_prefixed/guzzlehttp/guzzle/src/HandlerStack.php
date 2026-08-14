@@ -42,17 +42,17 @@ class HandlerStack
      */
     public static function create(?callable $handler = null) : self
     {
-        $stack = new self($handler ?: \WPMailSMTP\Vendor\GuzzleHttp\Utils::chooseHandler());
-        $stack->push(\WPMailSMTP\Vendor\GuzzleHttp\Middleware::httpErrors(), 'http_errors');
-        $stack->push(\WPMailSMTP\Vendor\GuzzleHttp\Middleware::redirect(), 'allow_redirects');
-        $stack->push(\WPMailSMTP\Vendor\GuzzleHttp\Middleware::cookies(), 'cookies');
-        $stack->push(\WPMailSMTP\Vendor\GuzzleHttp\Middleware::prepareBody(), 'prepare_body');
+        $stack = new self($handler ?: Utils::chooseHandler());
+        $stack->push(Middleware::httpErrors(), 'http_errors');
+        $stack->push(Middleware::redirect(), 'allow_redirects');
+        $stack->push(Middleware::cookies(), 'cookies');
+        $stack->push(Middleware::prepareBody(), 'prepare_body');
         return $stack;
     }
     /**
      * @param (callable(RequestInterface, array): PromiseInterface)|null $handler Underlying HTTP handler.
      */
-    public function __construct(callable $handler = null)
+    public function __construct(?callable $handler = null)
     {
         $this->handler = $handler;
     }
@@ -61,7 +61,7 @@ class HandlerStack
      *
      * @return ResponseInterface|PromiseInterface
      */
-    public function __invoke(\WPMailSMTP\Vendor\Psr\Http\Message\RequestInterface $request, array $options)
+    public function __invoke(RequestInterface $request, array $options)
     {
         $handler = $this->resolve();
         return $handler($request, $options);
@@ -76,13 +76,13 @@ class HandlerStack
         $depth = 0;
         $stack = [];
         if ($this->handler !== null) {
-            $stack[] = "0) Handler: " . $this->debugCallable($this->handler);
+            $stack[] = '0) Handler: ' . $this->debugCallable($this->handler);
         }
         $result = '';
         foreach (\array_reverse($this->stack) as $tuple) {
-            $depth++;
+            ++$depth;
             $str = "{$depth}) Name: '{$tuple[1]}', ";
-            $str .= "Function: " . $this->debugCallable($tuple[0]);
+            $str .= 'Function: ' . $this->debugCallable($tuple[0]);
             $result = "> {$str}\n{$result}";
             $stack[] = $str;
         }
@@ -161,12 +161,20 @@ class HandlerStack
     public function remove($remove) : void
     {
         if (!\is_string($remove) && !\is_callable($remove)) {
-            trigger_deprecation('guzzlehttp/guzzle', '7.4', 'Not passing a callable or string to %s::%s() is deprecated and will cause an error in 8.0.', __CLASS__, __FUNCTION__);
+            \trigger_deprecation('guzzlehttp/guzzle', '7.4', 'Not passing a callable or string to %s::%s() is deprecated and will cause an error in 8.0.', __CLASS__, __FUNCTION__);
         }
         $this->cached = null;
-        $idx = \is_callable($remove) ? 0 : 1;
-        $this->stack = \array_values(\array_filter($this->stack, static function ($tuple) use($idx, $remove) {
-            return $tuple[$idx] !== $remove;
+        if (\is_string($remove)) {
+            $count = \count($this->stack);
+            $this->stack = \array_values(\array_filter($this->stack, static function ($tuple) use($remove) {
+                return $tuple[1] !== $remove;
+            }));
+            if ($count !== \count($this->stack) || !\is_callable($remove)) {
+                return;
+            }
+        }
+        $this->stack = \array_values(\array_filter($this->stack, static function ($tuple) use($remove) {
+            return $tuple[0] !== $remove;
         }));
     }
     /**

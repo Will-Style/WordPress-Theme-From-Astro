@@ -1,0 +1,56 @@
+{
+    "name": "publishpress/publishpress-future",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "description": "",
+    "authors": [
+        {
+            "name": "PublishPress",
+            "email": "help@publishpress.com",
+            "homepage": "https://publishpress.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Aaron Axelsen",
+            "homepage": "http://postexpirator.tuxdocs.net/"
+        }
+    ],
+    "config": {
+        "preferred-install": {
+            "*": "dist"
+        },
+        "allow-plugins": {
+            "publishpress/dev-workspace": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "phpstan/extension-installer": true,
+            "automattic/jetpack-autoloader": true,
+            "php-http/discovery": true,
+            "composer/installers": true
+        },
+        "process-timeout": 0
+    },
+    "prefer-stable": true,
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=7.4",
+        "ext-json": "*"
+    },
+    "require-dev": {
+        "publishpress/dev-workspace": "^1.3"
+    },
+    "extra": {
+        "plugin-slug": "post-expirator",
+        "plugin-name": "publishpress-future",
+        "plugin-folder": "post-expirator",
+        "version-constant": "PUBLISHPRESS_FUTURE_VERSION",
+        "plugin-lang-domain": "post-expirator",
+        "plugin-github-repo": "publishpress/publishpress-future",
+        "plugin-composer-package": "publishpress/publishpress-future"
+    },
+    "scripts": {
+        "sync:pro": [
+            "@pack:dir",
+            "rsync -a --delete dist/post-expirator/ ../publishpress-future-pro/lib/vendor/publishpress/publishpress-future/"
+        ]
+    }
+}

@@ -26,6 +26,9 @@ class LazyBlocks_Tools {
 	public function __construct() {
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 
+		// activate/deactivate block on get request.
+		add_action( 'admin_init', array( $this, 'maybe_activate_block' ) );
+
 		// export json on get request.
 		add_action( 'admin_init', array( $this, 'maybe_export_json' ) );
 
@@ -106,6 +109,7 @@ class LazyBlocks_Tools {
 							'label',
 							'default',
 							'placement',
+							'group',
 							'width',
 							'required',
 							'hide_if_not_selected',
@@ -135,6 +139,7 @@ class LazyBlocks_Tools {
 							'placeholder'          => '',
 							'characters_limit'     => '',
 							'width'                => '100',
+							'group'                => 'settings',
 							'hide_if_not_selected' => 'false',
 							'required'             => 'false',
 							'translate'            => 'false',
@@ -143,7 +148,13 @@ class LazyBlocks_Tools {
 						);
 
 						foreach ( $default_fields_to_remove as $field => $val ) {
-							if ( isset( $block['controls'][ $k ][ $field ] ) && $val === $block['controls'][ $k ][ $field ] ) {
+							$should_remove_field = isset( $block['controls'][ $k ][ $field ] ) && $val === $block['controls'][ $k ][ $field ];
+
+							if ( ! $should_remove_field && 'group' === $field && isset( $block['controls'][ $k ][ $field ] ) ) {
+								$should_remove_field = in_array( $block['controls'][ $k ][ $field ], array( 'default', 'settings', 'list' ), true );
+							}
+
+							if ( $should_remove_field ) {
 								unset( $block['controls'][ $k ][ $field ] );
 
 								if ( 'save_in_meta' === $field && isset( $block['controls'][ $field ]['save_in_meta_name'] ) ) {
@@ -167,10 +178,10 @@ class LazyBlocks_Tools {
 	/**
 	 * Clear PHP string code.
 	 *
-	 * @param string $string code string.
+	 * @param string $code_string code string.
 	 * @return string
 	 */
-	public function clean_php_string_code( $string ) {
+	public function clean_php_string_code( $code_string ) {
 		$str_replace  = array(
 			'  '      => '    ',
 			'array (' => 'array(',
@@ -182,13 +193,13 @@ class LazyBlocks_Tools {
 		);
 
 		// change 2-spaces to 4-spaces.
-		$string = str_replace( array_keys( $str_replace ), array_values( $str_replace ), $string );
+		$code_string = str_replace( array_keys( $str_replace ), array_values( $str_replace ), $code_string );
 
 		// correct formats '=> array('.
 		// additional spaces.
-		$string = preg_replace( array_keys( $preg_replace ), array_values( $preg_replace ), $string );
+		$code_string = preg_replace( array_keys( $preg_replace ), array_values( $preg_replace ), $code_string );
 
-		return $string;
+		return $code_string;
 	}
 
 	/**
@@ -240,9 +251,10 @@ class LazyBlocks_Tools {
 		$blocks    = lazyblocks()->blocks()->get_blocks( true, true, true );
 		$templates = lazyblocks()->templates()->get_templates( true, true );
 		$data      = array(
-			'blocks'    => array(),
-			'templates' => array(),
-			'nonce'     => wp_create_nonce( 'lzb-tools-import-nonce' ),
+			'blocks'       => array(),
+			'templates'    => array(),
+			'nonce'        => wp_create_nonce( 'lzb-tools-import-nonce' ),
+			'export_nonce' => wp_create_nonce( 'lzb-export-blocks-nonce' ),
 		);
 
 		if ( ! empty( $blocks ) ) {
@@ -268,6 +280,86 @@ class LazyBlocks_Tools {
 
 		LazyBlocks_Assets::enqueue_style( 'lazyblocks-tools', 'build/admin-tools' );
 		wp_style_add_data( 'lazyblocks-tools', 'rtl', 'replace' );
+	}
+
+	/**
+	 * Activate blocks.
+	 *
+	 * @param array  $post_ids post ids.
+	 * @param string $type action type.
+	 */
+	public function activate( $post_ids, $type = 'activate' ) {
+		$count = count( $post_ids );
+
+		if ( 0 === $count ) {
+			return;
+		}
+
+		foreach ( $post_ids as $post_id ) {
+			wp_update_post(
+				array(
+					'ID'          => $post_id,
+					'post_status' => 'activate' === $type ? 'publish' : 'draft',
+				)
+			);
+		}
+
+		// Redirect.
+		wp_safe_redirect( admin_url( 'edit.php?post_type=lazyblocks&lazyblocks_activation_type=' . $type . '&lazyblocks_activate_complete=' . $count . ( 1 === $count ? '&lazyblocks_block_id=' . $post_ids[0] : '' ) ) );
+		exit;
+	}
+
+	/**
+	 * Deactivate blocks.
+	 *
+	 * @param array $post_ids post ids.
+	 */
+	public function deactivate( $post_ids ) {
+		$this->activate( $post_ids, 'deactivate' );
+	}
+
+	/**
+	 * Activate block.
+	 */
+	public function maybe_activate_block() {
+		$blocks_activated  = filter_input( INPUT_GET, 'lazyblocks_activate_complete', FILTER_SANITIZE_NUMBER_INT );
+		$activation_type   = isset( $_GET['lazyblocks_activation_type'] ) ? sanitize_text_field( wp_unslash( $_GET['lazyblocks_activation_type'] ) ) : false;
+		$block_id_complete = filter_input( INPUT_GET, 'lazyblocks_block_id', FILTER_SANITIZE_NUMBER_INT );
+
+		// Add notice for success activate.
+		if ( $blocks_activated ) {
+			$message = '';
+
+			if ( $block_id_complete ) {
+				$block_title = get_the_title( $block_id_complete );
+
+				// translators: %s - block title.
+				$message = 'activate' === $activation_type ? sprintf( esc_html__( 'Block "%s" activated successfully.', 'lazy-blocks' ), $block_title ) : sprintf( esc_html__( 'Block "%s" deactivated successfully.', 'lazy-blocks' ), $block_title );
+			} else {
+				// translators: %s - number of blocks.
+				$message = 'activate' === $activation_type ? sprintf( esc_html( _n( 'Activated %s block', 'Activated %s blocks', $blocks_activated, 'lazy-blocks' ) ), $blocks_activated ) : sprintf( esc_html( _n( 'Deactivated %s block', 'Deactivated %s blocks', $blocks_activated, 'lazy-blocks' ) ), $blocks_activated );
+			}
+
+			if ( $message ) {
+				$this->add_notice( $message, 'success' );
+			}
+		}
+
+		$nonce = isset( $_GET['lazyblocks_activate_block_nonce'] ) ? $_GET['lazyblocks_activate_block_nonce'] : false;
+		if ( ! $nonce || ! wp_verify_nonce( $nonce, 'lzb-activate-block-nonce' ) ) {
+			return;
+		}
+
+		$action  = isset( $_GET['lazyblocks_activate_block'] ) ? 'activate' : ( isset( $_GET['lazyblocks_deactivate_block'] ) ? 'deactivate' : false );
+		$post_id = filter_input( INPUT_GET, 'activate' === $action ? 'lazyblocks_activate_block' : 'lazyblocks_deactivate_block', FILTER_SANITIZE_NUMBER_INT );
+
+		if ( $post_id && $action && current_user_can( 'edit_lazyblock', $post_id ) ) {
+			if ( 'activate' === $action ) {
+				$this->activate( array( $post_id ) );
+			} elseif ( 'deactivate' === $action ) {
+				$this->deactivate( array( $post_id ) );
+			}
+		}
 	}
 
 	/**
@@ -388,6 +480,25 @@ class LazyBlocks_Tools {
 	 * Export JSON.
 	 */
 	public function maybe_export_json() {
+		// Check if any export parameters are present.
+		$has_export_params = isset( $_GET['lazyblocks_export_block'] ) ||
+							isset( $_GET['lazyblocks_export_blocks'] ) ||
+							isset( $_GET['lazyblocks_export_templates'] ) ||
+							isset( $_GET['lazyblocks_export_nonce'] );
+
+		// Exit early if no export parameters - this is the normal case on every admin page.
+		if ( ! $has_export_params ) {
+			return;
+		}
+
+		// Verify nonce for CSRF protection - required for all export operations.
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$nonce = isset( $_GET['lazyblocks_export_nonce'] ) ? sanitize_key( $_GET['lazyblocks_export_nonce'] ) : false;
+
+		if ( ! $nonce || ! wp_verify_nonce( $nonce, 'lzb-export-blocks-nonce' ) ) {
+			wp_die( esc_html__( 'Export permission denied.', 'lazy-blocks' ) );
+		}
+
 		$block_id  = filter_input( INPUT_GET, 'lazyblocks_export_block', FILTER_SANITIZE_NUMBER_INT );
 		$block_ids = filter_input_array(
 			INPUT_GET,
@@ -411,11 +522,13 @@ class LazyBlocks_Tools {
 		);
 		$template_ids = is_array( $template_ids ) && isset( $template_ids['lazyblocks_export_templates'] ) ? $template_ids['lazyblocks_export_templates'] : array();
 
-		if ( isset( $block_id ) && current_user_can( 'read_lazyblock', $block_id ) ) {
+		// Security: Only administrators with edit_lazyblocks capability can export.
+		// This prevents contributors from bypassing UI restrictions via direct URL access.
+		if ( isset( $block_id ) && current_user_can( 'edit_lazyblocks' ) ) {
 			$this->export_json( array( $block_id ) );
-		} elseif ( isset( $block_ids ) && ! empty( $block_ids ) && current_user_can( 'read_lazyblock', $block_ids[0] ) ) {
+		} elseif ( isset( $block_ids ) && ! empty( $block_ids ) && current_user_can( 'edit_lazyblocks' ) ) {
 			$this->export_json( $block_ids );
-		} elseif ( isset( $template_ids ) && ! empty( $template_ids ) && current_user_can( 'read_lazyblock', $template_ids[0] ) ) {
+		} elseif ( isset( $template_ids ) && ! empty( $template_ids ) && current_user_can( 'edit_lazyblocks' ) ) {
 			$this->export_json( $template_ids, 'templates' );
 		}
 	}
@@ -485,6 +598,7 @@ class LazyBlocks_Tools {
 			'help'                 => '',
 			'child_of'             => '',
 			'placement'            => 'content',
+			'group'                => 'settings',
 			'width'                => '100',
 			'hide_if_not_selected' => 'false',
 			'required'             => 'false',
@@ -581,7 +695,7 @@ class LazyBlocks_Tools {
 		$block_id_complete = filter_input( INPUT_GET, 'lazyblocks_duplicate_complete', FILTER_SANITIZE_NUMBER_INT );
 
 		// Duplicate block.
-		if ( isset( $block_id ) && current_user_can( 'read_lazyblock', $block_id ) ) {
+		if ( isset( $block_id ) && current_user_can( 'edit_lazyblocks' ) ) {
 			$this->duplicate_block( $block_id );
 		}
 
@@ -620,6 +734,15 @@ class LazyBlocks_Tools {
 		$new_post_author = $current_user->ID;
 
 		if ( isset( $post ) && $post ) {
+			$post_name    = $post->post_name;
+			$post_title   = $post->post_title;
+			$copy_postfix = esc_html__( '(Copy)', 'lazy-blocks' );
+
+			// Add (Copy) postfix to duplicated block title if needed.
+			if ( ! empty( $post_title ) && ! str_contains( $post_title, $copy_postfix ) ) {
+				$post_title = $post_title . ' ' . $copy_postfix;
+			}
+
 			// New post data array.
 			$args = array(
 				'comment_status' => $post->comment_status,
@@ -627,11 +750,12 @@ class LazyBlocks_Tools {
 				'post_author'    => $new_post_author,
 				'post_content'   => $post->post_content,
 				'post_excerpt'   => $post->post_excerpt,
-				'post_name'      => $post->post_name,
+				'post_name'      => $post_name,
 				'post_parent'    => $post->post_parent,
 				'post_password'  => $post->post_password,
-				'post_status'    => 'draft',
-				'post_title'     => $post->post_title,
+				// We must set the status to publish for the slug generation function (wp_unique_post_slug) to work correctly.
+				'post_status'    => 'publish',
+				'post_title'     => $post_title,
 				'post_type'      => $post->post_type,
 				'to_ping'        => $post->to_ping,
 				'menu_order'     => $post->menu_order,
@@ -640,7 +764,7 @@ class LazyBlocks_Tools {
 			// Insert new post.
 			$new_post_id = wp_insert_post( $args );
 
-			// Get all current post terms ad set them to the new post draft.
+			// Get all current post terms ad set them to the new post.
 			$taxonomies = get_object_taxonomies( $post->post_type );
 
 			foreach ( $taxonomies as $taxonomy ) {
@@ -685,10 +809,26 @@ class LazyBlocks_Tools {
 
 					foreach ( $meta_values as $meta_value ) {
 						$meta_value = maybe_unserialize( $meta_value );
+
+						if ( 'lazyblocks_slug' === $meta_key ) {
+							// Copy new post slug to meta.
+							$new_post   = get_post( $new_post_id );
+							$meta_value = $new_post->post_name;
+						}
+
 						add_post_meta( $new_post_id, $meta_key, wp_slash( $meta_value ) );
 					}
 				}
 			}
+
+			// Change the status to draft after all manipulations with the slug.
+			wp_update_post(
+				array(
+					'post_type'   => $post->post_type,
+					'ID'          => $new_post_id,
+					'post_status' => 'draft',
+				)
+			);
 
 			// Redirect.
 			wp_safe_redirect( admin_url( 'edit.php?post_type=lazyblocks&lazyblocks_duplicate_complete=' . $new_post_id ) );

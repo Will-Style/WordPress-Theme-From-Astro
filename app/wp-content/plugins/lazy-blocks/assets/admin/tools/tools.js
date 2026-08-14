@@ -47,6 +47,11 @@ export default function Templates() {
 		const typeLabel = type.charAt(0).toUpperCase() + type.slice(1);
 		let url = window.location.href;
 
+		// Add export nonce for CSRF protection
+		if (data.export_nonce) {
+			url += `&lazyblocks_export_nonce=${data.export_nonce}`;
+		}
+
 		data[type].forEach((item) => {
 			if (!disabledStates[`disabled${typeLabel}`][item.data.id]) {
 				url += `&lazyblocks_export_${type}[]=${item.data.id}`;
@@ -112,7 +117,7 @@ export default function Templates() {
 		return (
 			<>
 				<div className="lzb-export-select-items">
-					<BaseControl>
+					<BaseControl __nextHasNoMarginBottom>
 						<ToggleControl
 							label={__('Select all', 'lazy-blocks')}
 							checked={
@@ -140,6 +145,7 @@ export default function Templates() {
 									setDisabledTemplates(newDisabled);
 								}
 							}}
+							__nextHasNoMarginBottom
 						/>
 						{data[type].map((item) => {
 							const isSelected =
@@ -215,6 +221,7 @@ export default function Templates() {
 											setDisabledTemplates(newDisabled);
 										}
 									}}
+									__nextHasNoMarginBottom
 								/>
 							);
 						})}
@@ -228,6 +235,8 @@ export default function Templates() {
 								className="lzb-export-code"
 								readOnly
 								value={getPHPStringCode(type)}
+								__next40pxDefaultSize
+								__nextHasNoMarginBottom
 							/>
 						</div>
 						<div className="lzb-export-buttons">
@@ -305,13 +314,13 @@ export default function Templates() {
 								</div>
 							)}
 						</div>
-						<div className="postbox">
-							<h2 className="hndle">
-								<span>
-									{__('Export Templates', 'lazy-blocks')}
-								</span>
-							</h2>
-							{data.templates && data.templates.length ? (
+						{data.templates && data.templates.length ? (
+							<div className="postbox">
+								<h2 className="hndle">
+									<span>
+										{__('Export Templates', 'lazy-blocks')}
+									</span>
+								</h2>
 								<div className="inside">
 									<p>
 										{__(
@@ -321,16 +330,8 @@ export default function Templates() {
 
 									{renderExportContent('templates')}
 								</div>
-							) : (
-								<div className="inside">
-									<p>
-										{__(
-											'There are no templates to export.'
-										)}
-									</p>
-								</div>
-							)}
-						</div>
+							</div>
+						) : null}
 					</div>
 					<div className="postbox-container">
 						<div className="postbox">
@@ -340,7 +341,7 @@ export default function Templates() {
 							<div className="inside">
 								<p>
 									{__(
-										'Select the Lazy Blocks JSON file you would like to import. When you click the import button below, Lazy Blocks will import the blocks or templates.'
+										'Select the Lazy Blocks JSON file you want to import. When you click the import button below, Lazy Blocks will import the blocks.'
 									)}
 								</p>
 

@@ -1,6 +1,6 @@
 <?php
 
-if (!defined('UPDRAFTPLUS_DIR')) die('No direct access.');
+if (!defined('ABSPATH')) die('No direct access.');
 
 if (class_exists('UpdraftPlus_BackupModule_googlecloud')) return;
 

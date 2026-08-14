@@ -1,10 +1,9 @@
 === SEO SIMPLE PACK ===
 Contributors: looswebstudio
-Donate link: https://loos-web-studio.com/
-Tags: SEO, meta, analytics, wsebmaster, simple, japan, meta tag
+Tags: SEO, meta, analytics, wsebmaster, meta tag
 Requires at least: 4.9
-Tested up to: 6.1
-Stable tag:  3.2.0
+Tested up to: 7.0
+Stable tag: 3.7.0
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -119,6 +118,38 @@ The following hooks are available.
 
 
 == Changelog ==
+
+= 3.7.0 =
+- Support for WordPress 7.0.
+
+= 3.6.3 =
+- Support for WordPress 6.9.
+
+= 3.6.2 =
+- Fixed a bug where some items were not displayed on the taxonomy editing page.
+
+
+= 3.6.0 =
+- Support for WordPress 6.7.
+- Fixed an issue where the translation file could not be loaded properly.
+
+= 3.5.2 =
+- Fixed an issue where an error occurred on older WordPress versions.
+
+= 3.5.1 =
+- Fixed an issue where title tag was not output even for themes that did not support title-tag.
+
+= 3.5.0 =
+- Fixed an issue where duplicate title tags were being output in block themes.
+
+= 3.4.0 =
+- Support for WordPress 6.6.
+
+= 3.3.1 =
+- Fixed readme.txt file.
+
+= 3.3.0 =
+- Fixed an issue where the first part of the content of a password protected article was included in the og:description.
 
 = 3.2.0 =
 - Added 'ssp_output_og_image' hook.

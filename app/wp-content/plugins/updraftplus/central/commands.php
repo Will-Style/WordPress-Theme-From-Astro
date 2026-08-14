@@ -1,6 +1,7 @@
 <?php
-
-if (!defined('UPDRAFTCENTRAL_CLIENT_DIR')) die('No access.');
+// phpcs:disable WordPress.WP.AlternativeFunctions.file_system_operations_fclose, WordPress.WP.AlternativeFunctions.file_system_operations_fopen, WordPress.WP.AlternativeFunctions.file_system_operations_fwrite, WordPress.WP.AlternativeFunctions.file_system_operations_fgets, WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents, WordPress.WP.AlternativeFunctions.file_system_operations_mkdir, WordPress.WP.AlternativeFunctions.file_system_operations_fread, WordPress.WP.AlternativeFunctions.file_system_operations_chmod, WordPress.WP.AlternativeFunctions.file_system_operations_fputs, WordPress.WP.AlternativeFunctions.file_system_operations_is_writable, WordPress.WP.AlternativeFunctions.file_system_operations_chown, WordPress.WP.AlternativeFunctions.file_system_operations_chgrp, WordPress.WP.AlternativeFunctions.file_system_operations_touch -- Native PHP fileystem function is used for direct control and performance because it can bypass additional layers of abstraction so that no overhead from the WordPress filesystem API's internal handling
+// phpcs:disable WordPress.WP.AlternativeFunctions.rename_rename -- rename() usage is intentional and safe within this context.
+if (!defined('ABSPATH')) die('No direct access allowed');
 
 /**
  * - A container for all the RPC commands implemented. Commands map exactly onto method names (and hence this class should not implement anything else, beyond the constructor, and private methods)
@@ -98,7 +99,7 @@ abstract class UpdraftCentral_Commands {
 		$request_filesystem_credentials = ('direct' != $filesystem_method && !$filesystem_credentials_are_stored);
 
 		// Do we need to execute a backup process before installing/managing items
-		$automatic_backups = (class_exists('UpdraftPlus_Options') && class_exists('UpdraftPlus_Addon_Autobackup') && UpdraftPlus_Options::get_updraft_option('updraft_autobackup_default', true)) ? true : false;
+		$automatic_backups = (class_exists('UpdraftPlus_Options') && class_exists('UpdraftPlus_Addon_Autobackup') && UpdraftPlus_Options::get_updraft_option('updraft_autobackup_default')) ? true : false;
 		
 		return array(
 			'request_filesystem_credentials' => $request_filesystem_credentials,

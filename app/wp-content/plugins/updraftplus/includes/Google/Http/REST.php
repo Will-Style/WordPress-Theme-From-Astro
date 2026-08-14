@@ -15,6 +15,8 @@
  * limitations under the License.
  */
 
+if (!defined('ABSPATH')) die('No direct access allowed');
+
 if (!class_exists('UDP_Google_Client')) {
   require_once dirname(__FILE__) . '/../autoload.php';
 }
@@ -39,7 +41,7 @@ class UDP_Google_Http_REST
     $runner = new UDP_Google_Task_Runner(
         $client,
         sprintf('%s %s', $req->getRequestMethod(), $req->getUrl()),
-        array(get_class(), 'doExecute'),
+        array(__CLASS__, 'doExecute'),
         array($client, $req)
     );
 
@@ -107,7 +109,7 @@ class UDP_Google_Http_REST
             'retry_map'
         );
       }
-      throw new UDP_Google_Service_Exception($err, $code, null, $errors, $map);
+      throw new UDP_Google_Service_Exception($err, $code, null, $errors, $map); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- Error message to be escaped when caught and printed.
     }
 
     // Only attempt to decode the response, if the response code wasn't (204) 'no content'
@@ -123,7 +125,7 @@ class UDP_Google_Http_REST
         if ($client) {
           $client->getLogger()->error($error);
         }
-        throw new UDP_Google_Service_Exception($error);
+        throw new UDP_Google_Service_Exception($error); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- Error message to be escaped when caught and printed.
       }
 
       if ($response->getExpectedClass()) {

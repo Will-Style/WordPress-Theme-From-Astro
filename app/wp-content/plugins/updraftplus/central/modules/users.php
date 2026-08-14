@@ -1,6 +1,6 @@
 <?php
 
-if (!defined('UPDRAFTCENTRAL_CLIENT_DIR')) die('No access.');
+if (!defined('ABSPATH')) die('No direct access allowed');
 
 /**
  * Handles Users Commands
@@ -227,7 +227,7 @@ class UpdraftCentral_Users_Commands extends UpdraftCentral_Commands {
 			$network_sites = get_sites();
 		} else {
 			if (function_exists('wp_get_sites')) {
-				$network_sites = wp_get_sites();
+				$network_sites = wp_get_sites();// phpcs:ignore WordPress.WP.DeprecatedFunctions.wp_get_sitesFound -- This function was only intended for backward compatibility with versions below 4.6.
 			}
 		}
 		
@@ -356,7 +356,10 @@ class UpdraftCentral_Users_Commands extends UpdraftCentral_Commands {
 			));
 			
 			if (empty($user_query->results)) {
-				$result = array("message" => 'users_not_found');
+				$result = array(
+					"users" => array(),
+					"paging" => $this->_calculate_pages($query, 0),
+				);
 				return $this->_response($result);
 			}
 			

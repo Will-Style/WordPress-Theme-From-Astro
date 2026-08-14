@@ -5,8 +5,9 @@ namespace WPMailSMTP\UsageTracking;
 use WPMailSMTP\Admin\DomainChecker;
 use WPMailSMTP\Admin\SetupWizard;
 use WPMailSMTP\Conflicts;
-use WPMailSMTP\Debug;
+use WPMailSMTP\EmailSendingDebug;
 use WPMailSMTP\Helpers\Helpers;
+use WPMailSMTP\OptimizedEmailSending;
 use WPMailSMTP\Options;
 use WPMailSMTP\WP;
 
@@ -70,8 +71,19 @@ class UsageTracking {
 			}
 		);
 
-		// Register the action handler only if enabled.
+		// Register the action handler and error stats tracking only if enabled.
 		if ( $this->is_enabled() ) {
+			/**
+			 * Filter whether to enable error stats collection.
+			 *
+			 * @since 4.8.0
+			 *
+			 * @param bool $enabled Whether error stats collection is enabled. Default true.
+			 */
+			if ( apply_filters( 'wp_mail_smtp_usage_tracking_error_stats_enabled', true ) ) { // phpcs:ignore WPForms.PHP.ValidateHooks.InvalidHookName
+				( new ErrorStats() )->hooks();
+			}
+
 			add_filter(
 				'wp_mail_smtp_tasks_get_tasks',
 				static function ( $tasks ) {
@@ -132,6 +144,7 @@ class UsageTracking {
 				'wp_mail_smtp_version'                     => WPMS_PLUGIN_VER,
 				'wp_mail_smtp_activated'                   => get_option( 'wp_mail_smtp_activated_time', 0 ),
 				'wp_mail_smtp_mailer'                      => $options->get( 'mail', 'mailer' ),
+				'wp_mail_smtp_setup_type'                  => $this->get_setup_type( $options ),
 				'wp_mail_smtp_from_email_force'            => (bool) $options->get( 'mail', 'from_email_force' ),
 				'wp_mail_smtp_from_name_force'             => (bool) $options->get( 'mail', 'from_name_force' ),
 				'wp_mail_smtp_return_path'                 => (bool) $options->get( 'mail', 'return_path' ),
@@ -143,7 +156,9 @@ class UsageTracking {
 				'wp_mail_smtp_setup_wizard_launched_time'  => isset( $setup_wizard_stats['launched_time'] ) ? (int) $setup_wizard_stats['launched_time'] : 0,
 				'wp_mail_smtp_setup_wizard_completed_time' => isset( $setup_wizard_stats['completed_time'] ) ? (int) $setup_wizard_stats['completed_time'] : 0,
 				'wp_mail_smtp_setup_wizard_completed_successfully' => ! empty( $setup_wizard_stats['was_successful'] ),
+				'wp_mail_smtp_setup_wizard_mailer'         => isset( $setup_wizard_stats['mailer'] ) ? $setup_wizard_stats['mailer'] : '',
 				'wp_mail_smtp_source'                      => sanitize_title( get_option( 'wp_mail_smtp_source', '' ) ),
+				'wp_mail_smtp_optimize_email_sending'      => (bool) OptimizedEmailSending::is_enabled(),
 			]
 		);
 
@@ -156,10 +171,43 @@ class UsageTracking {
 		}
 
 		if ( is_multisite() ) {
-			$data['wp_mail_smtp_multisite_network_wide'] = WP::use_global_plugin_settings();
+			$use_global_settings                         = WP::use_global_plugin_settings();
+			$data['wp_mail_smtp_multisite_network_wide'] = $use_global_settings;
+
+			if ( ! $use_global_settings ) {
+				$data['wp_mail_smtp_multisite_is_subsite'] = ! is_main_site();
+			}
 		}
 
 		return apply_filters( 'wp_mail_smtp_usage_tracking_get_data', $data );
+	}
+
+	/**
+	 * How the active mailer was set up: 'quick_connect' (Gmail/Outlook One-Click or
+	 * SendLayer Quick Connect), 'manual' for any other configured mailer, or '' when none is set.
+	 *
+	 * @since 4.9.0
+	 *
+	 * @param Options $options Plugin options.
+	 *
+	 * @return string
+	 */
+	private function get_setup_type( Options $options ) {
+
+		$mailer = $options->get( 'mail', 'mailer' );
+
+		if ( empty( $mailer ) || $mailer === 'mail' ) {
+			return '';
+		}
+
+		$is_quick_connect =
+			(
+				in_array( $mailer, [ 'gmail', 'outlook' ], true ) &&
+				$options->get( $mailer, 'one_click_setup_enabled' )
+			) ||
+			( $mailer === 'sendlayer' && $options->get( 'sendlayer', 'quick_connect' ) );
+
+		return $is_quick_connect ? 'quick_connect' : 'manual';
 	}
 
 	/**
@@ -315,7 +363,7 @@ class UsageTracking {
 			$this->get_additional_data(),
 			[
 				'wp_mail_smtp_mailer'     => $options->get( 'mail', 'mailer' ),
-				'wp_mail_smtp_mail_error' => Debug::get_last(),
+				'wp_mail_smtp_mail_error' => EmailSendingDebug::get_message( 'primary' ),
 			],
 			$this->get_domain_checker_results( $domain_checker )
 		);

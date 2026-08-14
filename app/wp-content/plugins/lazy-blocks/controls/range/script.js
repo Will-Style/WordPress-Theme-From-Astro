@@ -18,19 +18,21 @@ addFilter('lzb.editor.control.range.render', 'lzb.editor', (render, props) => (
 	<BaseControl {...useBlockControlProps(props, { label: false })}>
 		<RangeControl
 			label={props.data.label}
-			min={props.data.min}
-			max={props.data.max}
-			step={props.data.step}
+			min={props.data.min === '' ? -Infinity : parseFloat(props.data.min)}
+			max={props.data.max === '' ? Infinity : parseFloat(props.data.max)}
+			step={props.data.step === '' ? 1 : parseFloat(props.data.step)}
 			value={props.getValue()}
 			onChange={(val) => {
 				props.onChange(parseFloat(val));
 			}}
+			__next40pxDefaultSize
+			__nextHasNoMarginBottom
 		/>
 	</BaseControl>
 ));
 
 /**
- * Control settings render in constructor.
+ * Control settings render in block builder.
  */
 addFilter(
 	'lzb.constructor.control.range.settings',
@@ -47,6 +49,8 @@ addFilter(
 						step={data.step}
 						value={data.min}
 						onChange={(value) => updateData({ min: value })}
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
 					/>
 				</PanelBody>
 				<PanelBody>
@@ -56,6 +60,8 @@ addFilter(
 						step={data.step}
 						value={data.max}
 						onChange={(value) => updateData({ max: value })}
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
 					/>
 				</PanelBody>
 				<PanelBody>
@@ -64,6 +70,8 @@ addFilter(
 						type="number"
 						value={data.step}
 						onChange={(value) => updateData({ step: value })}
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
 					/>
 				</PanelBody>
 			</>

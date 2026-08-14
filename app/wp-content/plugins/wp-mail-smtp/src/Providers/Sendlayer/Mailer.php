@@ -81,7 +81,7 @@ class Mailer extends MailerAbstract {
 
 		$headers = isset( $this->body['Headers'] ) ? (array) $this->body['Headers'] : [];
 
-		$headers[ $name ] = WP::sanitize_value( $value );
+		$headers[ $name ] = $this->sanitize_header_value( $name, $value );
 
 		$this->set_body_param(
 			[
@@ -388,6 +388,27 @@ class Mailer extends MailerAbstract {
 		}
 
 		return implode( WP::EOL, array_map( 'esc_textarea', array_filter( $error_text ) ) );
+	}
+
+	/**
+	 * Get the error code from the SendLayer API response.
+	 *
+	 * @since 4.8.0
+	 *
+	 * @return string
+	 */
+	public function get_response_error_code() {
+
+		if ( ! empty( $this->response ) ) {
+			$body = wp_remote_retrieve_body( $this->response );
+
+			// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+			if ( ! empty( $body->Errors ) && is_array( $body->Errors ) && ! empty( $body->Errors[0]->Code ) ) {
+				return $body->Errors[0]->Code; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+			}
+		}
+
+		return parent::get_response_error_code();
 	}
 
 	/**

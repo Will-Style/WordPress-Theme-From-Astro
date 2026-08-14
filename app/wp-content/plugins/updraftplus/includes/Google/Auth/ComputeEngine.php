@@ -15,6 +15,8 @@
  * limitations under the License.
  */
 
+if (!defined('ABSPATH')) die('No direct access allowed');
+
 if (!class_exists('UDP_Google_Client')) {
   require_once dirname(__FILE__) . '/../autoload.php';
 }
@@ -99,9 +101,9 @@ class Google_Auth_ComputeEngine extends Google_Auth_Abstract
       throw new Google_Auth_Exception(
           sprintf(
               "Error fetching service account access token, message: '%s'",
-              $response->getResponseBody()
+              $response->getResponseBody() // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- Error messages should be escaped when caught and printed.
           ),
-          $response->getResponseHttpCode()
+          $response->getResponseHttpCode() // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- HTTP code should be escaped when caught and printed.
       );
     }
   }

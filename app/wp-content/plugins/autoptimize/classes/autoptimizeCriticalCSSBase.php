@@ -280,7 +280,7 @@ class autoptimizeCriticalCSSBase {
             'unloadccss'    => get_option( 'autoptimize_ccss_unloadccss', false ),
         );
 
-        if ( strpos( $this->_options['domain'], 'http' ) === false && strpos( $this->_options['domain'], 'uggc' ) === 0 ) {
+        if ( ( strpos( $this->_options['domain'], 'http' ) === false && strpos( $this->_options['domain'], 'uggc' ) === 0 ) || 'abar' === $this->_options['domain'] ) {
             $this->_options['domain'] = str_rot13( $this->_options['domain'] );
         } elseif ( strpos( $this->_options['domain'], 'http' ) !== false ) {
             // not rot13'ed yet, do so now (goal; avoid migration plugins change the bound domain).
@@ -359,7 +359,8 @@ class autoptimizeCriticalCSSBase {
         // Attach interval to schedule.
         $schedules['ao_ccss'] = array(
             'interval' => $intsec,
-            'display'  => sprintf( __( 'Every %s (Autoptimize Crit. CSS)', 'autoptimize' ), $inttxt ),
+            // translators: the variable contains a string describing the insterval.
+            'display'  => sprintf( esc_html__( 'Every %s (Autoptimize Crit. CSS)', 'autoptimize' ), $inttxt ),
         );
         return $schedules;
     }

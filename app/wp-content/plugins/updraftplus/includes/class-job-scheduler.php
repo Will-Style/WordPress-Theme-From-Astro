@@ -1,6 +1,6 @@
 <?php
 
-if (!defined('UPDRAFTPLUS_DIR')) die('No access.');
+if (!defined('ABSPATH')) die('No access.');
 
 /**
  * A class for scheduling-related code.

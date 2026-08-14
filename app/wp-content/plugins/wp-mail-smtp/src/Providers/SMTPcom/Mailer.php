@@ -261,7 +261,7 @@ class Mailer extends MailerAbstract {
 
 		$headers = isset( $this->body['custom_headers'] ) ? (array) $this->body['custom_headers'] : array();
 
-		$headers[ $name ] = WP::sanitize_value( $value );
+		$headers[ $name ] = $this->sanitize_header_value( $name, $value );
 
 		$this->set_body_param(
 			array(
@@ -435,6 +435,31 @@ class Mailer extends MailerAbstract {
 		}
 
 		return implode( WP::EOL, array_map( 'esc_textarea', array_filter( $error_text ) ) );
+	}
+
+	/**
+	 * Get the error code from the SMTP.com API response.
+	 *
+	 * @since 4.8.0
+	 *
+	 * @return string
+	 */
+	public function get_response_error_code() {
+
+		if ( ! empty( $this->response ) ) {
+			$body = wp_remote_retrieve_body( $this->response );
+
+			// Only extract error keys when the API reports failure.
+			if ( ! empty( $body->status ) && $body->status === 'fail' && ! empty( $body->data ) ) {
+				$keys = array_keys( (array) $body->data );
+
+				if ( ! empty( $keys[0] ) ) {
+					return $keys[0];
+				}
+			}
+		}
+
+		return parent::get_response_error_code();
 	}
 
 	/**

@@ -3,10 +3,10 @@
 function get_namespace(){
     // ローディングを表示させないページ
     $disables_pages = [
-        'policy',
-        'entry',
-        'entry/complete',
-        'entry/error',
+        // 'policy',
+        // 'entry',
+        // 'entry/complete',
+        // 'entry/error',
     ];
     
     $namespace = "lower";

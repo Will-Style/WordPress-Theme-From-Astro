@@ -1,0 +1,104 @@
+@use "../../helpers/responsive-variables-generator.scss" as *;
+
+$icon-variables: (
+	"extra-extra-large": (
+		"mobile": "bu-64",
+		"desktop": "bu-64"
+	),
+	"extra-large": (
+		"mobile": "bu-48",
+		"desktop": "bu-48"
+	),
+	"large": (
+		"mobile": "bu-32",
+		"desktop": "bu-32"
+	),
+	"medium": (
+		"mobile": "bu-24",
+		"desktop": "bu-24"
+	),
+	"small": (
+		"mobile": "bu-20",
+		"desktop": "bu-20"
+	),
+	"extra-small": (
+		"mobile": "bu-18",
+		"desktop": "bu-18"
+	),
+	"extra-extra-small": (
+		"mobile": "bu-16",
+		"desktop": "bu-16"
+	)
+);
+
+@include tu-generate-responsive-variables("tu-icon", $icon-variables);
+
+
+tu-icon {
+	$self: &;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+
+	&::before {
+		--tu-icon-size: var(--tu-icon-extra-large);
+		content: "";
+		display: block;
+		width: var(--tu-icon-size);
+		height: var(--tu-icon-size);
+	}
+
+	&:not([color="original"])::before {
+		mask-image: url('./components/icon/svgs/right.svg');
+		mask-size: contain;
+		mask-repeat: no-repeat;
+		mask-position: center;
+		background: var(--color-secondary-500);
+	}
+
+	&[color="original"]::before {
+		background-image: url('./components/icon/svgs/right.svg');
+		background-size: contain;
+		background-repeat: no-repeat;
+		background-position: center;
+	}
+
+	$icon-size-map: (
+		"xxl": "extra-extra-large",
+		"xl": "extra-large",
+		"l":  "large",
+		"m":  "medium",
+		"s":  "small",
+		"xs": "extra-small",
+		"xxs": "extra-extra-small"
+	);
+
+	@each $abbr, $name in $icon-size-map {
+		&[size="#{$abbr}"]::before {
+			--tu-icon-size: var(--tu-icon-#{$name});
+		}
+	}
+
+	$icons: (
+		left,
+		check,
+		info,
+		minus,
+		right,
+		click,
+		up,
+		down,
+		"teamupdraft-logos/wp-optimize",
+	);
+
+	@each $icon in $icons {
+		&[instance="#{$icon}"]:not([color="original"])::before {
+			mask-image: url('./components/icon/svgs/#{$icon}.svg');
+		}
+
+		&[instance="#{$icon}"][color="original"]::before {
+			background-image: url('./components/icon/svgs/#{$icon}.svg');
+		}
+	}
+}

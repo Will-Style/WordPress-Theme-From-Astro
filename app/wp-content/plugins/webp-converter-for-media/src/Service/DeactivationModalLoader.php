@@ -18,25 +18,16 @@ class DeactivationModalLoader implements HookableInterface {
 
 	const API_URL = 'https://data.mattplugins.com/deactivations/%s';
 
-	/**
-	 * @var PluginInfo
-	 */
-	private $plugin_info;
+	private PluginInfo $plugin_info;
 
-	/**
-	 * @var PluginData
-	 */
-	private $plugin_data;
+	private PluginData $plugin_data;
 
-	/**
-	 * @var StatsManager
-	 */
-	private $stats_manager;
+	private StatsManager $stats_manager;
 
 	public function __construct(
 		PluginInfo $plugin_info,
 		PluginData $plugin_data,
-		StatsManager $stats_manager = null
+		?StatsManager $stats_manager = null
 	) {
 		$this->plugin_info   = $plugin_info;
 		$this->plugin_data   = $plugin_data;
@@ -46,17 +37,16 @@ class DeactivationModalLoader implements HookableInterface {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function init_hooks() {
+	public function init_hooks(): void {
 		add_action( 'load-plugins.php', [ $this, 'load_modal' ] );
 	}
 
 	/**
-	 * @return void
 	 * @throws DeactivationModal\Exception\DuplicatedFormOptionKeyException
 	 * @throws DeactivationModal\Exception\DuplicatedFormValueKeyException
 	 * @internal
 	 */
-	public function load_modal() {
+	public function load_modal(): void {
 		new DeactivationModal\Modal(
 			$this->plugin_info->get_plugin_slug(),
 			new DeactivationModal\Model\FormTemplate(
@@ -69,7 +59,6 @@ class DeactivationModalLoader implements HookableInterface {
 				__( 'Can you, please, take a moment to tell us why you are deactivating this plugin (anonymous answer)?', 'webp-converter-for-media' ),
 				__( 'Submit and Deactivate', 'webp-converter-for-media' ),
 				__( 'Skip and Deactivate', 'webp-converter-for-media' ),
-				'https://mattplugins.com/images/matt-plugins-gray.png',
 				$this->load_notice_message()
 			),
 			( new DeactivationModal\Model\FormOptions() )
@@ -174,7 +163,7 @@ class DeactivationModalLoader implements HookableInterface {
 					new DeactivationModal\Model\FormValue(
 						'request_plugin_settings',
 						function () {
-							$settings_json = json_encode( $this->plugin_data->get_public_settings() );
+							$settings_json = json_encode( $this->plugin_data->get_plugin_settings_public() );
 							return base64_encode( $settings_json ?: '' ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions
 						}
 					)
@@ -214,7 +203,7 @@ class DeactivationModalLoader implements HookableInterface {
 	/**
 	 * @return string|null
 	 */
-	private function load_notice_message() {
+	private function load_notice_message(): ?string {
 		if ( ( apply_filters( 'webpc_server_errors', [] ) !== [] ) || is_multisite() ) {
 			return null;
 		}

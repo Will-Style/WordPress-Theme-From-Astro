@@ -1,5 +1,6 @@
 <?php
-
+// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery -- we try to reduce overhead by bypassing WP APIs and other extra layers; Some custom complex queries tailored specifically to our needs, giving us full control over the SQL commands and data manipulation
+// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching -- some query operations need to always receive the most up-to-date or actual data directly from the database, reducing the risk of serving stale information
 if (!defined('ABSPATH')) die('No direct access.');
 
 /**
@@ -66,14 +67,14 @@ class Updraft_Semaphore_3_0 {
 		
 		$sql = $wpdb->prepare("SELECT COUNT(*) FROM {$wpdb->options} WHERE option_name = %s", $this->option_name);
 		
-		if (1 === (int) $wpdb->get_var($sql)) {
+		if (1 === (int) $wpdb->get_var($sql)) { // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- $sql is already prepared via $wpdb->prepare() above
 			$this->log('Lock option ('.$this->option_name.', '.$wpdb->options.') already existed in the database', 'debug');
 			return 1;
 		}
 		
 		$sql = $wpdb->prepare("INSERT INTO {$wpdb->options} (option_name, option_value, autoload) VALUES(%s, '0', 'no');", $this->option_name);
 		
-		$rows_affected = $wpdb->query($sql);
+		$rows_affected = $wpdb->query($sql); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- $sql is already prepared via $wpdb->prepare() above
 		
 		if ($rows_affected > 0) {
 			$this->log('Lock option ('.$this->option_name.', '.$wpdb->options.') was created in the database', 'debug');
@@ -102,7 +103,7 @@ class Updraft_Semaphore_3_0 {
 		
 		$sql = $wpdb->prepare("UPDATE {$wpdb->options} SET option_value = %s WHERE option_name = %s AND option_value < %d", $acquire_until, $this->option_name, $time_now);
 		
-		if (1 === $wpdb->query($sql)) {
+		if (1 === $wpdb->query($sql)) { // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- $sql is already prepared via $wpdb->prepare() above
 			$this->log('Lock ('.$this->option_name.', '.$wpdb->options.') acquired', 'info');
 			$this->acquired = true;
 			return true;
@@ -113,7 +114,7 @@ class Updraft_Semaphore_3_0 {
 		
 		do {
 			// Now that the row has been created, try again
-			if (1 === $wpdb->query($sql)) {
+			if (1 === $wpdb->query($sql)) { // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- $sql is already prepared via $wpdb->prepare() above
 				$this->log('Lock ('.$this->option_name.', '.$wpdb->options.') acquired after initialising the database', 'info');
 				$this->acquired = true;
 				return true;
@@ -148,7 +149,7 @@ class Updraft_Semaphore_3_0 {
 		
 		$this->log('Lock option ('.$this->option_name.', '.$wpdb->options.') released', 'info');
 		
-		$result = (int) $wpdb->query($sql) === 1;
+		$result = (int) $wpdb->query($sql) === 1; // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- $sql is already prepared via $wpdb->prepare() above
 		
 		$this->acquired = false;
 		

@@ -33,13 +33,54 @@ addFilter('lzb.editor.control.number.render', 'lzb.editor', (render, props) => {
 				onChange={(val) => {
 					props.onChange(parseFloat(val));
 				}}
+				__next40pxDefaultSize
+				__nextHasNoMarginBottom
 			/>
 		</BaseControl>
 	);
 });
 
 /**
- * Control settings render in constructor.
+ * Required check.
+ *
+ * @param {Object} validationData
+ * @param {number} value
+ * @param {Object} data
+ *
+ * @return {Object} validation data.
+ */
+function validate(validationData, value, data) {
+	if (value === '' || isNaN(value)) {
+		return { valid: false };
+	}
+
+	if (data.min !== '' && value < parseInt(data.min, 10)) {
+		return {
+			valid: false,
+			message: `Value must be greater than or equal to ${parseInt(
+				data.min,
+				10
+			)}.`,
+		};
+	}
+
+	if (data.max !== '' && value > parseInt(data.max, 10)) {
+		return {
+			valid: false,
+			message: `Value must be less than or equal to ${parseInt(
+				data.max,
+				10
+			)}.`,
+		};
+	}
+
+	return validationData;
+}
+addFilter('lzb.editor.control.number.validate', 'lzb.editor', validate);
+addFilter('lzb.editor.control.range.validate', 'lzb.editor', validate);
+
+/**
+ * Control settings render in block builder.
  */
 addFilter(
 	'lzb.constructor.control.number.settings',
@@ -56,6 +97,8 @@ addFilter(
 						step={data.step}
 						value={data.min}
 						onChange={(value) => updateData({ min: value })}
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
 					/>
 				</PanelBody>
 				<PanelBody>
@@ -65,6 +108,8 @@ addFilter(
 						step={data.step}
 						value={data.max}
 						onChange={(value) => updateData({ max: value })}
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
 					/>
 				</PanelBody>
 				<PanelBody>
@@ -73,6 +118,8 @@ addFilter(
 						type="number"
 						value={data.step}
 						onChange={(value) => updateData({ step: value })}
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
 					/>
 				</PanelBody>
 				<PanelBody>
@@ -80,6 +127,8 @@ addFilter(
 						label={__('Placeholder', 'lazy-blocks')}
 						value={data.placeholder}
 						onChange={(value) => updateData({ placeholder: value })}
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
 					/>
 				</PanelBody>
 			</>

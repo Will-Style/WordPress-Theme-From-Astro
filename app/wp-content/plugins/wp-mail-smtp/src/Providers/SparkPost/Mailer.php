@@ -131,10 +131,7 @@ class Mailer extends MailerAbstract {
 		}
 
 		$headers = isset( $this->body['content']['headers'] ) ? (array) $this->body['content']['headers'] : [];
-
-		if ( ! in_array( $name, [ 'Message-ID', 'CC' ], true ) ) {
-			$value = WP::sanitize_value( $value );
-		}
+		$value   = $this->sanitize_header_value( $name, $value );
 
 		$headers[ $name ] = $value;
 
@@ -471,6 +468,26 @@ class Mailer extends MailerAbstract {
 		}
 
 		return implode( WP::EOL, array_map( 'esc_textarea', array_filter( $error_text ) ) );
+	}
+
+	/**
+	 * Get the error code from the SparkPost API response.
+	 *
+	 * @since 4.8.0
+	 *
+	 * @return string
+	 */
+	public function get_response_error_code() {
+
+		if ( ! empty( $this->response ) ) {
+			$body = wp_remote_retrieve_body( $this->response );
+
+			if ( ! empty( $body->errors ) && is_array( $body->errors ) && ! empty( $body->errors[0]->code ) ) {
+				return $body->errors[0]->code;
+			}
+		}
+
+		return parent::get_response_error_code();
 	}
 
 	/**

@@ -20,7 +20,7 @@ class ImagesQualityOption extends OptionAbstract {
 	 * {@inheritdoc}
 	 */
 	public function get_form_name(): string {
-		return OptionAbstract::FORM_TYPE_BASIC;
+		return OptionAbstract::FORM_TYPE_GENERAL;
 	}
 
 	/**
@@ -33,7 +33,7 @@ class ImagesQualityOption extends OptionAbstract {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function get_label(): string {
+	public static function get_label(): string {
 		return __( 'Conversion strategy', 'webp-converter-for-media' );
 	}
 
@@ -70,13 +70,19 @@ class ImagesQualityOption extends OptionAbstract {
 	 * @return string[]
 	 */
 	public function get_available_values( array $settings ): array {
-		$levels = apply_filters( 'webpc_option_quality_levels', [ '75', '80', '85', '90', '95' ] );
+		$levels = apply_filters( 'webpc_option_quality_levels', [ 75, 80, 85, 90, 95 ] );
+		$levels = [
+			intval( $levels[0] ?? 75 ),
+			intval( $levels[1] ?? 80 ),
+			intval( $levels[2] ?? 85 ),
+			intval( $levels[3] ?? 90 ),
+			intval( $levels[4] ?? 95 ),
+		];
 
 		$values = [];
 		foreach ( $levels as $level ) {
-			$level_value = (int) $level;
-			if ( ( $level_value > 0 ) && ( $level_value <= 100 ) ) {
-				$values[ $level_value ] = sprintf( '%s%%', $level_value );
+			if ( ( $level > 0 ) && ( $level <= 100 ) ) {
+				$values[ $level ] = sprintf( '%s%%', $level );
 			}
 		}
 		ksort( $values );
@@ -86,16 +92,19 @@ class ImagesQualityOption extends OptionAbstract {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function get_default_value( array $settings = null ): string {
+	public function get_default_value(): string {
 		return '85';
 	}
 
-	public function validate_value( $current_value, array $available_values = null, array $disabled_values = null ) {
+	/**
+	 * {@inheritdoc}
+	 */
+	public function validate_value( $current_value, ?array $available_values = null, ?array $disabled_values = null ) {
 		if ( $current_value === '100' ) {
 			return '95';
 		} elseif ( ! array_key_exists( $current_value, $available_values ?: [] )
 			|| in_array( $current_value, $disabled_values ?: [] ) ) {
-			return null;
+			return $this->get_default_value();
 		}
 
 		return $current_value;
@@ -105,7 +114,7 @@ class ImagesQualityOption extends OptionAbstract {
 	 * {@inheritdoc}
 	 */
 	public function sanitize_value( $current_value ): string {
-		$values = apply_filters( 'webpc_option_quality_levels', [ '75', '80', '85', '90', '95' ] );
+		$values = apply_filters( 'webpc_option_quality_levels', [ 75, 80, 85, 90, 95 ] );
 
 		return $this->validate_value(
 			$current_value,

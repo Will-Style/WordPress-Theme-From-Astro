@@ -6,7 +6,9 @@ function _feed_request($vars) {
     if ( isset( $vars['feed'] ) && !isset( $vars['post_type'] ) ) {
         $vars['post_type'] = array(
             'post',
-            'blog',
+            'interview',
+            'talk',
+            'requirements'
         );
     }
     return $vars;

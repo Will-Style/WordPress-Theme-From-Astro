@@ -51,7 +51,7 @@ class Admin_Bar {
 	 * @return void
 	 */
 	public function register_hooks() {
-		if ( \intval( Utils::get_option( 'duplicate_post_show_link_in', 'adminbar' ) ) === 1 ) {
+		if ( (int) Utils::get_option( 'duplicate_post_show_link_in', 'adminbar' ) === 1 ) {
 			\add_action( 'wp_before_admin_bar_render', [ $this, 'admin_bar_render' ] );
 			\add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_styles' ] );
 			\add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_styles' ] );
@@ -78,8 +78,8 @@ class Admin_Bar {
 			return;
 		}
 
-		$show_new_draft             = ( \intval( Utils::get_option( 'duplicate_post_show_link', 'new_draft' ) ) === 1 );
-		$show_rewrite_and_republish = ( \intval( Utils::get_option( 'duplicate_post_show_link', 'rewrite_republish' ) ) === 1 )
+		$show_new_draft             = ( (int) Utils::get_option( 'duplicate_post_show_link', 'new_draft' ) === 1 );
+		$show_rewrite_and_republish = ( (int) Utils::get_option( 'duplicate_post_show_link', 'rewrite_republish' ) === 1 )
 									&& $this->permissions_helper->should_rewrite_and_republish_be_allowed( $post );
 
 		if ( $show_new_draft && $show_rewrite_and_republish ) {
@@ -88,7 +88,7 @@ class Admin_Bar {
 					'id'    => 'duplicate-post',
 					'title' => '<span class="ab-icon"></span><span class="ab-label">' . \__( 'Duplicate Post', 'duplicate-post' ) . '</span>',
 					'href'  => $this->link_builder->build_new_draft_link( $post ),
-				]
+				],
 			);
 			$wp_admin_bar->add_menu(
 				[
@@ -96,7 +96,7 @@ class Admin_Bar {
 					'parent' => 'duplicate-post',
 					'title'  => \__( 'Copy to a new draft', 'duplicate-post' ),
 					'href'   => $this->link_builder->build_new_draft_link( $post ),
-				]
+				],
 			);
 			$wp_admin_bar->add_menu(
 				[
@@ -104,7 +104,7 @@ class Admin_Bar {
 					'parent' => 'duplicate-post',
 					'title'  => \__( 'Rewrite & Republish', 'duplicate-post' ),
 					'href'   => $this->link_builder->build_rewrite_and_republish_link( $post ),
-				]
+				],
 			);
 		}
 		else {
@@ -114,7 +114,7 @@ class Admin_Bar {
 						'id'     => 'new-draft',
 						'title'  => '<span class="ab-icon"></span><span class="ab-label">' . \__( 'Copy to a new draft', 'duplicate-post' ) . '</span>',
 						'href'   => $this->link_builder->build_new_draft_link( $post ),
-					]
+					],
 				);
 			}
 
@@ -124,7 +124,7 @@ class Admin_Bar {
 						'id'     => 'rewrite-republish',
 						'title'  => '<span class="ab-icon"></span><span class="ab-label">' . \__( 'Rewrite & Republish', 'duplicate-post' ) . '</span>',
 						'href'   => $this->link_builder->build_rewrite_and_republish_link( $post ),
-					]
+					],
 				);
 			}
 		}

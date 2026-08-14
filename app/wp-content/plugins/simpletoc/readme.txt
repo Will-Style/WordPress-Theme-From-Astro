@@ -1,15 +1,15 @@
 === SimpleTOC - Table of Contents Block ===
 Contributors: MarcDK
-Tags: Gutenberg, block, TOC, Table of Contents, AMP
-Requires at least: 5.9
-Donate link: https://marc.tv/out/donate
-Tested up to: 6.3
-Stable tag: 6.0.10
-Requires PHP: 7.0
+Tags: TOC, Table of Contents, Block, Accessibility, Table
+Requires at least: 6.2
+Tested up to: 7.0
+Stable tag: 7.1.1
+Requires PHP: 7.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Donate link: https://marc.tv/out/donate
 
-SEO-friendly Table of Contents Gutenberg block. No JavaScript and no CSS means faster loading.
+SEO-friendly Table of Contents Gutenberg block. No JavaScript or CSS by default.
 
 == Description ==
 
@@ -17,21 +17,39 @@ Add a Table of Contents block to your posts and pages. The TOC is a nested list 
 
 The maximum depth of the toc can be configured in in the blocks' sidebar among many other options. There can hide the headline "Table of Contents" and add your own by using a normal heading block.  
 
-SimpleTOC is open-source and developed on [GitHub Pages](https://github.com/mtoensing/SimpleTOC). If you find a bug or have an idea for a feature please feel free to contribute and create a pull request. 
-
 [Spin up](https://demo.tastewp.com/simpletoc) a new WordPress instance with the SimpleTOC plugin already installed.
+
+= User Feedback =
+
+> "It is lightweight, stable, and fully compatible with WordPress Full Site Editing. A reliable solution that integrates seamlessly and performs exactly as expected."
+— [@js100 on wordpress.org](https://wordpress.org/support/topic/good-job-1889/)
+
+> "Does the job perfectly, and adds no bloat."
+— [@clicknathan on wordpress.org](https://wordpress.org/support/topic/does-the-job-perfectly-and-adds-no-bloat/)
+
+> "Simple yet powerful. Great plugin that does exactly what you need."
+— [@mixey on wordpress.org](https://wordpress.org/support/topic/simple-yet-powerful-106/)
+
+= Accessibility =
+
+This plugin is designed & developed for WCAG 2.2 level AA conformance. The plugin is tested with assistive technology and intended to be accessible, however some third party plugins or themes may affect the individual accessibility on a given website. If you find an accessibility issue, please [let us know](https://github.com/mtoensing/simpletoc/issues) and we'll try to address it promptly.
+Hidden TOCs use native `<details>` and `<summary>` semantics without extra ARIA references that require custom IDs.
 
 = Features =
 
 * Designed for Gutenberg.
 * Zero configuration: Add the SimpleTOC block to your post and that's it. 
 * Minimal and valid HTML output.
-* No JavaScript or CSS added. Unless you activate the accordion menu.
+* Utilizes the browser's built-in details tag for a collapsible interface.
+* No JavaScript or CSS by default. Optional features such as the accordion menu, smooth scrolling, or box style add minimal assets only when enabled.
+* Optional box style for the TOC with a default gray background.
 * Style SimpleTOC with Gutenberg's native group styling options.
 * Inherits the style of your theme.
 * Smooth scrolling effect using CSS. 
+* Accessibility built-in by following web standards.
 * Optional ARIA Label and navigation role attributes.
 * Translated in [multiple languages](https://translate.wordpress.org/projects/wp-plugins/simpletoc/). Including German, Japanese, Chinese (Taiwan), Dutch, Brazilian Portuguese, French, Spanish and Latvia.
+* Ideal for creating a Frequently Asked Questions section on your website.
 
 = Customization = 
 
@@ -40,6 +58,7 @@ SimpleTOC is open-source and developed on [GitHub Pages](https://github.com/mtoe
 * Native block support for wide and full width.
 * Control the maximum depth of the headings.
 * Choose between an ordered, bullet HTML list. Or indent the list.
+* Enable a box style and choose a box color directly in the block sidebar.
 * Select a heading level or turn it into a paragraph.
 * Disable the h2 heading of the TOC block and add your own.
 
@@ -48,18 +67,31 @@ SimpleTOC is open-source and developed on [GitHub Pages](https://github.com/mtoe
 * GeneratePress and Rank Math support.
 * Works with popular AMP plugins.
 
+= How to contribute = 
+
+SimpleTOC is open-source and developed on [GitHub Pages](https://github.com/mtoensing/SimpleTOC). If you find a bug or have an idea for a feature please feel free to contribute and create a pull request. 
+
 == Changelog ==
+= 7.1.1 =
+* Fixed: Prevented WordPress HTML API notices when nested block content is not a string.
+* Fixed: Escaped TOC links and titles before rendering them.
+* Fixed: Preserved legacy SimpleTOC block validity in the WordPress editor.
 
-= 6.0.10 =
-* Added aria-hidden attribute to icon in accordion. Thanks Alex Stine!
+= 7.1.0 =
+* Fixed: Avoid DOMDocument HTML parsing for highlighted heading markup by using the WordPress HTML API.
+* Changed: Minimum required WordPress version is now 6.2.
+* Added: PHPUnit coverage for core rendering helpers and an editor e2e smoke test.
 
-= 6.0.9 =
-* Added ARIA accessibility labels for the accordion. Thanks Amber Hinds!
-* Fixed: Caching of accordion JavaScript. Thanks jghitchcock!
-* Added correct ARIA controls attribute.
+= 7.0.10 =
+* Fixed: Prevent the SimpleTOC editor preview from collapsing during WordPress autosaves.
+* Changed: Automatic editor refresh now runs after manual post saves and keeps the previous TOC visible while updating.
 
-= 6.0.5 =
-* Compatibilty with WordPress 6.3
+= 7.0.9 =
+* Fixed: Restored WordPress 7.0 editor previews for existing SimpleTOC blocks that contain legacy editor-only attributes.
+* Fixed: The "Hide SimpleTOC" editor toggle no longer stores a redundant helper attribute.
+
+= 7.0.8 =
+* Fixed: Prevent editor preview errors when another plugin adds editor-only attributes to blocks, for example Noted! block notes. Thanks Hans-Gerd Gerhards (@hage).
 
 == Installation ==
 
@@ -81,7 +113,7 @@ Select the block and select "group" in the context menu. Apply "background color
 
 If you really want to hide a single heading from the table of contents, then add the CSS class "simpletoc-hidden" to a heading block. You can find this field in the same place as the HTML anchor field: In the Block > Advanced sidebar. But first, think about the reason you would like to hide a specific heading. Maybe you would like to remove all headings of a specific depth level. Then there is an option for that in the blocks options in Gutenberg. If you think this heading should not be part of the toc perhaps it is not needed in the post itself?
 
-= I would like to save my SimpleTOC settings as default. Is that possible?
+= I would like to save my SimpleTOC settings as default. Is that possible? =
 
 You can convert your configured SimpleTOC block into a reusable block in Gutenberg. It will keep its settings. This way, you can use your desired settings for each new post by adding the reusable block.
 
@@ -128,8 +160,8 @@ I don’t see an easy solution at the moment. SimpleTOC is only a block that can
 
 == Credits ==
 
-This plugin is forked from [pdewouters](https://github.com/pdewouters/gutentoc) and uses code from [Easy-Table-of-Contents](https://github.com/shazahm1/Easy-Table-of-Contents)
-
 Many thanks to [Tom J Nowell](https://tomjn.com) and and Sally CJ who both helped me a lot with my questions over at wordpress.stackexchange.com
 
-Thanks to Quintus Valerius Soranus for inventing the Table of Contents around 100 BC. 
+And many more thanks to all the [developers on GitHub](https://github.com/mtoensing/simpletoc/graphs/contributors) who helped me making SimpleTOC what it is today!
+
+Thanks to Quintus Valerius Soranus for inventing the Table of Contents around 100 BC.

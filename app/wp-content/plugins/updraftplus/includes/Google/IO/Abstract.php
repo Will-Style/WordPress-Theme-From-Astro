@@ -19,6 +19,8 @@
  * Abstract IO base class
  */
 
+if (!defined('ABSPATH')) die('No direct access allowed');
+
 if (!class_exists('UDP_Google_Client')) {
   require_once dirname(__FILE__) . '/../autoload.php';
 }
@@ -142,7 +144,7 @@ abstract class UDP_Google_IO_Abstract
     }
 
     if (!isset($responseHeaders['Date']) && !isset($responseHeaders['date'])) {
-      $responseHeaders['date'] = date("r");
+      $responseHeaders['date'] = gmdate("r");
     }
 
     $request->setResponseHttpCode($respHttpCode);

@@ -14,7 +14,7 @@
  * - Call $updraftplus->log("my log message") to log things, which greatly helps debugging
  * - UpdraftPlus is licenced under the GPLv3 or later. In order to combine your backup method with UpdraftPlus, you will need to licence to anyone and everyone that you distribute it to in a compatible way.
  */
-if (!defined('UPDRAFTPLUS_DIR')) die('No direct access allowed.');
+if (!defined('ABSPATH')) die('No direct access allowed.');
 
 if (!class_exists('UpdraftPlus_BackupModule')) updraft_try_include_file('methods/backup-module.php', 'require_once');
 
@@ -101,7 +101,7 @@ class UpdraftPlus_BackupModule_template extends UpdraftPlus_BackupModule {
 		$classes = $this->get_css_classes();
 	
 		?>
-			<tr class="updraftplusmethod <?php echo $classes;?>">
+			<tr class="updraftplusmethod <?php echo esc_attr($classes);?>">
 				<th>My Method:</th>
 				<td>
 					

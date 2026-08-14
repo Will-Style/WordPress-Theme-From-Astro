@@ -1,6 +1,6 @@
 <?php
 
-if (!defined('UPDRAFTPLUS_DIR')) die('No direct access allowed.');
+if (!defined('ABSPATH')) die('No direct access allowed.');
 
 // SDK uses namespacing - requires PHP 5.3 (actually the SDK states its requirements as 5.3.3)
 // @codingStandardsIgnoreLine
@@ -9,6 +9,41 @@ use OpenCloud\OpenStack;
 updraft_try_include_file('methods/openstack-base.php', 'require_once');
 
 class UpdraftPlus_BackupModule_openstack extends UpdraftPlus_BackupModule_openstack_base {
+
+	/**
+	 * Input and option field mappings with default values and supported contexts.
+	 *
+	 * @var array
+	 */
+	protected $input_option_field_mappings = array(
+		'authurl' => array(
+			'default_value' => '',
+			'template_property_input_mapping' => 'authentication_uri',
+			'contexts' => array('option', 'input'),
+		),
+		'tenant' => array(
+			'default_value' => '',
+			'contexts' => array('option', 'input'),
+		),
+		'region' => array(
+			'default_value' => '',
+			'contexts' => array('option', 'input'),
+		),
+		'user' => array(
+			'default_value' => '',
+			'template_property_input_mapping' => 'username',
+			'contexts' => array('option', 'input'),
+		),
+		'password' => array(
+			'default_value' => '',
+			'contexts' => array('option', 'input'),
+		),
+		'path' => array(
+			'default_value' => '',
+			'template_property_input_mapping' => 'container',
+			'contexts' => array('option', 'input'),
+		),
+	);
 
 	public function __construct() {
 		// 4th parameter is a relative (to UPDRAFTPLUS_DIR) logo URL, which should begin with /, should we get approved for use of the OpenStack logo in future (have requested info)
@@ -30,7 +65,9 @@ class UpdraftPlus_BackupModule_openstack extends UpdraftPlus_BackupModule_openst
 
 		if (null === $disablesslverify) $disablesslverify = UpdraftPlus_Options::get_updraft_option('updraft_ssl_disableverify');
 
-		if (empty($user) || empty($password) || empty($authurl)) throw new Exception(__('Authorisation failed (check your credentials)', 'updraftplus'));// phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- $user, $password and $authurl being extracted in extract() line 29
+		if (empty($user) || empty($password) || empty($authurl)) { // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- $user, $password and $authurl being extracted in extract() line 29
+			throw new Exception(__('Authorisation failed (check your credentials)', 'updraftplus')); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- Error message to be escaped when caught and printed.
+		}
 
 		updraft_try_include_file('vendor/autoload.php', 'include_once');
 		global $updraftplus;
@@ -92,42 +129,30 @@ class UpdraftPlus_BackupModule_openstack extends UpdraftPlus_BackupModule_openst
 		// This options format is handled via only accessing options via $this->get_options()
 		return array('multi_options', 'config_templates', 'multi_storage', 'conditional_logic');
 	}
-
-	/**
-	 * Retrieve default options for this remote storage module.
-	 *
-	 * @return Array - an array of options
-	 */
-	public function get_default_options() {
-		return array(
-			'user' => '',
-			'authurl' => '',
-			'password' => '',
-			'tenant' => '',
-			'path' => '',
-			'region' => ''
-		);
-	}
 	
 	public function credentials_test($posted_settings) {
 
 		if (empty($posted_settings['user'])) {
-			printf(__("Failure: No %s was given.", 'updraftplus'), __('username', 'updraftplus'));
+			/* translators: %s: Username */
+			echo esc_html(sprintf(__("Failure: No %s was given.", 'updraftplus'), __('username', 'updraftplus')));
 			return;
 		}
 
 		if (empty($posted_settings['password'])) {
-			printf(__("Failure: No %s was given.", 'updraftplus'), __('password', 'updraftplus'));
+			/* translators: %s: Password */
+			echo esc_html(sprintf(__("Failure: No %s was given.", 'updraftplus'), __('password', 'updraftplus')));
 			return;
 		}
 
 		if (empty($posted_settings['tenant'])) {
-			printf(__("Failure: No %s was given.", 'updraftplus'), _x('tenant', '"tenant" is a term used with OpenStack storage - Google for "OpenStack tenant" to get more help on its meaning', 'updraftplus'));
+			/* translators: %s: Tenant (used in OpenStack storage) */
+			echo esc_html(sprintf(__("Failure: No %s was given.", 'updraftplus'), _x('tenant', '"tenant" is a term used with OpenStack storage - Google for "OpenStack tenant" to get more help on its meaning', 'updraftplus')));
 			return;
 		}
 
 		if (empty($posted_settings['authurl'])) {
-			printf(__("Failure: No %s was given.", 'updraftplus'), __('authentication URI', 'updraftplus'));
+			/* translators: %s: Authentication URI */
+			echo esc_html(sprintf(__("Failure: No %s was given.", 'updraftplus'), __('authentication URI', 'updraftplus')));
 			return;
 		}
 
@@ -170,7 +195,7 @@ class UpdraftPlus_BackupModule_openstack extends UpdraftPlus_BackupModule_openst
 				{{{mb_substr_existence_label}}}
 				{{{curl_existence_label}}}
 				<br>
-				<p>{{openstack_text_description}} <a href="{{faq_link_url}}" target="_blank">{{faq_link_text}}</a></p>
+				<p>{{openstack_text_description}} <a href="{{{faq_link_url}}}" target="_blank">{{faq_link_text}}</a></p>
 			</td>
 		</tr>
 
@@ -236,27 +261,71 @@ class UpdraftPlus_BackupModule_openstack extends UpdraftPlus_BackupModule_openst
 	 */
 	public function get_template_properties() {
 		global $updraftplus, $updraftplus_admin;
+
+		$mb_substr_existence_label = '';
+		if (!apply_filters('updraftplus_openstack_mbsubstr_exists', function_exists('mb_substr'))) {
+			$mb_substr_existence_label = wp_kses($updraftplus_admin->show_double_warning(
+				'<strong>'.__('Warning', 'updraftplus').':</strong> '.
+				/* translators: %s: Required module name */
+				sprintf(__('Your web server\'s PHP installation does not include a required module (%s).', 'updraftplus'), 'mbstring').' '.
+				__('Please contact your web hosting provider\'s support.', 'updraftplus').' '.
+				/* translators: 1: Module name, 2: Required module name */
+				sprintf(__('UpdraftPlus\'s %1$s module <strong>requires</strong> %2$s.', 'updraftplus'), $this->desc, 'mbstring').' '.
+				__('Please do not file any support requests; there is no alternative.', 'updraftplus'),
+				$this->method,
+				false
+			), $this->allowed_html_for_content_sanitisation());
+		}
+
 		$properties = array(
 			'storage_image_url' => !empty($this->img_url) ? UPDRAFTPLUS_URL.$this->img_url : '',
 			'storage_long_description' => $this->long_desc,
-			'mb_substr_existence_label' => !apply_filters('updraftplus_openstack_mbsubstr_exists', function_exists('mb_substr')) ? wp_kses($updraftplus_admin->show_double_warning('<strong>'.__('Warning', 'updraftplus').':</strong> '.sprintf(__('Your web server\'s PHP installation does not include a required module (%s).', 'updraftplus'), 'mbstring').' '.__('Please contact your web hosting provider\'s support.', 'updraftplus').' '.sprintf(__("UpdraftPlus's %s module <strong>requires</strong> %s.", 'updraftplus'), $this->desc, 'mbstring').' '.__('Please do not file any support requests; there is no alternative.', 'updraftplus'), $this->method, false), $this->allowed_html_for_content_sanitisation()) : '',
+			'mb_substr_existence_label' => $mb_substr_existence_label,
 			'curl_existence_label' => wp_kses($updraftplus_admin->curl_check($this->long_desc, false, $this->method.' hidden-in-updraftcentral', false), $this->allowed_html_for_content_sanitisation()),
 			'openstack_text_description' => __('Get your access credentials from your OpenStack Swift provider, and then pick a container name to use for storage.', 'updraftplus').' '.__('This container will be created for you if it does not already exist.', 'updraftplus'),
 			'faq_link_text' => __('Also, you should read this important FAQ.', 'updraftplus'),
-			'faq_link_url' => wp_kses(apply_filters("updraftplus_com_link", "https://updraftplus.com/faqs/there-appear-to-be-lots-of-extra-files-in-my-rackspace-cloud-files-container/"), array(), array('http', 'https')),
+			'faq_link_url' => wp_kses(apply_filters("updraftplus_com_link", "https://teamupdraft.com/documentation/updraftplus/topics/cloud-storage/rackspace/there-are-extra-files-in-my-rackspace-cloud-files-container/?utm_source=udp-plugin&utm_medium=referral&utm_campaign=paac&utm_content=openstack-important-faq&utm_creative_format=tex"), array(), array('http', 'https')),
 			'input_authentication_uri_label' => __('Authentication URI', 'updraftplus'),
 			'input_authentication_uri_title' => _x('This needs to be a v2 (Keystone) authentication URI; v1 (Swauth) is not supported.', 'Keystone and swauth are technical terms which cannot be translated', 'updraftplus'),
+			'input_authentication_uri_placeholder' => __('Example: https://keystone.example.com/v2.0', 'updraftplus'),
 			'input_tenant_label' => __('Tenant', 'updraftplus'),
 			'input_tenant_link_url' => 'https://docs.openstack.org/openstack-ops/content/projects_users.html',
 			'input_tenant_link_title' => __('Follow this link for more information', 'updraftplus'),
+			'input_tenant_placeholder' => __('Example: my-project', 'updraftplus'),
 			'input_region_label' => __('Region', 'updraftplus'),
 			'input_region_title' => __('Leave this blank, and a default will be chosen.', 'updraftplus'),
+			'input_region_placeholder' => __('Enter a region', 'updraftplus'),
 			'input_username_label' => __('Username', 'updraftplus'),
+			'input_username_placeholder' => __('Enter your username', 'updraftplus'),
 			'input_password_label' => __('Password', 'updraftplus'),
 			'input_password_type' => apply_filters('updraftplus_admin_secret_field_type', 'password'),
 			'input_container_label' => __('Container', 'updraftplus'),
+			'input_container_placeholder' => __('Example: backups', 'updraftplus'),
+			/* translators: %s: Remote storage method */
 			'input_test_label' => sprintf(__('Test %s Settings', 'updraftplus'), $updraftplus->backup_methods[$this->get_id()]),
 		);
 		return wp_parse_args($properties, $this->get_persistent_variables_and_methods());
+	}
+	
+	/**
+	 * Customize generated field data using legacy mapping values.
+	 *
+	 * Used by transform_template_properties_to_fields_structure()
+	 * to allow child classes to adjust the generated field structure
+	 * based on legacy data and field mapping requirements.
+	 *
+	 * @param array  $field               Field data.
+	 * @param array  $template_properties Template properties.
+	 * @param string $field_name          Field name.
+	 * @param array  $option              Field mapping option.
+	 *
+	 * @return array
+	 */
+	public function configure_field_from_legacy($field, $template_properties, $field_name, $option) {
+		$prefix = 'input_'.$option['template_property_input_mapping'].'_';
+
+		if (empty($field['tooltip']) && isset($template_properties[$prefix.'title'])) $field['tooltip'] = array('text' => $template_properties[$prefix.'title']);
+
+		return $field;
 	}
 }

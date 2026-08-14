@@ -36,7 +36,7 @@ addFilter('lzb.editor.control.image.render', 'lzb.editor', (render, props) => (
 							link: val.link || '',
 							url: val.url || '',
 							sizes: val.sizes || '',
-					  }
+						}
 					: '';
 
 				props.onChange(result);
@@ -52,7 +52,13 @@ addFilter('lzb.editor.control.image.getValue', 'lzb.editor', (value) => {
 	// change string value to array.
 	if (typeof value === 'string') {
 		try {
-			value = JSON.parse(decodeURI(value));
+			// WPML decodes string in a different way, so we have to use decodeURIComponent
+			// when string does not contains ':'.
+			if (value.includes(':')) {
+				value = JSON.parse(decodeURI(value));
+			} else {
+				value = JSON.parse(decodeURIComponent(value));
+			}
 		} catch (e) {
 			value = [];
 		}
@@ -74,7 +80,7 @@ addFilter('lzb.editor.control.image.updateValue', 'lzb.editor', (value) => {
 });
 
 /**
- * Control settings render in constructor.
+ * Control settings render in block builder.
  *
  * @param {Object} props - component props.
  *
@@ -123,6 +129,7 @@ function AdditionalAttributes(props) {
 								insert_from_url: value ? 'true' : 'false',
 							})
 						}
+						__nextHasNoMarginBottom
 					/>
 				</BaseControl>
 			</PanelBody>
@@ -145,6 +152,8 @@ function AdditionalAttributes(props) {
 					})}
 					value={data.preview_size || 'medium'}
 					onChange={(value) => updateData({ preview_size: value })}
+					__next40pxDefaultSize
+					__nextHasNoMarginBottom
 				/>
 			</PanelBody>
 		</>

@@ -1,4 +1,13 @@
 <?php
+/**
+ * @package ACF
+ * @author  WP Engine
+ *
+ * © 2026 Advanced Custom Fields (ACF®). All rights reserved.
+ * "ACF" is a trademark of WP Engine.
+ * Licensed under the GNU General Public License v2 or later.
+ * https://www.gnu.org/licenses/gpl-2.0.html
+ */
 
 // global
 global $field_group;
@@ -72,6 +81,8 @@ foreach ( acf_get_combined_field_group_settings_tabs() as $tab_key => $tab_label
 		case 'location_rules':
 			echo '<div class="field-group-locations field-group-settings-tab">';
 				acf_get_view( 'acf-field-group/locations' );
+
+				do_action( 'acf/field_group/render_additional_location_settings', $field_group );
 			echo '</div>';
 			break;
 		case 'presentation':
@@ -99,7 +110,7 @@ foreach ( acf_get_combined_field_group_settings_tabs() as $tab_key => $tab_label
 			acf_render_field_wrap(
 				array(
 					'label'         => __( 'Position', 'acf' ),
-					'instructions'  => '',
+					'instructions'  => __( "'High' position not supported in the Block Editor", 'acf' ),
 					'type'          => 'button_group',
 					'name'          => 'position',
 					'prefix'        => 'acf_field_group',
@@ -110,7 +121,9 @@ foreach ( acf_get_combined_field_group_settings_tabs() as $tab_key => $tab_label
 						'side'            => __( 'Side', 'acf' ),
 					),
 					'default_value' => 'normal',
-				)
+				),
+				'div',
+				'field'
 			);
 
 
@@ -161,6 +174,8 @@ foreach ( acf_get_combined_field_group_settings_tabs() as $tab_key => $tab_label
 				'div',
 				'field'
 			);
+
+			do_action( 'acf/field_group/render_additional_presentation_settings', $field_group );
 
 			echo '</div>';
 			echo '<div class="field-group-setting-split">';
@@ -219,8 +234,6 @@ foreach ( acf_get_combined_field_group_settings_tabs() as $tab_key => $tab_label
 					'prefix'       => 'acf_field_group',
 					'value'        => $field_group['active'],
 					'ui'           => 1,
-				// 'ui_on_text'  => __('Active', 'acf'),
-				// 'ui_off_text' => __('Inactive', 'acf'),
 				)
 			);
 
@@ -235,8 +248,6 @@ foreach ( acf_get_combined_field_group_settings_tabs() as $tab_key => $tab_label
 						'prefix'       => 'acf_field_group',
 						'value'        => $field_group['show_in_rest'],
 						'ui'           => 1,
-					// 'ui_on_text'  => __('Active', 'acf'),
-					// 'ui_off_text' => __('Inactive', 'acf'),
 					)
 				);
 			}
@@ -254,6 +265,21 @@ foreach ( acf_get_combined_field_group_settings_tabs() as $tab_key => $tab_label
 				'div',
 				'field'
 			);
+
+			acf_render_field_wrap(
+				array(
+					'label'        => __( 'Display Title', 'acf' ),
+					'instructions' => __( 'Title shown on the edit screen for the field group meta box to use instead of the field group title', 'acf' ),
+					'type'         => 'text',
+					'name'         => 'display_title',
+					'prefix'       => 'acf_field_group',
+					'value'        => $field_group['display_title'],
+				),
+				'div',
+				'field'
+			);
+
+			do_action( 'acf/field_group/render_additional_group_settings', $field_group );
 
 			/* translators: 1: Post creation date 2: Post creation time */
 			$acf_created_on = sprintf( __( 'Created on %1$s at %2$s', 'acf' ), get_the_date(), get_the_time() );
@@ -281,7 +307,7 @@ do_action( 'acf/render_field_group_settings', $field_group );
 ?>
 
 <div class="acf-hidden">
-	<input type="hidden" name="acf_field_group[key]" value="<?php echo $field_group['key']; ?>" />
+	<input type="hidden" name="acf_field_group[key]" value="<?php echo esc_attr( $field_group['key'] ); ?>" />
 </div>
 <script type="text/javascript">
 if( typeof acf !== 'undefined' ) {

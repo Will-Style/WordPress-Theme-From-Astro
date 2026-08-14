@@ -2,7 +2,7 @@
 /*
 Plugin Name: WP Multibyte Patch
 Description: Multibyte functionality enhancement for the WordPress Japanese package.
-Version: 2.9
+Version: 2.9.3
 Plugin URI: https://eastcoder.com/code/wp-multibyte-patch/
 Author: Seisuke Kuraishi
 Author URI: https://tinybit.co.jp/
@@ -15,9 +15,9 @@ Domain Path: /languages
  * Multibyte functionality enhancement for the WordPress Japanese package.
  *
  * @package WP_Multibyte_Patch
- * @version 2.9
+ * @version 2.9.3
  * @author Seisuke Kuraishi <210pura@gmail.com>
- * @copyright Copyright (c) 2020 Seisuke Kuraishi, Tinybit Inc.
+ * @copyright Copyright (c) 2025 Seisuke Kuraishi, Tinybit Inc.
  * @license https://opensource.org/licenses/gpl-2.0.php GPLv2
  * @link https://eastcoder.com/code/wp-multibyte-patch/
  */
@@ -71,8 +71,9 @@ class multibyte_patch {
 	// For fallback purpose only. (1.6)
 	public function guess_encoding( $string, $encoding = '' ) {
 		$blog_encoding = $this->blog_encoding;
+		$utf8_check = function_exists('wp_is_valid_utf8') ? wp_is_valid_utf8( $string ) : seems_utf8( $string );
 
-		if ( !$encoding && seems_utf8( $string ) )
+		if ( !$encoding && $utf8_check )
 			return 'UTF-8';
 		elseif ( !$encoding )
 			return $blog_encoding;

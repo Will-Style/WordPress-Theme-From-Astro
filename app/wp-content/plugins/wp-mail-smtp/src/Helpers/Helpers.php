@@ -31,6 +31,12 @@ class Helpers {
 				'mailgun',
 				'postmark',
 				'sparkpost',
+				'elasticemail',
+				'smtp2go',
+				'mailjet',
+				'mailersend',
+				'mandrill',
+				'resend',
 			],
 			true
 		);
@@ -109,6 +115,38 @@ class Helpers {
 	}
 
 	/**
+	 * Format a variable for debug-style output as an inline <code> block.
+	 *
+	 * Bools and empty values are rendered via var_dump (which shows the type);
+	 * everything else via print_r. Line breaks are stripped so the output fits
+	 * on a single rendered line.
+	 *
+	 * @since 4.9.0
+	 *
+	 * @param mixed $var Variable to format.
+	 *
+	 * @return string
+	 */
+	public static function pvar( $var = '' ) {
+
+		ob_start();
+
+		echo '<code>';
+
+		if ( is_bool( $var ) || empty( $var ) ) {
+			var_dump( $var );
+		} else {
+			print_r( $var );
+		}
+
+		echo '</code>';
+
+		$output = ob_get_clean();
+
+		return str_replace( [ "\r\n", "\r", "\n" ], '', $output );
+	}
+
+	/**
 	 * Format error message.
 	 *
 	 * @since 3.4.0
@@ -152,5 +190,29 @@ class Helpers {
 		$license_type = wp_mail_smtp()->get_license_type();
 
 		return 'WordPress/' . get_bloginfo( 'version' ) . '; ' . get_bloginfo( 'url' ) . '; WPMailSMTP/' . $license_type . '-' . WPMS_PLUGIN_VER;
+	}
+
+	/**
+	 * Import Plugin_Upgrader class from core.
+	 *
+	 * @since 3.11.0
+	 */
+	public static function include_plugin_upgrader() {
+
+		/** \WP_Upgrader class */
+		require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
+
+		/** \Plugin_Upgrader class */
+		require_once ABSPATH . 'wp-admin/includes/class-plugin-upgrader.php';
+	}
+
+	/**
+	 * Whether the current request is a WP CLI request.
+	 *
+	 * @since 4.0.0
+	 */
+	public static function is_wp_cli() {
+
+		return defined( 'WP_CLI' ) && WP_CLI;
 	}
 }

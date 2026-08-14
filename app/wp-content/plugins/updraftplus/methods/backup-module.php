@@ -1,6 +1,6 @@
 <?php
 
-if (!defined('UPDRAFTPLUS_DIR')) die('No direct access allowed.');
+if (!defined('ABSPATH')) die('No direct access allowed.');
 
 abstract class UpdraftPlus_BackupModule {
 
@@ -9,6 +9,21 @@ abstract class UpdraftPlus_BackupModule {
 	private $_instance_id;
 
 	private $_storage;
+
+	/**
+	 * Indicates whether the connection test was successful.
+	 *
+	 * @var bool
+	 */
+	protected $is_connection_successful = false;
+
+	/**
+	 * Input and option field mappings with default values and supported contexts.
+	 * N.B. This variable/property would normally be over-ridden by the child.
+	 *
+	 * @var array
+	 */
+	protected $input_option_field_mappings = array();
 	
 	/**
 	 * Store options (within this class) for this remote storage module. There is also a parameter for saving to the permanent storage (i.e. database).
@@ -39,7 +54,7 @@ abstract class UpdraftPlus_BackupModule {
 	private function save_options() {
 	
 		if (!$this->supports_feature('multi_options')) {
-			throw new Exception('save_options() can only be called on a storage method which supports multi_options (this module, '.$this->get_id().', does not)');
+			throw new Exception('save_options() can only be called on a storage method which supports multi_options (this module, '.$this->get_id().', does not)'); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- Error message to be escaped when caught and printed.
 		}
 	
 		if (!$this->_instance_id) {
@@ -49,7 +64,7 @@ abstract class UpdraftPlus_BackupModule {
 		$current_db_options = UpdraftPlus_Storage_Methods_Interface::update_remote_storage_options_format($this->get_id());
 
 		if (is_wp_error($current_db_options)) {
-			throw new Exception('save_options(): options fetch/update failed ('.$current_db_options->get_error_code().': '.$current_db_options->get_error_message().')');
+			throw new Exception('save_options(): options fetch/update failed ('.$current_db_options->get_error_code().': '.$current_db_options->get_error_message().')'); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- Error message to be escaped when caught and printed.
 		}
 
 		$current_db_options['settings'][$this->_instance_id] = $this->_options;
@@ -60,12 +75,19 @@ abstract class UpdraftPlus_BackupModule {
 	
 	/**
 	 * Retrieve default options for this remote storage module.
-	 * This method would normally be over-ridden by the child.
 	 *
-	 * @return Array - an array of options
+	 * @return array - an array of options
 	 */
 	public function get_default_options() {
-		return array();
+		$options = $this->get_input_option_mappings('option');
+
+		$defaults = array();
+
+		foreach ($options as $key => $option) {
+			$defaults[$key] = $option['default_value'];
+		}
+
+		return $defaults;
 	}
 
 	/**
@@ -85,7 +107,11 @@ abstract class UpdraftPlus_BackupModule {
 			'_instance_id' => $this->_instance_id,
 			'method_display_name' => $updraftplus->backup_methods[$this->get_id()],
 			'admin_page_url' => UpdraftPlus_Options::admin_page_url(),
-			'storage_auth_nonce' =>wp_create_nonce('storage_auth_nonce')
+			'storage_auth_nonce' =>wp_create_nonce('storage_auth_nonce'),
+			'input_select_folder_label' => __('Select existing folder', 'updraftplus'),
+			'input_confirm_label' => __('Confirm', 'updraftplus'),
+			'input_cancel_label' => __('Cancel', 'updraftplus'),
+			'hostname_error_label' => __('Error:', 'updraftplus').' '.__('A host name cannot be an URL or contain a slash.', 'updraftplus'),
 		);
 	}
 
@@ -247,7 +273,7 @@ abstract class UpdraftPlus_BackupModule {
 		if ($return_instead_of_echo) {
 			return $output;
 		} else {
-			echo $output;
+			echo wp_kses_post($output);
 		}
 	}
 	
@@ -277,7 +303,7 @@ abstract class UpdraftPlus_BackupModule {
 		ob_start();
 		// Allow methods to not use this hidden field, if they do not output any settings (to prevent their saved settings being over-written by just this hidden field)
 		if ($this->print_shared_settings_fields()) {
-			?><tr class="<?php echo $this->get_css_classes(); ?>"><input type="hidden" name="updraft_<?php echo $this->get_id();?>[version]" value="1"></tr><?php
+			?><tr class="<?php echo esc_attr($this->get_css_classes()); ?>"><input type="hidden" name="updraft_<?php echo esc_attr($this->get_id());?>[version]" value="1"></tr><?php
 		}
 		
 		if ($this->supports_feature('config_templates')) {
@@ -350,7 +376,7 @@ abstract class UpdraftPlus_BackupModule {
 	 * Prints out the configuration section for a particular module. This is now (Sep 2017) considered deprecated; things are being ported over to get_configuration_template(), indicated via the feature 'config_templates'.
 	 */
 	public function config_print() {
-		echo $this->get_id().": module neither declares config_templates support, nor has a config_print() method (coding bug)";
+		echo esc_html($this->get_id()).": module neither declares config_templates support, nor has a config_print() method (coding bug)";
 	}
 
 	/**
@@ -396,9 +422,10 @@ abstract class UpdraftPlus_BackupModule {
 		ob_start();
 		$instance_id = $this->supports_feature('config_templates') ? '{{instance_id}}' : $this->_instance_id;
 		?>
-		<tr class="<?php echo $this->get_css_classes(); ?>">
+		<tr class="<?php echo esc_attr($this->get_css_classes()); ?>">
 			<th></th>
-			<td><p><button id="updraft-<?php echo $this->get_id();?>-test-<?php echo $instance_id;?>" type="button" class="button-primary updraft-test-button updraft-<?php echo $this->get_id();?>-test" data-instance_id="<?php echo $instance_id;?>" data-method="<?php echo $this->get_id();?>" data-method_label="<?php echo esc_attr($title);?>"><?php printf(__('Test %s Settings', 'updraftplus'), $title);?></button></p></td>
+			<?php /* translators: %s: Remote storage method */ ?>
+			<td><p><button id="updraft-<?php echo esc_attr($this->get_id());?>-test-<?php echo esc_attr($instance_id);?>" type="button" class="button-primary updraft-test-button updraft-<?php echo esc_attr($this->get_id());?>-test" data-instance_id="<?php echo esc_attr($instance_id);?>" data-method="<?php echo esc_attr($this->get_id());?>" data-method_label="<?php echo esc_attr($title);?>"><?php echo esc_html(sprintf(__('Test %s Settings', 'updraftplus'), $title));?></button></p></td>
 		</tr>
 		<?php
 		return ob_get_clean();
@@ -482,7 +509,7 @@ abstract class UpdraftPlus_BackupModule {
 		
 			if ($supports_multi_options) {
 				// This is forbidden, because get_opts() is legacy and is for methods that do not support multi-options. Supporting multi-options leads to the array format being updated, which will then break get_opts().
-				die('Fatal error: method '.$this->get_id().' both supports multi_options and provides a get_opts method');
+				die('Fatal error: method '.esc_html($this->get_id()).' both supports multi_options and provides a get_opts method');
 			}
 			
 			$options = $this->get_opts();
@@ -628,13 +655,15 @@ abstract class UpdraftPlus_BackupModule {
 
 		if ($template_instead_of_notice) {
 			$instance_id = "{{instance_id}}";
+			/* translators: %s: Description */
 			$text = sprintf(__("<strong>After</strong> you have saved your settings (by clicking 'Save Changes' below), then come back here and follow this link to complete authentication with %s.", 'updraftplus'), $description);
 		} else {
 			$instance_id = $this->get_instance_id();
-			$text = sprintf(__('Follow this link to authorize access to your %s account (you will not be able to backup to %s without it).', 'updraftplus'), $description, $description);
+			/* translators: 1: Description or remote storage name (e.g. Google Drive, OneDrive, etc.), 2: Description or remote storage name */
+			$text = sprintf(__('Follow this link to authorize access to your %1$s account (you will not be able to backup to %2$s without it).', 'updraftplus'), $description, $description);
 		}
 
-		echo $account_warning . ' ' . $this->build_authentication_link($instance_id, $text);
+		echo esc_html($account_warning) . ' ' . wp_kses_post($this->build_authentication_link($instance_id, $text));
 
 		if (!$echo_instead_of_return) {
 			return ob_get_clean();
@@ -662,8 +691,12 @@ abstract class UpdraftPlus_BackupModule {
 	 * Check the authentication is valid before proceeding to call the authentication method
 	 */
 	public function action_authenticate_storage() {
-		if (isset($_GET['updraftplus_'.$this->get_id().'auth']) && 'doit' == $_GET['updraftplus_'.$this->get_id().'auth'] && !empty($_GET['updraftplus_instance']) && preg_match('/^[-A-Z0-9]+$/i', $_GET['updraftplus_instance']) && isset($_GET['nonce']) && wp_verify_nonce($_GET['nonce'], 'storage_auth_nonce')) {
-			$this->authenticate_storage((string) $_GET['updraftplus_instance']);
+		$updraftplus_auth = UpdraftPlus_Manipulation_Functions::fetch_superglobal('get', 'updraftplus_'.$this->get_id().'auth');
+		$updraftplus_instance = UpdraftPlus_Manipulation_Functions::fetch_superglobal('get', 'updraftplus_instance');
+		$nonce = UpdraftPlus_Manipulation_Functions::fetch_superglobal('get', 'nonce');
+		
+		if (isset($updraftplus_auth) && 'doit' == $updraftplus_auth && !empty($updraftplus_instance) && preg_match('/^[-A-Z0-9]+$/i', $updraftplus_instance) && isset($nonce) && wp_verify_nonce($nonce, 'storage_auth_nonce')) {
+			$this->authenticate_storage((string) $updraftplus_instance);
 		}
 	}
 	
@@ -676,7 +709,7 @@ abstract class UpdraftPlus_BackupModule {
 		if (method_exists($this, 'do_authenticate_storage')) {
 			$this->do_authenticate_storage($instance_id);
 		} else {
-			error_log($this->get_id().": module does not have an authenticate storage method (coding bug)");
+			UpdraftPlus_Manipulation_Functions::error_log($this->get_id().": module does not have an authenticate storage method (coding bug)");
 		}
 	}
 	
@@ -694,7 +727,8 @@ abstract class UpdraftPlus_BackupModule {
 		$id = $this->get_id();
 		$description = $this->get_description();
 
-		echo ' <a class="updraft_deauthlink" href="'.UpdraftPlus_Options::admin_page_url().'?action=updraftmethod-'.$id.'-auth&page=updraftplus&updraftplus_'.$id.'auth=deauth&nonce='.wp_create_nonce($id.'_deauth_nonce').'&updraftplus_instance={{instance_id}}" data-instance_id="{{instance_id}}" data-remote_method="'.$id.'">'.sprintf(__("Follow this link to remove these settings for %s.", 'updraftplus'), $description).'</a>';
+		/* translators: %s: Description */
+		echo ' <a class="updraft_deauthlink" href="'.esc_url(UpdraftPlus_Options::admin_page_url().'?action=updraftmethod-'.$id.'-auth&page=updraftplus&updraftplus_'.$id.'auth=deauth&nonce='.wp_create_nonce($id.'_deauth_nonce').'&updraftplus_instance={{instance_id}}').'" data-instance_id="{{instance_id}}" data-remote_method="'.esc_attr($id).'">'.esc_html(sprintf(__("Follow this link to remove these settings for %s.", 'updraftplus'), $description)).'</a>';
 
 		if (!$echo_instead_of_return) {
 			return ob_get_clean();
@@ -705,8 +739,12 @@ abstract class UpdraftPlus_BackupModule {
 	 * Check the deauthentication is valid before proceeding to call the deauthentication method
 	 */
 	public function action_deauthenticate_storage() {
-		if (isset($_GET['updraftplus_'.$this->get_id().'auth']) && 'deauth' == $_GET['updraftplus_'.$this->get_id().'auth'] && !empty($_GET['nonce']) && !empty($_GET['updraftplus_instance']) && preg_match('/^[-A-Z0-9]+$/i', $_GET['updraftplus_instance']) && wp_verify_nonce($_GET['nonce'], $this->get_id().'_deauth_nonce')) {
-			$this->deauthenticate_storage($_GET['updraftplus_instance']);
+		$updraftplus_auth = UpdraftPlus_Manipulation_Functions::fetch_superglobal('get', 'updraftplus_'.$this->get_id().'auth');
+		$updraftplus_instance = UpdraftPlus_Manipulation_Functions::fetch_superglobal('get', 'updraftplus_instance');
+		$nonce = UpdraftPlus_Manipulation_Functions::fetch_superglobal('get', 'nonce');
+
+		if (isset($updraftplus_auth) && 'deauth' == $updraftplus_auth && !empty($nonce) && !empty($updraftplus_instance) && preg_match('/^[-A-Z0-9]+$/i', $updraftplus_instance) && wp_verify_nonce($nonce, $this->get_id().'_deauth_nonce')) {
+			$this->deauthenticate_storage($updraftplus_instance);
 		}
 	}
 	
@@ -734,9 +772,12 @@ abstract class UpdraftPlus_BackupModule {
 		$description = $this->get_description();
 
 		$template = "<div id='updraftplus_manual_authorisation_template_{$id}'>";
+		/* translators: %s: Description */
 		$template .= "<strong>".sprintf(__('%s authentication:', 'updraftplus'), $description)."</strong>";
+		/* translators: %s: Description */
 		$template .= "<p>".sprintf(__('If you are having problems authenticating with %s you can manually authorize here.', 'updraftplus'), $description)."</p>";
 		$template .= "<p>".__('To complete manual authentication, at the orange UpdraftPlus authentication screen select the "Having problems authenticating?" link, then copy and paste the code given here.', 'updraftplus')."</p>";
+		/* translators: %s: Description */
 		$template .= "<label for='updraftplus_manual_authentication_data_{$id}'>".sprintf(__('%s authentication code:', 'updraftplus'), $description)."</label> <input type='text' id='updraftplus_manual_authentication_data_{$id}' name='updraftplus_manual_authentication_data_{$id}'>";
 		$template .= "<p id='updraftplus_manual_authentication_error_{$id}'></p>";
 		$template .= "<button type='button' data-method='{$id}' class='button button-primary' id='updraftplus_manual_authorisation_submit_{$id}'>".__('Complete manual authentication', 'updraftplus')."</button>";
@@ -759,7 +800,7 @@ abstract class UpdraftPlus_BackupModule {
 			return $this->do_complete_authentication($state, $code, true);
 		} else {
 			$message = $this->get_id().": module does not have an complete authentication method (coding bug)";
-			error_log($message);
+			UpdraftPlus_Manipulation_Functions::error_log($message);
 			return $message;
 		}
 	}
@@ -841,5 +882,149 @@ abstract class UpdraftPlus_BackupModule {
 		}
 
 		return $prefix;
+	}
+
+	/**
+	 * This method will output any needed js for the JSTree.
+	 *
+	 * @return void
+	 */
+	public function admin_footer_jstree() {
+		static $script_output = array(); // Static array to store script output status.
+
+		$id = $this->get_id();
+	
+		// Check if the script has already been output for this ID.
+		if (isset($script_output[$id])) return;
+
+		// wp_add_inline_script() is available on WP 4.5+
+		if (function_exists('wp_add_inline_script')) {
+			wp_add_inline_script('updraft-admin-common', "var js_tree_".esc_js($id)." = new updraft_js_tree('".esc_js($id)."'); js_tree_".esc_js($id).".init();", 'after');
+		} elseif (wp_script_is('updraft-admin-common', 'done')) {
+		?>
+			<script>
+				var js_tree_<?php echo esc_js($id); ?> = new updraft_js_tree('<?php echo esc_js($id); ?>');
+				js_tree_<?php echo esc_js($id); ?>.init();
+			</script>
+		<?php
+		}
+		// Mark the script as output for this ID.
+		$script_output[$id] = true;
+	}
+
+	/**
+	 * Set the connection status.
+	 *
+	 * This method is intended to be used internally or by subclasses
+	 * to update the connection result in a controlled way.
+	 *
+	 * @param bool $status True if connection is successful, false otherwise.
+	 *
+	 * @return void
+	 */
+	protected function set_connection_status($status) {
+		$this->is_connection_successful = (bool) $status;
+	}
+
+	/**
+	 * Check if the connection was successful.
+	 *
+	 * @return bool True if connected successfully, false otherwise.
+	 */
+	public function is_connection_successful() {
+		return $this->is_connection_successful;
+	}
+
+	/**
+	 * Transform template properties into field array structures.
+	 *
+	 * Builds an array of field definitions based on the template properties
+	 * and configured fields. Supports text, password, and dropdown field
+	 * types, including placeholders, tooltips, and options.
+	 *
+	 * This method is already onboarding-oriented; it processes all properties in the template that were added using the naming convention starting with the 'input_' prefix.
+	 * Format: "input_{fieldName}_{attribute}"
+	 * fieldName or inputName refers to data added in the $input_option_field_mappings class variable in each remote storage module
+	 * attribute is essential metadata accompanying a field, defining its characteristics or behaviour. The list of supported attributes:
+	 * id, default, type, label, placeholder, prefix, tooltip, option_labels
+	 *
+	 * NOTE: Not all variables in the template properties consistently follow the naming convention/format, so mapping might be necessary to avoid introducing new translation strings and/or redundancies.
+	 *
+	 * @return array List of field definitions.
+	 */
+	public function transform_template_properties_to_fields_structure() {
+		$fields = array();
+		$template_property_input_mappings = $this->get_input_option_mappings('input');
+
+		if (empty($template_property_input_mappings)) return $fields;
+
+		$template_properties = $this->get_template_properties();
+
+		foreach ($template_property_input_mappings as $field_name => $option) {
+			$field = array(
+				'id' => $field_name,
+				'default' => $option['default_value'],
+				'type' => 'text',
+			);
+
+			if (!isset($option['template_property_input_mapping'])) $option['template_property_input_mapping'] = $field_name;
+			$prefix = 'input_'.$option['template_property_input_mapping'].'_';
+
+			if (isset($template_properties[$prefix.'type'])) $field['type'] = $template_properties[$prefix.'type'];
+
+			switch ($field['type']) {
+				case 'password':
+					$field['show_forgot_password'] = false;
+					break;
+				case 'number':
+					if (isset($template_properties[$prefix.'min_value'])) $field['min'] = $template_properties[$prefix.'min_value'];
+					if (isset($template_properties[$prefix.'max_value'])) $field['max'] = $template_properties[$prefix.'max_value'];
+					break;
+			}
+
+			if (isset($template_properties[$prefix.'label'])) $field['label'] = $template_properties[$prefix.'label'];
+
+			if (isset($template_properties[$prefix.'placeholder'])) $field['placeholder'] = $template_properties[$prefix.'placeholder'];
+
+			if (isset($template_properties[$prefix.'prefix'])) $field['prefix'] = $template_properties[$prefix.'prefix'];
+
+			if (isset($template_properties[$prefix.'tooltip'])) $field['tooltip'] = array('text' => wp_kses_post($template_properties[$prefix.'tooltip']));
+
+			if (isset($template_properties[$prefix.'option_labels'])) {
+				$field['type'] = 'dropdown';
+				$options = array();
+				foreach ($template_properties[$prefix.'option_labels'] as $key => $value) {
+					$options[] = array(
+						'value' => $key,
+						'label' => $value,
+					);
+				}
+				$field['options'] = $options;
+			}
+
+			if (method_exists($this, 'configure_field_from_legacy')) $field = $this->configure_field_from_legacy($field, $template_properties, $field_name, $option);
+
+			if ($field) $fields[] = $field;
+		}
+
+		return $fields;
+	}
+
+	/**
+	 * Retrieve field mappings, optionally filters mappings by context.
+	 *
+	 * @param string $context Optional. Context name used to filter mappings.
+	 *
+	 * @return array
+	 */
+	public function get_input_option_mappings($context = '') {
+		if (empty($context)) return $this->input_option_field_mappings;
+		$filtered_mappings = array();
+
+		foreach ($this->input_option_field_mappings as $key => $mapping) {
+			if (in_array($context, $mapping['contexts'])) $filtered_mappings[$key] = $mapping;
+		}
+
+		return $filtered_mappings;
 	}
 }

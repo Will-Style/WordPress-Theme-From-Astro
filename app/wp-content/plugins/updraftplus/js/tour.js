@@ -285,6 +285,40 @@
 			}
 		});
 
+		// Auto backup.
+		main_tour.addStep('auto_backup', {
+			title: updraftplus_tour_i18n.auto_backup.title,
+			text: updraftplus_tour_i18n.auto_backup.text,
+			attachTo: '#updraft_autobackup_default top',
+			buttons: [
+				{
+					classes: 'udp-tour-back',
+					text: updraftplus_tour_i18n.back,
+					action: function() {
+						main_tour.back();
+					}
+				},
+				{
+					classes: button_classes,
+					text: updraftplus_tour_i18n.next,
+					action: main_tour.next
+				}
+			],
+			showOn: function() {
+				if (updraftplus_tour_i18n.auto_backup.enabled) return true;
+				return false;
+			},
+			when: {
+				'before-show': function() {
+					$('.enableexpertmode').trigger('click');
+					$('#updraft_autobackup_default').focus();
+				},
+				show: function() {
+					scroll_to_popup();
+				}
+			}
+		});
+
 		// Save settings
 		main_tour.addStep('settings_save', {
 			title: updraftplus_tour_i18n.settings_save.title,

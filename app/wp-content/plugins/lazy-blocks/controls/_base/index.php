@@ -65,7 +65,8 @@ class LazyBlocks_Control {
 		'label_settings'                => true,
 		'default_settings'              => true,
 		'help_settings'                 => true,
-		'placement_settings'            => array( 'content', 'inspector' ),
+		'placement_settings'            => array( 'content', 'inspector' /* , 'content-fallback', 'inspector-fallback' */ ),
+		'group_settings'                => true,
 		'width_settings'                => true,
 		'required_settings'             => true,
 		'hide_if_not_selected_settings' => true,
@@ -93,6 +94,7 @@ class LazyBlocks_Control {
 		'help'                 => '',
 		'child_of'             => '',
 		'placement'            => 'content',
+		'group'                => 'settings',
 		'width'                => '100',
 		'hide_if_not_selected' => 'false',
 		'required'             => 'false',
@@ -128,7 +130,7 @@ class LazyBlocks_Control {
 		add_filter( 'lzb/controls/all', array( $this, 'get_control_data' ) );
 		add_filter(
 			'lzb/control_value',
-			function( $value, $control_data, $block_data, $context ) {
+			function ( $value, $control_data, $block_data, $context ) {
 				if ( ! $control_data || $this->name !== $control_data['type'] ) {
 					return $value;
 				}
@@ -143,11 +145,12 @@ class LazyBlocks_Control {
 		add_action( 'enqueue_block_editor_assets', array( $this, 'register_assets' ) );
 		add_action(
 			'enqueue_block_editor_assets',
-			function() {
+			function () {
 				$blocks = lazyblocks()->blocks()->get_blocks();
 
 				// Skip assets enqueue if there are no blocks.
-				if ( empty( $blocks ) ) {
+				// Allow on block builder page even if no blocks, since we need control assets here.
+				if ( empty( $blocks ) && 'lazyblocks' !== get_post_type() ) {
 					return;
 				}
 
@@ -158,12 +161,17 @@ class LazyBlocks_Control {
 			11
 		);
 		add_action(
-			'enqueue_block_editor_assets',
-			function() {
+			'enqueue_block_assets',
+			function () {
+				if ( ! is_admin() ) {
+					return;
+				}
+
 				$blocks = lazyblocks()->blocks()->get_blocks();
 
 				// Skip assets enqueue if there are no blocks.
-				if ( empty( $blocks ) ) {
+				// Allow on block builder page even if no blocks, since we need control assets here.
+				if ( empty( $blocks ) && 'lazyblocks' !== get_post_type() ) {
 					return;
 				}
 

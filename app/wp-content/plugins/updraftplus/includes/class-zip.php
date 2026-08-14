@@ -1,5 +1,5 @@
 <?php
-
+// phpcs:disable WordPress.WP.AlternativeFunctions.file_system_operations_fclose, WordPress.WP.AlternativeFunctions.file_system_operations_fopen, WordPress.WP.AlternativeFunctions.file_system_operations_fwrite, WordPress.WP.AlternativeFunctions.file_system_operations_fgets, WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents, WordPress.WP.AlternativeFunctions.file_system_operations_mkdir, WordPress.WP.AlternativeFunctions.file_system_operations_fread, WordPress.WP.AlternativeFunctions.file_system_operations_chmod, WordPress.WP.AlternativeFunctions.file_system_operations_fputs, WordPress.WP.AlternativeFunctions.file_system_operations_is_writeable, WordPress.WP.AlternativeFunctions.file_system_operations_chown, WordPress.WP.AlternativeFunctions.file_system_operations_chgrp, WordPress.WP.AlternativeFunctions.file_system_operations_touch -- Native PHP fileystem function is used for direct control and performance because it can bypass additional layers of abstraction so that no overhead from the WordPress filesystem API's internal handling
 if (!defined('ABSPATH')) die('No direct access allowed');
 
 if (class_exists('ZipArchive')) :
@@ -204,7 +204,7 @@ class UpdraftPlus_PclZip {
 		
 		// This also prevents CI complaining about an unused parameter
 		if ($flags) {
-			error_log("A call to UpdraftPlus_PclZip::getFromIndex() set flags=$flags, but this is not implemented");
+			UpdraftPlus_Manipulation_Functions::error_log("A call to UpdraftPlus_PclZip::getFromIndex() set flags=$flags, but this is not implemented");
 		}
 		
 		if (!is_array($contents)) {
@@ -459,7 +459,7 @@ class UpdraftPlus_BinZip extends UpdraftPlus_PclZip {
 		// Loop over each destination directory name
 		foreach ($this->addfiles as $rdirname => $files) {
 
-			$process = function_exists('proc_open') ? proc_open($exec, $descriptorspec, $pipes, $rdirname) : false;
+			$process = function_exists('proc_open') ? proc_open($exec, $descriptorspec, $pipes, $rdirname) : false;// phpcs:ignore Generic.PHP.ForbiddenFunctions.Found -- This function is intentionally used and reviewed for safety.
 
 			if (!is_resource($process)) {
 				$updraftplus->log('BinZip error: proc_open failed');
@@ -485,7 +485,7 @@ class UpdraftPlus_BinZip extends UpdraftPlus_PclZip {
 				$write = array($pipes[0]);
 			}
 
-			while ((!feof($pipes[1]) || !feof($pipes[2]) || (is_array($files) && count($files)>0)) && false !== ($changes = @stream_select($read, $write, $except, 0, 200000))) {// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
+			while ((!feof($pipes[1]) || !feof($pipes[2]) || (is_array($files) && count($files)>0)) && false !== @stream_select($read, $write, $except, 0, 200000)) {// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged  -- Silenced to suppress errors that may arise because of the call being interrupted by an incoming signal
 
 				if (is_array($write) && in_array($pipes[0], $write) && is_array($files) && count($files)>0) {
 					$file = array_pop($files);

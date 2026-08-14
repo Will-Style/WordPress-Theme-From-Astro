@@ -10,7 +10,7 @@ import { PanelBody, RadioControl, ToggleControl } from '@wordpress/components';
  * Internal dependencies.
  */
 import BaseControl from '../../assets/components/base-control';
-import ComponentChoices from '../select/component-choices';
+import Choices from '../../assets/components/choices';
 import useBlockControlProps from '../../assets/hooks/use-block-control-props';
 
 /**
@@ -28,22 +28,32 @@ addFilter('lzb.editor.control.radio.render', 'lzb.editor', (render, props) => (
 ));
 
 /**
- * Control value valid in editor.
+ * Required check.
+ *
+ * @param {Object} validationData
+ * @param {number} value
+ * @param {Object} data
+ *
+ * @return {Object} validation data.
  */
-addFilter(
-	'lzb.editor.control.radio.isValueValid',
-	'lzb.editor',
-	(isValid, value, data) => {
-		if (data.allow_null === 'true') {
-			isValid = true;
-		}
-
-		return isValid;
+function validate(validationData, value, data) {
+	if (data.allow_null === 'true') {
+		return { valid: true };
 	}
-);
+
+	if (!value) {
+		return {
+			valid: false,
+			message: 'Please select an item in the list.',
+		};
+	}
+
+	return validationData;
+}
+addFilter('lzb.editor.control.radio.validate', 'lzb.editor', validate);
 
 /**
- * Control settings render in constructor.
+ * Control settings render in block builder.
  */
 addFilter(
 	'lzb.constructor.control.radio.settings',
@@ -55,7 +65,7 @@ addFilter(
 		return (
 			<>
 				<PanelBody>
-					<ComponentChoices
+					<Choices
 						value={choices}
 						onChange={(val) => updateData({ choices: val })}
 					/>
@@ -78,6 +88,7 @@ addFilter(
 									allow_null: value ? 'true' : 'false',
 								})
 							}
+							__nextHasNoMarginBottom
 						/>
 					</BaseControl>
 				</PanelBody>

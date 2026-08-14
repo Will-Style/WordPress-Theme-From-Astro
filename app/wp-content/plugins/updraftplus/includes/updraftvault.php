@@ -1,6 +1,6 @@
 <?php
 
-if (!defined('UPDRAFTPLUS_DIR')) die('No access.');
+if (!defined('ABSPATH')) die('No access.');
 
 /**
  * Handles UpdraftVault Commands to pull Amazon S3 Bucket credentials

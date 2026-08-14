@@ -15,22 +15,16 @@ class CronConversionEndpoint extends EndpointAbstract {
 
 	const ROUTE_NONCE_HEADER = 'Webpc-Nonce';
 
-	/**
-	 * @var CronInitiator
-	 */
-	private $cron_initiator;
+	private CronInitiator $cron_initiator;
 
-	/**
-	 * @var CronStatusManager
-	 */
-	private $cron_status_manager;
+	private CronStatusManager $cron_status_manager;
 
 	public function __construct(
 		PluginData $plugin_data,
 		TokenRepository $token_repository,
 		FormatFactory $format_factory,
-		CronInitiator $cron_initiator = null,
-		CronStatusManager $cron_status_manager = null
+		?CronInitiator $cron_initiator = null,
+		?CronStatusManager $cron_status_manager = null
 	) {
 		$this->cron_initiator      = $cron_initiator ?: new CronInitiator( $plugin_data, $token_repository, $format_factory );
 		$this->cron_status_manager = $cron_status_manager ?: new CronStatusManager();
@@ -53,7 +47,7 @@ class CronConversionEndpoint extends EndpointAbstract {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function is_valid_request( string $request_nonce ): bool {
+	public function is_valid_request( string $request_nonce, array $request_params ): bool {
 		$nonce_value = $this->cron_status_manager->get_conversion_request_id();
 		if ( $nonce_value === null ) {
 			return false;
@@ -68,10 +62,12 @@ class CronConversionEndpoint extends EndpointAbstract {
 	public static function get_route_url(): string {
 		return get_rest_url(
 			null,
-			sprintf(
-				'%1$s/%2$s',
-				EndpointIntegrator::ROUTE_NAMESPACE,
-				self::get_route_name()
+			user_trailingslashit(
+				sprintf(
+					'%1$s/%2$s',
+					EndpointIntegrator::ROUTE_NAMESPACE,
+					self::get_route_name()
+				)
 			)
 		);
 	}

@@ -20,6 +20,9 @@
  * which is 5.3 and above only, so if you include this in a PHP 5.2
  * setup or one without 5.3 things will blow up.
  */
+
+if (!defined('ABSPATH')) die('No direct access allowed');
+
 use google\appengine\api\app_identity\AppIdentityService;
 
 if (!class_exists('UDP_Google_Client')) {

@@ -45,7 +45,7 @@ class TemplateGeneratorService implements Hookable
     public function load_template()
     {
         $params = ['plugin_slug' => $this->plugin_slug, 'form_template' => $this->form_template, 'form_options' => $this->form_options, 'form_values' => $this->form_values];
-        \extract($params);
+        extract($params);
         // phpcs:ignore WordPress.PHP.DontExtract.extract_extract
         require_once Modal::MODAL_TEMPLATE_PATH;
     }

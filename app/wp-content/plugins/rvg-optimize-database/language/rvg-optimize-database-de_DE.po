@@ -1,0 +1,1075 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Optimize Database after Deleting Revisions\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-11-09 18:34+0100\n"
+"PO-Revision-Date: 2018-12-12 06:01+0100\n"
+"Last-Translator: Kolja Spyra <mail@kolja-spyra.de>\n"
+"Language-Team: \n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-Basepath: C:/My Dropbox/WordPress/wp-plugins/rvg-optimize-db\n"
+"X-Poedit-KeywordsList: _:1;gettext:1;dgettext:2;ngettext:1,2;dngettext:2,3;"
+"__:1;_e:1;_c:1;_n:1,2;_n_noop:1,2;_nc:1,2;__ngettext:1,2;__ngettext_noop:1,2;"
+"_x:1,2c;_ex:1,2c;_nx:1,2,4c;_nx_noop:1,2,3c;_n_js:1,2;_nx_js:1,2,3c;"
+"esc_attr__:1;esc_html__:1;esc_attr_e:1;esc_html_e:1;esc_attr_x:1,2c;"
+"esc_html_x:1,2c;comments_number_link:2,3;t:1;st:1;trans:1;transChoice:1,2\n"
+"X-Loco-Target-Locale: de_DE\n"
+"X-Generator: Poedit 2.2\n"
+"X-Poedit-Flags-xgettext: --add-comments\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: classes/odb-cleaner.php:32
+msgid "Analyzing Database"
+msgstr "Datenbank Analysieren"
+
+#: classes/odb-cleaner.php:41
+msgid "Cleaning Database"
+msgstr "Datenbank bereiningen"
+
+#: classes/odb-cleaner.php:90
+msgid "REVISIONS"
+msgstr "REVISIONEN"
+
+#: classes/odb-cleaner.php:91
+msgid "revisions"
+msgstr "Revisionen"
+
+#: classes/odb-cleaner.php:93
+msgid "DELETED REVISIONS"
+msgstr "GELÖSCHTE REVISIONEN"
+
+#: classes/odb-cleaner.php:94
+msgid "revisions deleted"
+msgstr "Revisionen gelöscht"
+
+#: classes/odb-cleaner.php:103 classes/odb-cleaner.php:169
+#: classes/odb-cleaner.php:230 classes/odb-cleaner.php:292
+#: classes/odb-cleaner.php:362 classes/odb-cleaner.php:426
+#: classes/odb-cleaner.php:488 classes/odb-cleaner.php:552
+msgid "prefix"
+msgstr "Präfix"
+
+#: classes/odb-cleaner.php:104
+msgid "post / page"
+msgstr "Beitrag / Seite"
+
+#: classes/odb-cleaner.php:105
+msgid "revision date"
+msgstr "Datum"
+
+#: classes/odb-cleaner.php:116
+msgid "total number of revisions"
+msgstr "Gesamt Anzahl der Revisionen"
+
+#: classes/odb-cleaner.php:118
+msgid "total number of revisions deleted"
+msgstr "insgesamt gelöschte Revisionen"
+
+#: classes/odb-cleaner.php:131
+msgid "No REVISIONS found to delete"
+msgstr "Keine REVISIONEN zum Löschen gefunden"
+
+#: classes/odb-cleaner.php:154
+msgid "TRASHED ITEMS"
+msgstr "GELÖSCHTE EINTRÄGE"
+
+#: classes/odb-cleaner.php:155
+msgid "total number of trashed items"
+msgstr "Gesamtzahl der gelöschten Einträge"
+
+#: classes/odb-cleaner.php:157
+msgid "DELETED TRASHED ITEMS"
+msgstr "Aus dem Papierkorb gelöscht"
+
+#: classes/odb-cleaner.php:158
+msgid "total number of trashed items deleted"
+msgstr "gesamt gelöscht"
+
+#: classes/odb-cleaner.php:170 classes/odb-cleaner.php:427
+#: classes/odb-cleaner.php:553
+msgid "type"
+msgstr "Typ"
+
+#: classes/odb-cleaner.php:171
+msgid "IP address / title"
+msgstr "IP Adresse / Titel"
+
+#: classes/odb-cleaner.php:172 classes/odb-cleaner.php:429
+#: classes/odb-logger.php:114 classes/odb-logger.php:242
+msgid "date"
+msgstr "Datum"
+
+#: classes/odb-cleaner.php:192
+msgid "No TRASHED ITEMS found to delete"
+msgstr "Nichts zum Löschen im PAPIERKORB gefunden"
+
+#: classes/odb-cleaner.php:215
+msgid "SPAMMED ITEMS"
+msgstr "SPAM EINTRÄGE"
+
+#: classes/odb-cleaner.php:216
+msgid "total number of spammed items"
+msgstr "Gesamtzahl der spam Einträge"
+
+#: classes/odb-cleaner.php:218
+msgid "DELETED SPAMMED ITEMS"
+msgstr "GELÖSCHTE SPAM EINTRÄGE"
+
+#: classes/odb-cleaner.php:219
+msgid "total number of spammed items deleted"
+msgstr "gesamt Spam gelöscht"
+
+#: classes/odb-cleaner.php:231
+msgid "comment author"
+msgstr "Kommentar Autor"
+
+#: classes/odb-cleaner.php:232
+msgid "comment author email"
+msgstr "Kommentar Autor E-Mail"
+
+#: classes/odb-cleaner.php:233
+msgid "comment date"
+msgstr "Kommentar Datum"
+
+#: classes/odb-cleaner.php:253
+msgid "No SPAMMED ITEMS found to delete"
+msgstr "kein SPAM EINTRÄGE zum Löschen gefunden"
+
+#: classes/odb-cleaner.php:277
+msgid "UNUSED TAGS"
+msgstr "UNBENUTZTE SCHLAGWORTE"
+
+#: classes/odb-cleaner.php:278
+msgid "total number of unused tags"
+msgstr "Gesamtzahl der ungenutzten Schlagworte"
+
+#: classes/odb-cleaner.php:280
+msgid "DELETED UNUSED TAGS"
+msgstr "GELÖSCHTE UNBENUTZTE SCHLAGWORTE"
+
+#: classes/odb-cleaner.php:281
+msgid "total number of unused tags deleted"
+msgstr "Gesamtzahl der ungenutzten Schlagworte gelöscht"
+
+#: classes/odb-cleaner.php:293
+msgid "tag"
+msgstr "Schlagwort"
+
+#: classes/odb-cleaner.php:313
+msgid "No UNUSED TAGE found to delete"
+msgstr "Kein UNBENUTZTEN SCHLAGWORTE gefunden, um zu löschen"
+
+#: classes/odb-cleaner.php:338
+msgid "EXPIRED TRANSIENTS"
+msgstr "ABGELAUFENEN ZWISCHENVERSIONEN "
+
+#: classes/odb-cleaner.php:339
+msgid "total number of expired transients"
+msgstr "Gesamtzahl der abgelaufenen Zwischenversionen"
+
+#: classes/odb-cleaner.php:341
+msgid "EXPIRED TRANSIENTS DELETED"
+msgstr "ABGELAUFENE ZWISCHENVERSIONEN GELÖSCHT"
+
+#: classes/odb-cleaner.php:342
+msgid "total number of expired transients deleted"
+msgstr "Gesamtzahl abgelaufener gelöschter Zwischenversionen"
+
+#: classes/odb-cleaner.php:346
+msgid "TRANSIENTS"
+msgstr "TRANSIENTEN"
+
+#: classes/odb-cleaner.php:347 classes/odb-cleaner.php:350
+msgid "total number of transients"
+msgstr "Gesamtzahl der Zwischenversionen"
+
+#: classes/odb-cleaner.php:349
+msgid "TRANSIENTS DELETED"
+msgstr "ZWISCHENVERSIONEN GELÖSCHT"
+
+#: classes/odb-cleaner.php:363
+msgid "option name"
+msgstr "Optionsname"
+
+#: classes/odb-cleaner.php:385
+msgid "No EXPIRED TRANSIENTS found to delete"
+msgstr "Keine ABGELAUFENEN ZWISCHENVERSIONEN zum Löschen gefunden"
+
+#: classes/odb-cleaner.php:387
+msgid "No TRANSIENTS found to delete"
+msgstr "keine abgelaufenen ZWISCHENVERSIONEN zum Löschen gefunden"
+
+#: classes/odb-cleaner.php:411
+msgid "PINGBACKS AND TRACKBACKS"
+msgstr "PINGBACKS UND TRACKBACKS"
+
+#: classes/odb-cleaner.php:412
+msgid "total number of pingbacks and trackbacks"
+msgstr "Gesamtzahl der Pingbacks und Trackbacks"
+
+#: classes/odb-cleaner.php:414
+msgid "DELETED PINGBACKS AND TRACKBACKS"
+msgstr "GELÖSCHTE PINGBACKS UND TRACKBACKS"
+
+#: classes/odb-cleaner.php:415
+msgid "total number of pingbacks and trackbacks deleted"
+msgstr "Gesamtzahl der gelöschten Pingbacks und Trackbacks "
+
+#: classes/odb-cleaner.php:428
+msgid "comment_author"
+msgstr "Kommentar Autor"
+
+#: classes/odb-cleaner.php:449
+msgid "No PINGBACKS nor TRACKBACKS found to delete"
+msgstr "keine PINGBACKS und TRACKBACKS zum Löschen gefunden"
+
+#: classes/odb-cleaner.php:473
+msgid "OEMBED CACHE"
+msgstr "OEMBED CACHE"
+
+#: classes/odb-cleaner.php:474
+msgid "total number of oEmbeds"
+msgstr "Gesamtzahl der oEmbeds"
+
+#: classes/odb-cleaner.php:476
+msgid "DELETED OEMBEDS"
+msgstr "GELÖSCHTE OEMBEDS"
+
+#: classes/odb-cleaner.php:477
+msgid "total number of oEmbeds deleted"
+msgstr "Gesamtzahl der gelöschten oEmbeds"
+
+#: classes/odb-cleaner.php:489 classes/odb-cleaner.php:557
+msgid "meta key"
+msgstr "Meta-Schlüssel"
+
+#: classes/odb-cleaner.php:490 classes/odb-cleaner.php:558
+msgid "meta value"
+msgstr "Meta-Wert"
+
+#: classes/odb-cleaner.php:510
+msgid "No OEMED CHACHE found to delete"
+msgstr "Kein OEMBED CACHE gefunden, der geleert werden konnte"
+
+#: classes/odb-cleaner.php:534
+msgid "POSTMETA ORPHANS"
+msgstr "VERWAISTE META EINTRÄGE"
+
+#: classes/odb-cleaner.php:535 classes/odb-cleaner.php:538
+msgid "total number of orphans"
+msgstr "Gesamtzahl der Waisen Einträge"
+
+#: classes/odb-cleaner.php:537
+msgid "DELETED POSTMETA ORPHANS"
+msgstr "GELÖSCHTE VERWAISTE META EINTRÄGE"
+
+#: classes/odb-cleaner.php:554 classes/odb-logger.php:241
+msgid "id"
+msgstr "ID"
+
+#: classes/odb-cleaner.php:555
+msgid "title"
+msgstr "Titel"
+
+#: classes/odb-cleaner.php:556
+msgid "modified"
+msgstr "geändert"
+
+#: classes/odb-cleaner.php:579
+msgid "No POSTMETA ORPHANS found to delete"
+msgstr "keine VERWAISTEN METADATEN zum Löschen gefunden"
+
+#: classes/odb-cleaner.php:606
+msgid "Optimizing Database Tables"
+msgstr "Optimiere Datenbank Tabellen"
+
+#: classes/odb-cleaner.php:613
+msgid "table name"
+msgstr "Tabelle"
+
+#: classes/odb-cleaner.php:614
+msgid "optimization result"
+msgstr "Ergebnis"
+
+#: classes/odb-cleaner.php:615
+msgid "engine"
+msgstr "Typ"
+
+#: classes/odb-cleaner.php:616
+msgid "table rows"
+msgstr "Zeilen"
+
+#: classes/odb-cleaner.php:617
+msgid "table size"
+msgstr "Größe"
+
+#: classes/odb-cleaner.php:664
+msgid "Savings"
+msgstr "Einsparungen"
+
+#: classes/odb-cleaner.php:671
+msgid "size of the database"
+msgstr "Datenbank-Größe"
+
+#: classes/odb-cleaner.php:674
+msgid "BEFORE optimization"
+msgstr "VORHER"
+
+#: classes/odb-cleaner.php:678
+msgid "AFTER optimization"
+msgstr "NACHHER"
+
+#: classes/odb-cleaner.php:682
+msgid "SAVINGS THIS TIME"
+msgstr "Einsparungen bei diesem Lauf"
+
+#: classes/odb-cleaner.php:686
+msgid "TOTAL SAVINGS SINCE THE FIRST RUN"
+msgstr "Einsparungen insgesamt seit dem ersten Lauf"
+
+#: classes/odb-cleaner.php:712
+msgid "DONE!"
+msgstr "FERTIG!"
+
+#: classes/odb-cleaner.php:720
+msgid "Analysis took"
+msgstr "Analyse dauerte"
+
+#: classes/odb-cleaner.php:720 classes/odb-cleaner.php:724
+#: classes/odb-displayer.php:139 classes/odb-displayer.php:174
+msgid "seconds"
+msgstr "Sekunden"
+
+#: classes/odb-cleaner.php:724
+msgid "Optimization took"
+msgstr "Optimierung dauerte"
+
+#: classes/odb-cleaner.php:738 classes/odb-displayer.php:196
+#: classes/odb-logger.php:157
+msgid "Clear the log?"
+msgstr "Protokoll löschen?"
+
+#: classes/odb-cleaner.php:748 classes/odb-displayer.php:215
+msgid "View Log"
+msgstr "Protokoll anzeigen"
+
+#: classes/odb-cleaner.php:750 classes/odb-displayer.php:217
+#: classes/odb-logger.php:170
+msgid "Clear Log"
+msgstr "Protokoll löschen"
+
+#: classes/odb-cleaner.php:991
+msgid "of"
+msgstr "von"
+
+#: classes/odb-cleaner.php:1655
+msgid "InnoDB table: skipped..."
+msgstr "InnoDB table: übersprungen…"
+
+#: classes/odb-cleaner.php:1662 classes/odb-cleaner.php:1672
+msgid "<span class=\"odb-optimized\">TABLE OPTIMIZED</span>"
+msgstr "<span class=\"odb-optimized\">TABELLE OPTIMIERT</span>"
+
+#: classes/odb-cleaner.php:1664 classes/odb-cleaner.php:1670
+msgid "Table is already up to date"
+msgstr "Tabelle ist aktuell"
+
+#: classes/odb-displayer.php:29
+msgid "Optimize Database after Deleting Revisions"
+msgstr "Datenbank bereinigen und optimieren"
+
+#: classes/odb-displayer.php:33
+msgid ""
+"A popular 'one-click' plugin to clean and optimize your WordPress database."
+msgstr ""
+"Eine populäre „Ein-Klick“-Erweiterung, um Ihre WordPress-Datenbank zu "
+"reinigen und zu optimieren."
+
+#: classes/odb-displayer.php:34
+msgid "Plugin version"
+msgstr "Erweiterungs-Version"
+
+#: classes/odb-displayer.php:34
+msgid "Plugin page"
+msgstr "Hersteller-Seite"
+
+#: classes/odb-displayer.php:34
+msgid "Download page"
+msgstr "WordPress-Seite"
+
+#: classes/odb-displayer.php:34
+msgid "Author"
+msgstr "Herausgeber"
+
+#: classes/odb-displayer.php:34
+msgid "Company"
+msgstr "Unternehmen"
+
+#: classes/odb-displayer.php:63
+msgid "YES"
+msgstr "JA"
+
+#: classes/odb-displayer.php:64
+msgid "NO"
+msgstr "NEIN"
+
+#: classes/odb-displayer.php:72 includes/settings-page.php:325
+msgid "DELETE EXPIRED TRANSIENTS"
+msgstr "LÖSCHE ABGELAUFENEN ZWISCHENVERSIONEN "
+
+#: classes/odb-displayer.php:74 includes/settings-page.php:328
+msgid "DELETE ALL TRANSIENTS"
+msgstr "LÖSCHE ALLE ZWISCHENVERSIONEN "
+
+#: classes/odb-displayer.php:86
+msgid "EVERY FIVE MINUTES"
+msgstr "ALLE FÜNF MINUTEN"
+
+#: classes/odb-displayer.php:88
+msgid "ONCE HOURLY"
+msgstr "STÜNDLICH"
+
+#: classes/odb-displayer.php:90
+msgid "TWICE DAILY"
+msgstr "ZWEIMAL TÄGLICH"
+
+#: classes/odb-displayer.php:92
+msgid "ONCE DAILY"
+msgstr "EINMAL TÄGLICH"
+
+#: classes/odb-displayer.php:94
+msgid "ONCE WEEKLY"
+msgstr "WÖCHENTLICH"
+
+#: classes/odb-displayer.php:96
+msgid "ONCE MONTHLY"
+msgstr "EINMAL MONATLICH"
+
+#: classes/odb-displayer.php:97 includes/settings-page.php:371
+msgid "NOT SCHEDULED"
+msgstr "NICHT PLANEN"
+
+#: classes/odb-displayer.php:102
+msgid "Current settings"
+msgstr "Aktuelle Einstellungen"
+
+#: classes/odb-displayer.php:117
+msgid "NONE"
+msgstr "KEINE"
+
+#: classes/odb-displayer.php:119
+msgid "Delete revisions of"
+msgstr "Lösche Revisionen von"
+
+#: classes/odb-displayer.php:122 includes/settings-page.php:155
+#: includes/settings-page.php:267
+msgid "Delete revisions older than"
+msgstr "Revisionen löschen, die älter sind als"
+
+#: classes/odb-displayer.php:122 classes/odb-displayer.php:170
+msgid "days"
+msgstr "Tage"
+
+#: classes/odb-displayer.php:126
+msgid "Maximum number of - most recent - revisions to keep per post / page"
+msgstr "Maximal gespeicherte Anzahl von Revisionen pro Beitrag / Seite"
+
+#: classes/odb-displayer.php:130 includes/settings-page.php:300
+msgid "Delete trashed items"
+msgstr "Papierkorb leeren"
+
+#: classes/odb-displayer.php:131 includes/settings-page.php:306
+msgid "Delete spammed items"
+msgstr "Spam löschen"
+
+#: classes/odb-displayer.php:132 includes/settings-page.php:312
+msgid "Delete unused tags"
+msgstr "Unbenutzte Schlagworte löschen"
+
+#: classes/odb-displayer.php:133 includes/settings-page.php:318
+msgid "Delete transients"
+msgstr "Zwischenversionen löschen"
+
+#: classes/odb-displayer.php:134 includes/settings-page.php:337
+msgid "Delete pingbacks and trackbacks"
+msgstr "Pingbacks und Trackbacks löschen"
+
+#: classes/odb-displayer.php:135 includes/settings-page.php:343
+msgid "Clear oEmbed cache"
+msgstr "oEmbed-Cache leeren"
+
+#: classes/odb-displayer.php:136 includes/settings-page.php:361
+msgid "Keep a log"
+msgstr "Protokoll mitschreiben"
+
+#: classes/odb-displayer.php:137
+msgid "Optimize InnoDB tables"
+msgstr "InnoDB-Tabellen optimieren"
+
+#: classes/odb-displayer.php:138
+msgid "Number of excluded tables"
+msgstr "Anzahl ausgeschlossener Tabellen"
+
+#: classes/odb-displayer.php:139
+msgid "Last run"
+msgstr "Letzte Ausführung"
+
+#: classes/odb-displayer.php:139 includes/settings-page.php:405
+msgid "hrs"
+msgstr "Uhr"
+
+#: classes/odb-displayer.php:139
+msgid "in"
+msgstr "vor"
+
+#: classes/odb-displayer.php:140 includes/settings-page.php:367
+msgid "Scheduler"
+msgstr "Zeitplan"
+
+#: classes/odb-displayer.php:150
+msgid "Next scheduled run"
+msgstr "Nächste geplante Optimierung"
+
+#: classes/odb-displayer.php:155
+msgid "Total savings since the first run"
+msgstr "Einsparungen insgesamt seit erstem Lauf"
+
+#: classes/odb-displayer.php:171
+msgid "hours"
+msgstr "Stunden"
+
+#: classes/odb-displayer.php:172
+msgid "minutes"
+msgstr "Minuten"
+
+#: classes/odb-displayer.php:173
+msgid "and"
+msgstr "und"
+
+#: classes/odb-displayer.php:189 classes/odb-logger.php:168
+msgid "Change Settings"
+msgstr "Einstellungen ändern"
+
+#: classes/odb-displayer.php:224
+msgid "Analyze Database"
+msgstr "Datenbank analysieren"
+
+#: classes/odb-displayer.php:226 classes/odb-logger.php:174
+#: rvg-optimize-database.php:674
+msgid "Start Optimization"
+msgstr "Optimierung starten"
+
+#: classes/odb-logger.php:102
+msgid "Logs"
+msgstr "Protokolle"
+
+#: classes/odb-logger.php:115
+msgid "deleted<br>revisions"
+msgstr "gelöschte<br />Revisionen"
+
+#: classes/odb-logger.php:116
+msgid "deleted<br>trash"
+msgstr "gelöschter<br />Papierkorb"
+
+#: classes/odb-logger.php:117
+msgid "deleted<br>spam"
+msgstr "gelöschter<br />Spam"
+
+#: classes/odb-logger.php:118
+msgid "deleted<br>tags"
+msgstr "gelöschte<br />Schlagworte"
+
+#: classes/odb-logger.php:119
+msgid "deleted<br>transients"
+msgstr "gelöschte<br />Zwischenversionen"
+
+#: classes/odb-logger.php:120
+msgid "deleted<br>pingbacks<br>trackbacks"
+msgstr "gelöschte<br />Pingbacks<br />Trackbacks"
+
+#: classes/odb-logger.php:121
+msgid "deleted<br>oEmbed<br>records"
+msgstr "gelöschte<br>oEmbed<br>Datensätze"
+
+#: classes/odb-logger.php:122
+msgid "deleted<br>orphans"
+msgstr "gelöschte<br />cerwaiste Einträge"
+
+#: classes/odb-logger.php:123
+msgid "nr of<br>optimized<br>tables"
+msgstr "Anzahl<br>optimierter<br>Tabellen"
+
+#: classes/odb-logger.php:124
+msgid "database<br> size<br>BEFORE"
+msgstr "Datenbank<br>Größe<br>VORHER"
+
+#: classes/odb-logger.php:125
+msgid "database<br>size<br>AFTER"
+msgstr "Datenbank<br>Größe<br>DANACH"
+
+#: classes/odb-logger.php:126 classes/odb-logger.php:253
+msgid "SAVINGS"
+msgstr "Einsparungen"
+
+#: classes/odb-logger.php:172
+msgid "Export to CSV"
+msgstr "Als CSV exportieren"
+
+#: classes/odb-logger.php:243
+msgid "deleted revisions"
+msgstr "gelöschte Revisionen"
+
+#: classes/odb-logger.php:244
+msgid "deleted trash"
+msgstr "gelöschter Papierkorb"
+
+#: classes/odb-logger.php:245
+msgid "deleted spam"
+msgstr "gelöschter Spam"
+
+#: classes/odb-logger.php:246
+msgid "deleted tags"
+msgstr "gelöschte Schlagworte"
+
+#: classes/odb-logger.php:247
+msgid "deleted transients"
+msgstr "gelöschte Zwischenversionen"
+
+#: classes/odb-logger.php:248
+msgid "deleted pingbacks"
+msgstr "geklöschte Pingbacks Pingbacks"
+
+#: classes/odb-logger.php:249
+msgid "deleted orphans"
+msgstr "gelöschte verwaiste Einträge"
+
+#: classes/odb-logger.php:250
+msgid "nr of optimized tables"
+msgstr "optimierte Tabellen"
+
+#: classes/odb-logger.php:251
+msgid "database size BEFORE"
+msgstr "Datenbankgröße VORHER"
+
+#: classes/odb-logger.php:252
+msgid "database size AFTER"
+msgstr "Datenbankgröße NACHHER"
+
+#: classes/odb-scheduler.php:38
+msgid "Once Weekly"
+msgstr "einmal wöchentlich"
+
+#: classes/odb-scheduler.php:42
+msgid "Once Monthly"
+msgstr "Einmal monatlich"
+
+#: classes/odb-scheduler.php:47
+msgid "Every Five Minutes"
+msgstr "Alle Fünf Minuten"
+
+#: includes/settings-page.php:118
+msgid "Optimize Database after Deleting Revisions SETTINGS UPDATED"
+msgstr "Einstellungen aktualisiert"
+
+#: includes/settings-page.php:120
+msgid ""
+"Click <a href=\"tools.php?page=rvg-optimize-database\" class=\"odb-bold"
+"\">HERE</a> to run the optimization"
+msgstr ""
+"Klicken Sie <a href=\"tools.php?page=rvg-optimize-database\" class=\"odb-bold"
+"\">HIER </a>, um die Optimierung auszuführen"
+
+#: includes/settings-page.php:155
+msgid "You have to enter: "
+msgstr "Sie müssen eingeben:"
+
+#: includes/settings-page.php:160
+msgid "<Delete revisions older than> should be a number"
+msgstr "<Löschen von Revisionen, älter als> sollte eine Zahl sein"
+
+#: includes/settings-page.php:168
+msgid "You have to enter the <Maximum number of revisions>"
+msgstr "Sie müssen die maximale Anzahl von Revisionen eingeben"
+
+#: includes/settings-page.php:173
+msgid "<Maximum number of revisions> should be a number"
+msgstr "<Maximalzahl der Zwischenversionen> sollte eine Zahl sein"
+
+#: includes/settings-page.php:231 rvg-optimize-database.php:464
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: includes/settings-page.php:236
+msgid "Delete revisions for the following (custom) post type(s):"
+msgstr ""
+"Revisionen für folgende (benutzerdefinierte) Beitragsarten-Typen löschen:"
+
+#: includes/settings-page.php:272
+msgid "day(s)"
+msgstr "Tag(e)"
+
+#: includes/settings-page.php:284
+msgid "Maximum number of - most recent - revisions<br>to keep per post / page"
+msgstr "Maximale Anzahl der-letzten-Revisionen<br>pro Beitrag/Seite"
+
+#: includes/settings-page.php:290
+msgid "('0' means: delete <u>ALL</u> revisions)"
+msgstr "('0' bedeutet: <u>ALLE</u> Revisoren werden gelöscht)"
+
+#: includes/settings-page.php:322
+msgid "DO NOT DELETE TRANSIENTS"
+msgstr "ZWISCHENVERSIONEN NICHT LÖSCHEN"
+
+#: includes/settings-page.php:349
+msgid "Clear orphans"
+msgstr "Verwaiste Einträge löschen"
+
+#: includes/settings-page.php:355
+msgid "Optimize InnoDB tables too"
+msgstr "InnoDB-Tabellen optimieren"
+
+#: includes/settings-page.php:374
+msgid "run optimization HOURLY"
+msgstr "STÜNDLICH optimieren"
+
+#: includes/settings-page.php:377
+msgid "run optimization TWICE A DAY"
+msgstr "ZWEIMAL TÄGLICH optimieren"
+
+#: includes/settings-page.php:380
+msgid "run optimization DAILY"
+msgstr "TÄGLICH optimieren"
+
+#: includes/settings-page.php:383
+msgid "run optimization WEEKLY"
+msgstr "WÖCHENTLICH optimieren"
+
+#: includes/settings-page.php:386
+msgid "run optimization MONTHLY"
+msgstr "MONATLICH optimieren"
+
+#: includes/settings-page.php:396
+msgid "Time"
+msgstr "Zeit"
+
+#: includes/settings-page.php:420
+msgid "Show '1-click' link in Admin Bar"
+msgstr "Zeige einen ‚1-Klick' Link in der Adminleiste"
+
+#: includes/settings-page.php:426
+msgid "Show an icon in the Admin Menu"
+msgstr "Zeige ein Symbol im Admin-Menü"
+
+#: includes/settings-page.php:431
+msgid "change will be visible after loading the next page"
+msgstr "(Änderungen werden sichtbar, nachdem die nächste Seite geladen wurde)"
+
+#: includes/settings-page.php:436 includes/settings-page.php:482
+msgid "Save Settings"
+msgstr "Einstellungen speichern"
+
+#: includes/settings-page.php:438 includes/settings-page.php:484
+msgid "Go To Optimizer"
+msgstr "Zur Optimierung"
+
+#: includes/settings-page.php:445
+msgid ""
+"EXCLUDE DATABASE TABLES FROM OPTIMIZATION:<br><span class=\"odb-underline-red"
+"\">CHECKED</span> TABLES <span class=\"odb-underline-red\">WON'T</span> BE "
+"OPTIMIZED!</span>"
+msgstr ""
+"TABELLEN VON DER OPTIMIERUNG AUSSCHLIESSEN: <span class=\"odb-underline-red"
+"\">MARKIERTE</span> TABELLEN WERDEN <span class=\"odb-underline-red\">NICHT</"
+"span> OPTIMIERT!</span>"
+
+#: includes/settings-page.php:451
+msgid "check all tables"
+msgstr "alle Tabellen markieren"
+
+#: includes/settings-page.php:453
+msgid "uncheck all tables"
+msgstr "alle Markierungen entfernen"
+
+#: includes/settings-page.php:455
+msgid "check all NON-WordPress tables"
+msgstr "alle NICHT-WordPress-Tabellen markieren"
+
+#: rvg-optimize-database.php:436 rvg-optimize-database.php:437
+#: rvg-optimize-database.php:451 rvg-optimize-database.php:452
+#: rvg-optimize-database.php:492 rvg-optimize-database.php:493
+#: rvg-optimize-database.php:510 rvg-optimize-database.php:511
+msgid "Optimize Database"
+msgstr "Datenbank optimieren"
+
+#: rvg-optimize-database.php:481
+msgid "Optimize DB (1 click)"
+msgstr "DB optimieren (1 Klick)"
+
+#: rvg-optimize-database.php:629
+#, fuzzy
+#| msgid "Optimize Database after Deleting Revisions LOG FILE HAS BEEN DELETED"
+msgid "Optimize Database after Deleting Revisions LOGS HAVE BEEN CLEARED"
+msgstr ""
+"Optimierung der Datenbank nach dem Löschen von Revisionen LOGS HAVE BEEN "
+"CLEARED"
+
+#: rvg-optimize-database.php:672
+msgid "CLICK 'Start Optimization' TO ACTUALLY DELETE THE FOUND ITEMS"
+msgstr ""
+"KLICKEN Sie ' Optimierung starten ' um die GEFUNDENEN EINTRÄGE JETZT ZU "
+"LÖSCHEN"
+
+#: rvg-optimize-database.php:673
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: rvg-optimize-database.php:677
+msgid "Analysis Done!"
+msgstr "Analyse abgeschlossen!"
+
+msgid "NUMBER OF oEmbed RECORDS"
+msgstr "Anzahl der oEmbed EINTRÄGE"
+
+msgid "PLEASE DONATE!"
+msgstr "Bitte Unterstützen Sie uns!"
+
+msgid "POSTS only"
+msgstr "Nur BEITRÄGE"
+
+msgid "PAGES only"
+msgstr "Nur SEITEN"
+
+msgid "POSTS and PAGES"
+msgstr "BEITRÄGE und SEITEN"
+
+msgid "You have to enter the maximum number of revisions"
+msgstr "Sie müssen die maximale Anzahl von Revisionen eingeben"
+
+msgid "OR"
+msgstr "ODER"
+
+msgid "OPTIMIZING DATABASE TABLES"
+msgstr "DATENBANK TABELLEN OPTIMIEREN"
+
+msgid "<strong>TABLE OPTIMIZED</strong>"
+msgstr "<strong>TABEL GEOPTIMALISEERD</strong>"
+
+msgid "TABLE OPTIMIZED"
+msgstr "TABEL GEOPTIMALISEERD"
+
+msgid "TABLE OPTIMIZED!"
+msgstr "TABEL GEOPTIMALISEERD!"
+
+msgid ""
+"<strong>WP Admin Panel</strong> &raquo; <strong>Tools</strong> &raquo; "
+"<strong>Optimize Database</strong>. Then click the '<strong>Start "
+"Optimization</strong>'-button. Et voila!"
+msgstr ""
+"<strong>WP Admin Panel</strong> &raquo; <strong>Werkzeuge</strong> &raquo; "
+"<strong>Datenbank Optimieren</strong>. Klicken Sie auf die Schaltfläche "
+"\"<strong>Optimierung Starten</strong>\". Et voila!"
+
+msgid "Note: if you use the Scheduler the Optimization will run automatically!"
+msgstr ""
+"Hinweis: Wenn Sie den Zeitplan verwenden, läuft die Optimierung automatisch!"
+
+# @ rvg-optimize-database
+msgid "Hello world!"
+msgstr "Hallo Welt!"
+
+#, fuzzy
+#~| msgid "NUMBER OF POSTMETA ORPHANS DELETED"
+#~ msgid "NUMBER OF oEmbed RECORDS DELETED"
+#~ msgstr "Anzahl gelöschter verwaister Einträge in postmeta"
+
+#, fuzzy
+#~| msgid "No UNUSED TAGS found to delete"
+#~ msgid "No oEmbed records found to delete"
+#~ msgstr "keine unbenutzten Tags zum Löschen gefunden"
+
+#~ msgid "NUMBER OF UNUSED TAGS DELETED"
+#~ msgstr "gelöschte unbenutzte Tags"
+
+#~ msgid "Delete Log File"
+#~ msgstr "Log löschen"
+
+#~ msgid "A WordPress Plugin by"
+#~ msgstr "Ein WordPress Plugin von"
+
+#~ msgid "The Netherlands"
+#~ msgstr "Niederlande"
+
+#~ msgid "time"
+#~ msgstr "Zeit"
+
+#~ msgid "current server time"
+#~ msgstr "Aktuelle Serverzeit"
+
+#, fuzzy
+#~| msgid "total number of revisions deleted"
+#~ msgid "Maximum number of revisions should be a number"
+#~ msgstr "insgesamt gelöschte Revisionen"
+
+#~ msgid ""
+#~ "EXCLUDE DATABASE TABLES FROM OPTIMIZATION: <span class=\"odb-underline-red"
+#~ "\">CHECKED</span> TABLES <span class=\"odb-underline-red\">WON'T</span> "
+#~ "BE OPTIMIZED!</span>"
+#~ msgstr ""
+#~ "TABELLEN VON DER OPTIMIERUNG AUSSCHLIESSEN: <span class=\"odb-underline-"
+#~ "red\">MARKIERTE</span> TABELLEN WERDEN <span class=\"odb-underline-red"
+#~ "\">NICHT</span> OPTIMIERT!</span>"
+
+#~ msgid "(change will be visible after loading the next page)"
+#~ msgstr ""
+#~ "(Änderungen werden sichtbar, nachdem die nächste Seite geladen wurde)"
+
+#, fuzzy
+#~| msgid ""
+#~| "A popular 'one-click' plugin to clean and optimize your WordPress "
+#~| "database."
+#~ msgid ""
+#~ "A popular one-click plugin to clean and optimize your WordPress database."
+#~ msgstr ""
+#~ "Eine populäre „Ein-Klick“-Erweiterung, um Ihre WordPress-Datenbank zu "
+#~ "reinigen und zu optimieren."
+
+#~ msgid ""
+#~ "Maximum number of - most recent - revisions<br />to keep per post / page"
+#~ msgstr "Maximal gespeicherte Anzahl<br />Revisionen pro Beitrag / Seite"
+
+#~ msgid ""
+#~ "Click <a href=\"tools.php?page=rvg-optimize-db.php\" class=\"odb-bold"
+#~ "\">HERE</a> to run the optimization"
+#~ msgstr ""
+#~ "<a href=\"tools.php?page=rvg-optimize-db.php\" class=\"odb-bold\">HIER</"
+#~ "a> klicken, um die Optimierung zu starten"
+
+#~ msgid "is an one-click plugin to clean and optimize your WordPress database"
+#~ msgstr ""
+#~ "ist ein 1-Klick Plugin zum Bereinigen und Optimieren der WordPress "
+#~ "Datenbank"
+
+#~ msgid "Optimize your WordPress Database"
+#~ msgstr "WordPress Datenbank optimieren"
+
+#~ msgid "Plugin version:"
+#~ msgstr "Plugin Version:"
+
+#~ msgid "Author:"
+#~ msgstr "Autor:"
+
+#~ msgid "Plugin URL:"
+#~ msgstr "Plugin URL:"
+
+#~ msgid "Download URL:"
+#~ msgstr "Download URL:"
+
+#, fuzzy
+#~| msgid "Delete trashed items"
+#~ msgid "Delete all trashed items"
+#~ msgstr "Papierkorb leeren"
+
+#, fuzzy
+#~| msgid "Delete spammed items"
+#~ msgid "Delete all spammed items"
+#~ msgstr "Spam löschen"
+
+#, fuzzy
+#~| msgid "Optimize Database after Deleting Revisions"
+#~ msgid "Using Optimize Database after Deleting Revisions"
+#~ msgstr "Datenbank bereinigen und optimieren"
+
+#, fuzzy
+#~| msgid "Optimize Database after Deleting Revisions"
+#~ msgid "Optimize Database after Deleting Revisions - Settings"
+#~ msgstr "Datenbank bereinigen und optimieren"
+
+#, fuzzy
+#~| msgid "Start Optimization"
+#~ msgid "Starting Optimization"
+#~ msgstr "Optimierung starten"
+
+#, fuzzy
+#~| msgid "DELETED REVISIONS"
+#~ msgid "DELETING REVISIONS"
+#~ msgstr "GELÖSCHTE REVISIONEN"
+
+#, fuzzy
+#~| msgid "DELETED TRASHED ITEMS"
+#~ msgid "DELETING TRASHED ITEMS"
+#~ msgstr "Aus dem Papierkorb gelöscht"
+
+#, fuzzy
+#~| msgid "DELETEED SPAMMED ITEMS"
+#~ msgid "DELETING SPAMMED ITEMS"
+#~ msgstr "Gelöschte Spambeiträge"
+
+#, fuzzy
+#~| msgid "DONE!"
+#~ msgid "DONE"
+#~ msgstr "FERTIG!"
+
+#, fuzzy
+#~| msgid "Optimize Database"
+#~ msgid "Optimize DB Options"
+#~ msgstr "Datenbank optimieren"
+
+#, fuzzy
+#~| msgid "Optimize Database after Deleting Revisions SETTINGS UPDATED"
+#~ msgid "Optimize Database after Deleting Revisions OPTIONS UPDATED"
+#~ msgstr "Einstellungen aktualisiert"
+
+#, fuzzy
+#~| msgid ""
+#~| "Click <a href=\"tools.php?page=rvg-optimize-db.php\" class=\"odb-bold"
+#~| "\">HERE</a> to run the optimization"
+#~ msgid ""
+#~ "Click <a href=\"tools.php?page=rvg-optimize-db.php\" style=\"font-weight:"
+#~ "bold\">HERE</a> to run the optimization"
+#~ msgstr ""
+#~ "<a href=\"tools.php?page=rvg-optimize-db.php\" class=\"odb-bold\">HIER</"
+#~ "a> klicken, um die Optimierung zu starten"
+
+#, fuzzy
+#~| msgid "Start Optimization"
+#~ msgid "To start the optimization:"
+#~ msgstr "Optimierung starten"
+
+#, fuzzy
+#~| msgid "Optimize Database after Deleting Revisions"
+#~ msgid "Optimize Database after Deleting Revisions - Options"
+#~ msgstr "Datenbank bereinigen und optimieren"
+
+#, fuzzy
+#~| msgid ""
+#~| "EXCLUDE DATABASE TABLES FROM OPTIMIZATION: <span class=\"odb-underline-"
+#~| "red\">CHECKED</span> TABLES <span class=\"odb-underline-red\">WON'T</"
+#~| "span> BE OPTIMIZED!</span>"
+#~ msgid ""
+#~ "EXCLUDE DATABASE TABLES FROM OPTIMIZATION: <span style=\"text-decoration:"
+#~ "underline;color:#F00;\">CHECKED</span> TABLES <span style=\"text-"
+#~ "decoration:underline;color:#F00;\">WON'T</span> BE OPTIMIZED!</span>"
+#~ msgstr ""
+#~ "TABELLEN VON DER OPTIMIERUNG AUSSCHLIESSEN: <span class=\"odb-underline-"
+#~ "red\">MARKIERTE</span> TABELLEN WERDEN <span class=\"odb-underline-red"
+#~ "\">NICHT</span> OPTIMIERT!</span>"
+
+#, fuzzy
+#~| msgid "Save Settings"
+#~ msgid "Save Options"
+#~ msgstr "Einstellungen speichern"
+
+#, fuzzy
+#~| msgid "Current settings"
+#~ msgid "Current options"
+#~ msgstr "Aktuelle Einstellungen"
+
+#, fuzzy
+#~| msgid "Change Settings"
+#~ msgid "Change Options"
+#~ msgstr "Einstellungen ändern"

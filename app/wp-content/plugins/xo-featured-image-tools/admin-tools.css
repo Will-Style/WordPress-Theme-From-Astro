@@ -1,0 +1,59 @@
+/*
+XO Reatured Image Tools - Tools page
+*/
+.ui-widget {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 1em;
+}
+
+.ui-widget .ui-widget {
+	font-size: 1em;
+}
+
+.ui-widget-content {
+	border: 1px solid #dddddd;
+	background: #ffffff;
+	color: #333333;
+}
+
+.ui-widget-content a {
+	color: #333333;
+}
+
+.ui-widget-header {
+	border: 1px solid #dddddd;
+	background: #deedf7;
+	color: #333333;
+	font-weight: bold;
+}
+
+.ui-widget-header a {
+	color: #333333;
+}
+
+.ui-progressbar {
+	height: 2em;
+	text-align: left;
+	overflow: hidden;
+}
+
+.ui-progressbar .ui-progressbar-value {
+	margin: -1px;
+	height: 100%;
+}
+
+.tools_page_xo-featured-image-tools.wp-core-ui .button-danger {
+	background: #dc3545;
+	border-color: #dc3545;
+	color: #fff;
+}
+
+.tools_page_xo-featured-image-tools.wp-core-ui .button-danger:hover,
+.tools_page_xo-featured-image-tools.wp-core-ui .button-danger:focus {
+	background: #c82333;
+	border-color: #bd2130;
+}
+
+.tools_page_xo-featured-image-tools.wp-core-ui .button-danger:focus {
+	box-shadow: 0 0 0 1px #fff, 0 0 0 3px #dc3545;
+}
