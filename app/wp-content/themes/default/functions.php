@@ -2,7 +2,7 @@
 // キャッシュクリア用
 define("VERSION",'');
 // RECAPTCHA シークレットキー
-define("RECAPTCHA_SECRET",'***REMOVED_RECAPTCHA_SECRET***');
+define("RECAPTCHA_SECRET",'');
 
 include('config/settings.php');
 
