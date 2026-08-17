@@ -70,6 +70,13 @@ add_filter( 'auto_update_theme', '__return_false' );
 add_filter( 'allow_major_auto_core_updates', '__return_true' );
 add_filter('automatic_updates_is_vcs_checkout', '__return_false', 1 );
 
+function remove_dashicons_for_non_logged_in() {
+    if ( ! is_user_logged_in() ) {
+        wp_deregister_style( 'dashicons' );
+    }
+}
+add_action( 'wp_enqueue_scripts', 'remove_dashicons_for_non_logged_in' );
+
 function remove_admin_menus() {
     
     // level10以外のユーザーの場合
