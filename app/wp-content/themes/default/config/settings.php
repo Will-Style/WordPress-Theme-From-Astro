@@ -20,7 +20,7 @@ add_action( 'after_setup_theme', function () {
 		array( 'name' => '白',         'slug' => 'white',     'color' => 'var(--color-white)' ),
 		array( 'name' => '背景',       'slug' => 'bg',        'color' => 'var(--color-bg)' ),
 		array( 'name' => 'プライマリ', 'slug' => 'primary',   'color' => 'var(--color-primary)' ),
-		array( 'name' => 'セカンダリ', 'slug' => 'primary',   'color' => 'var(--color-secondary)' ),
+		array( 'name' => 'セカンダリ', 'slug' => 'secondary',   'color' => 'var(--color-secondary)' ),
 		array( 'name' => 'グレー',     'slug' => 'gray',      'color' => 'var(--color-gray)' ),
 		array( 'name' => 'グレー濃',   'slug' => 'gray-dark', 'color' => 'var(--color-gray-dark)' ),
 	) );
